@@ -1,0 +1,18 @@
+{
+  "name": "meca3",
+  "version": "1.0.0",
+  "description": "Represent trajectories and solve dynamic equations",
+  "main": "meca3.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "Vector3Test.mjs"
+  },
+  "author": "samiBendou",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  }
+}
