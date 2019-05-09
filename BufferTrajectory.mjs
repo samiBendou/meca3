@@ -1,6 +1,27 @@
 const PointPair = require("./PointPair.mjs");
 const Trajectory = require("./Trajectory.mjs");
 
+/**
+ *
+ * @type {module.Trajectory}
+ * @date 09/05/2019
+ * @author samiBendou sbdh75@gmail.com
+ * @brief Fixed size buffer for Trajectory class
+ * @details This trajectory behaves the same as Trajectory class for the most
+ *
+ *          The BufferTrajectories have a fixed size given at construction, thus when adding a new PointPair,
+ *          if there is overflow the new PointPair is added at the beginning of the trajectory.
+ *
+ *          The so created trajectory is a circular buffer containing the trajectory.
+ *
+ *          A BufferTrajectory can be initialized with a Trajectory :
+ *              - If buffer size is greater then trajectory size, than the whole
+ *              trajectory is added at the beginning of the buffer and the rest is filled with zeros.
+ *
+ *              - If buffer size is smaller then trajectory size, than the trajectory is
+ *              truncated and only the last elements are taken.
+ */
+
 module.exports = class BufferTrajectory extends Trajectory{
     constructor(size, trajectory) {
         super(new Array(size), new Array(size));

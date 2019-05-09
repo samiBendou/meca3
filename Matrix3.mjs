@@ -1,6 +1,25 @@
-const
-     Vector3 = require("./Vector3.mjs");
+const Vector3 = require("./Vector3.mjs");
 
+
+/**
+ *
+ * @type {module.Matrix3}
+ * @date 09/05/2019
+ * @author samiBendou sbdh75@gmail.com
+ * @brief Representation of 3x3 matrices
+ * @details The matrix is stored in memory as an aggregation of three Vector3 rows : x, y, z.
+ *
+ *          The access a component of the matrix use the following syntax : m.i.j where
+ *          both i and j are equal to x, y or z. eg m.x.x or m.y.z
+ *
+ *          The Matrix3 extends vector space operations from Vector3 and provide other
+ *          matrix related algebraical operations.
+ *
+ *          The Matrix3 class is designed to provide fast inversion, product and determinant
+ *          computation.
+ *
+ *          It provides many generators and special ones for rotation matrices.
+ */
 module.exports = class Matrix3 {
 
     constructor(xx = 0, xy = 0, xz = 0,

@@ -1,6 +1,23 @@
 const PointPair = require("./PointPair.mjs");
 const Vector3 = require("./Vector3.mjs");
 
+/**
+ *
+ * @type {module.Trajectory}
+ * @date 09/05/2019
+ * @author samiBendou sbdh75@gmail.com
+ * @brief Represents a discrete trajectory
+ * @details The trajectory is stored into memory as an array of PointPair.
+ *
+ *          Each value of the array denotes the position of both the object observed and the
+ *          observer of the object at a given time, the value of the array must be chronological ordered.
+ *
+ *          The origin of each PointPair is the position of the observer of the trajectory in absolute coordinates.
+ *
+ *          This module is designed to perform relative cinematic computation (position, speed, acceleration), in order
+ *          to follow the state of a moving object
+ */
+
 module.exports = class Trajectory {
 
     constructor(pairs = [], steps = []) {
@@ -42,7 +59,7 @@ module.exports = class Trajectory {
     }
 
     homothety(scalar) {
-        this.pairs.forEach(function (pair) { pair.homothety(scalar) });
+        this.pairs.forEach(function (pair) { pair.homothetic(scalar) });
         return this;
     }
 

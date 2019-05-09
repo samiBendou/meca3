@@ -1,5 +1,21 @@
 const Vector3 = require("./Vector3.mjs");
 
+/**
+ *
+ * @type {module.Solver}
+ * @brief Solve second order differential equation d2u/dt2 = f(u, t) where :
+ *          - d2 . / dt2 denotes the second order derivative
+ *          - u is the unknown vector function
+ *          - f(., .) is a enough regular function depending only on vector coordinates and time
+ *          - v = du/dt is the derivative of u
+ *
+ *          This solver is designed to be used in two ways :
+ *          1. Step by step solving. Get the next value of u giving the current and previous values of u
+ *          2. Trajectory solving. Give the number of steps, u0 and v0 and get an array containing u at each step.s
+ *
+ *          Note that only explicit Euler's method is used here.
+ */
+
 module.exports = class Solver {
     constructor(field, step = 1) {
         this.field = field;

@@ -1,3 +1,29 @@
+/**
+ *
+ * @type {module.Vector3}
+ * @date 09/05/2019
+ * @author samiBendou sbdh75@gmail.com
+ * @brief Representation of 3D vectors
+ * @details The 3D vectors components are stored using cartesian coordinates (x, y, z).
+ *
+ *          Vector3 class allows to perform vector space operations between vectors (u + v, s * u).
+ *
+ *          Vector3 class provides setters and getters for cylindrical (r, theta, z)
+ *          and spherical coordinates (r, theta, phi).
+ *
+ *          The Vector3 class is designed to provide many geometry related features such
+ *          as the angle of between two vector, the cross product.
+ *
+ *          The Vector3 class provides vectors generator in a numpy-style syntax such as ones, zeros, ...
+ *
+ *          We denote the canonical basis of R3 (ex, ey, ez) such that :
+ *              - ex = (1, 0, 0), - ey = (0, 1, 0), - ez = (0, 0, 1)
+
+ * @property r {number} length of the vector. Also the r coordinate in spherical coordinates
+ * @property theta {number} angle between ex and this vector
+ * @property phi {number} angle between ez and this vector
+ * @property rxy {number} length of the projection of this vector on the (ex, ey) plan
+ */
 module.exports = class Vector3 {
 
     constructor(x = 0, y = 0, z = 0) {

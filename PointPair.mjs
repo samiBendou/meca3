@@ -1,5 +1,21 @@
 const Vector3 = require("./Vector3.mjs");
 
+/**
+ *
+ * @type {module.PointPair}
+ * @date 09/05/2019
+ * @author samiBendou sbdh75@gmail.com
+ * @brief Represents a couple of points
+ * @details In memory, the points are represented as vectors. this.vector denotes the absolute coordinates
+ *          of the extremity point. this.origin denotes the absolute coordinates the origin point.
+ *
+ *          This class is designed to perform geometrical transformation on the segment joining the two
+ *          points
+ *
+ *          A PointPair can also be represented as a pair observer (origin) and mobile (vector). Therefore
+ *          it offers relative coordinates computation features.
+ */
+
 module.exports = class PointPair {
 
     constructor(origin = Vector3.zeros, vector = Vector3.zeros) {
@@ -29,7 +45,7 @@ module.exports = class PointPair {
         return this;
     }
 
-    homothety(scalar) {
+    homothetic(scalar) {
         this.origin.mul(scalar);
         this.vector.mul(scalar);
         return this;
