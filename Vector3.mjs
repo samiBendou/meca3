@@ -4,22 +4,23 @@
  * @date 09/05/2019
  * @author samiBendou sbdh75@gmail.com
  * @brief Representation of 3D vectors
- * @details The 3D vectors components are stored using cartesian coordinates (x, y, z).
+ * @details The 3D vectors are stored by components using cartesian coordinates (x, y, z).
  *
  *          Vector3 class allows to perform vector space operations between vectors (u + v, s * u).
+ *          Operations are performed using a object-syntax eg. u.add(v), they can be chained eg. u.add(v).mul(s).
  *
  *          Vector3 class provides setters and getters for cylindrical (r, theta, z)
  *          and spherical coordinates (r, theta, phi).
  *
- *          The Vector3 class is designed to provide many geometry related features such
+ *          Vector3 class is designed to provide many features related to geometry such
  *          as the angle of between two vector, the cross product.
  *
  *          The Vector3 class provides vectors generator in a numpy-style syntax such as ones, zeros, ...
  *
- *          We denote the canonical basis of R3 (ex, ey, ez) such that :
+ *          We denote the canonical basis of 3D euclidean space ex, ey, ez such that :
  *              - ex = (1, 0, 0), - ey = (0, 1, 0), - ez = (0, 0, 1)
 
- * @property r {number} length of the vector. Also the r coordinate in spherical coordinates
+ * @property r {number} length of this vector, also the r spherical coordinate
  * @property theta {number} angle between ex and this vector
  * @property phi {number} angle between ez and this vector
  * @property rxy {number} length of the projection of this vector on the (ex, ey) plan
@@ -27,7 +28,9 @@
 module.exports = class Vector3 {
 
     constructor(x = 0, y = 0, z = 0) {
-        this.x = x; this.y = y; this.z = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     get r() {
@@ -35,7 +38,7 @@ module.exports = class Vector3 {
     }
 
     set r(newR) {
-        this.setRThetaPhi(newR, this.theta,this.phi);
+        this.setRThetaPhi(newR, this.theta, this.phi);
     }
 
     get theta() {
@@ -60,47 +63,59 @@ module.exports = class Vector3 {
 
     setRThetaPhi(r, theta, phi) {
         this.x = r * Math.sin(phi) * Math.cos(theta),
-        this.y = r * Math.sin(phi) * Math.sin(theta),
-        this.z = r * Math.cos(phi);
+            this.y = r * Math.sin(phi) * Math.sin(theta),
+            this.z = r * Math.cos(phi);
     }
 
     fill(s) {
-        this.x = s; this.y = s; this.z = s;
+        this.x = s;
+        this.y = s;
+        this.z = s;
     }
 
     add(u) {
-        this.x += u.x; this.y += u.y; this.z += u.z;
+        this.x += u.x;
+        this.y += u.y;
+        this.z += u.z;
         return this;
     }
 
     sub(u) {
-        this.x -= u.x; this.y -= u.y; this.z -= u.z;
+        this.x -= u.x;
+        this.y -= u.y;
+        this.z -= u.z;
         return this;
     }
 
     get opp() {
-        this.x = -this.x; this.y = -this.y; this.z = -this.z;
+        this.x = -this.x;
+        this.y = -this.y;
+        this.z = -this.z;
         return this;
     }
 
     mul(s) {
-        this.x *= s; this.y *= s; this.z *= s;
+        this.x *= s;
+        this.y *= s;
+        this.z *= s;
         return this;
     }
 
     div(s) {
-        this.x /= s; this.y /= s; this.z /= s;
+        this.x /= s;
+        this.y /= s;
+        this.z /= s;
         return this;
     }
 
     scal(u) {
         return this.x * u.x + this.y * u.y + this.z * u.z;
-    }   
+    }
 
     cross(u) {
-        return new Vector3( this.y * u.z - this.z * u.y,
-                            this.z * u.x - this.x * u.z,
-                            this.x * u.y - this.y * u.x);
+        return new Vector3(this.y * u.z - this.z * u.y,
+            this.z * u.x - this.x * u.z,
+            this.x * u.y - this.y * u.x);
     }
 
     dist(u) {
@@ -143,15 +158,25 @@ module.exports = class Vector3 {
         return [this.x, this.y, this.z];
     }
 
-    static get zeros() {return new Vector3();}
+    static get zeros() {
+        return new Vector3();
+    }
 
-    static get ones() {return Vector3.scal(1);}
+    static get ones() {
+        return Vector3.scal(1);
+    }
 
-    static get ex() {return Vector3.can(0);}
+    static get ex() {
+        return Vector3.can(0);
+    }
 
-    static get ey() {return Vector3.can(1);}
+    static get ey() {
+        return Vector3.can(1);
+    }
 
-    static get ez() {return Vector3.can(2);}
+    static get ez() {
+        return Vector3.can(2);
+    }
 
     static scal(s) {
         return new Vector3(s, s, s);
@@ -162,11 +187,13 @@ module.exports = class Vector3 {
     }
 
     static sum(vectors) {
-        return vectors.reduce(function(prev, cur) {return prev.copy().add(cur);});
+        return vectors.reduce(function (prev, cur) {
+            return prev.copy().add(cur);
+        });
     }
 
     static comb(scalars, vectors) {
-        return vectors.reduce(function(prev, cur, index) {
+        return vectors.reduce(function (prev, cur, index) {
             return prev.copy().mul(scalars[index - 1]).add(cur.copy().mul(scalars[index]));
         });
     }
@@ -177,9 +204,9 @@ module.exports = class Vector3 {
 
     static der(vectors, steps) {
         var der = new Array(vectors.length - 1);
-        for(var i = 1; i < vectors.length; i++) {
+        for (var i = 1; i < vectors.length; i++) {
             der[i - 1] = vectors[i].copy().sub(vectors[i - 1]).div(steps[i - 1]);
         }
         return der;
-    } 
+    }
 };

@@ -1,22 +1,28 @@
-const PointPair = require("./PointPair.mjs");
-const Vector3 = require("./Vector3.mjs");
-
 /**
  *
  * @type {module.Trajectory}
  * @date 09/05/2019
  * @author samiBendou sbdh75@gmail.com
  * @brief Represents a discrete trajectory
- * @details The trajectory is stored into memory as an array of PointPair.
+ * @details The trajectory is stored into memory as an array of PointPair representing the successive positions
+ *          of a mobile over time. The value of the array must be chronological ordered.
  *
- *          Each value of the array denotes the position of both the object observed and the
- *          observer of the object at a given time, the value of the array must be chronological ordered.
- *
+ *          Each value of the array denotes the position of both the mobile and the observer at a given time.
  *          The origin of each PointPair is the position of the observer of the trajectory in absolute coordinates.
  *
  *          This module is designed to perform relative cinematic computation (position, speed, acceleration), in order
- *          to follow the state of a moving object
+ *          to follow the state of a moving object.
+ *
+ *          You have to provide a time step for the trajectory in order to compute speed and acceleration.
+ *          The time step can be variable but if so you have to precise the value of each time step in an array.
+ *
+ * @property {Array} pairs Array storing position of the object as a PointPair
+ * @property {Array} steps Array storing the time step between each position
  */
+
+
+const PointPair = require("./PointPair.mjs");
+const Vector3 = require("./Vector3.mjs");
 
 module.exports = class Trajectory {
 
@@ -33,7 +39,9 @@ module.exports = class Trajectory {
     }
 
     get pos() {
-        return this.pairs.map(function (pair) { return pair.relative });
+        return this.pairs.map(function (pair) {
+            return pair.relative
+        });
     }
 
     get speeds() {
@@ -45,31 +53,43 @@ module.exports = class Trajectory {
     }
 
     get origins() {
-        return this.pairs.map(function(pair) {return pair.origin;});
+        return this.pairs.map(function (pair) {
+            return pair.origin;
+        });
     }
 
     set origins(origins) {
-        this.pairs.forEach(function (pair, index) {pair.origin = origins[index];});
+        this.pairs.forEach(function (pair, index) {
+            pair.origin = origins[index];
+        });
         return this;
     }
 
     translate(vector) {
-        this.pairs.forEach(function (pair) { pair.translate(vector) });
+        this.pairs.forEach(function (pair) {
+            pair.translate(vector)
+        });
         return this;
     }
 
     homothety(scalar) {
-        this.pairs.forEach(function (pair) { pair.homothetic(scalar) });
+        this.pairs.forEach(function (pair) {
+            pair.homothetic(scalar)
+        });
         return this;
     }
 
     transform(matrix) {
-        this.pairs.forEach(function (pair) { pair.transform(matrix) });
+        this.pairs.forEach(function (pair) {
+            pair.transform(matrix)
+        });
         return this;
     }
 
     affine(matrix, vector) {
-        this.pairs.forEach(function (pair) { pair.affine(matrix, vector) });
+        this.pairs.forEach(function (pair) {
+            pair.affine(matrix, vector)
+        });
         return this;
     }
 
@@ -78,10 +98,10 @@ module.exports = class Trajectory {
     }
 
     isEqual(trajectory) {
-        if(trajectory.pairs.size !== this.pairs.size) {
+        if (trajectory.pairs.size !== this.pairs.size) {
             return false;
         }
-        return this.pairs.reduce(function(acc, cur, index) {
+        return this.pairs.reduce(function (acc, cur, index) {
             return acc && cur.isEqual(trajectory.pairs[index]);
         }, true);
     }
@@ -118,12 +138,16 @@ module.exports = class Trajectory {
     }
 
     static cstStep(pairs, step) {
-        var steps = Array(pairs.length).map(function () { return step });
+        var steps = Array(pairs.length).map(function () {
+            return step
+        });
         return new Trajectory(pairs, steps);
     }
 
     static fromVect(vectors, origin, steps) {
-        var steps = (typeof steps == "number") ? Array(vectors.length).map(function () { return steps }) : steps;
+        var steps = (typeof steps == "number") ? Array(vectors.length).map(function () {
+            return steps
+        }) : steps;
         var pairs = vectors.map(function (u) {
             return new PointPair(origin, u);
         });
