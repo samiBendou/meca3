@@ -58,4 +58,15 @@ describe("Trajectory Tests", function () {
             return acc && cur.isEqual(originToSet[index]);
         }, true));
     });
+
+    it("First/Last", function() {
+        assert(gamma0.first.isEqual(om0));
+        assert(gamma0.last.isEqual(om2));
+
+        gamma0.first = om1;
+        gamma0.last = om0;
+
+        assert(gamma0.first.isEqual(om1));
+        assert(gamma0.last.isEqual(om0));
+    });
 });

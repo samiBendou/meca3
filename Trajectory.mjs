@@ -31,6 +31,20 @@ module.exports = class Trajectory {
         this.steps = steps;
     }
 
+    get first() {
+        return this.pairs[0];
+    }
+    set first(newFirst) {
+        this.pairs[0] = newFirst;
+    }
+
+    get last() {
+        return this.pairs[this.pairs.length - 1];
+    }
+    set last(newLast) {
+        this.pairs[this.pairs.length - 1] = newLast;
+    }
+
     get length() {
         var steps = this.steps;
         return this.speeds.reduce(function (prev, cur, index) {

@@ -38,4 +38,15 @@ describe("BufferTrajectory Tests", function () {
         gamma2.add(om1);
         assert(gamma2.isEqual(Trajectory.cstStep([om1, om1, om2, om2], step)));
     });
+
+    it("First/Last", function() {
+        assert(gamma1.first.isEqual(om1));
+        assert(gamma1.last.isEqual(om2));
+
+        gamma1.first = om1;
+        gamma1.last = om0;
+
+        assert(gamma1.first.isEqual(om1));
+        assert(gamma1.last.isEqual(om0));
+    });
 });

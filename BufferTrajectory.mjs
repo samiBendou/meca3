@@ -36,6 +36,21 @@ module.exports = class BufferTrajectory extends Trajectory {
         }
     }
 
+    get first() {
+        return this.pairs[this.addIndex];
+    }
+
+    set first(newFirst) {
+        this.pairs[this.addIndex] = newFirst;
+    }
+
+    get last() {
+        return this.pairs[this.addIndex > 0 ? this.addIndex - 1 : this.pairs.length - 1];
+    }
+    set last(newLast) {
+        this.pairs[this.addIndex > 0 ? this.addIndex - 1 : this.pairs.length - 1] = newLast;
+    }
+
     bufferize(trajectory) {
         var delta = (trajectory.pairs.length - this.size);
         var end = delta >= 0 ? this.size : trajectory.pairs.length;
