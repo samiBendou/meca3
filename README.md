@@ -44,7 +44,7 @@ meca3 library is designed to :
 
 The package has an object oriented structure as follows :
 
-![Class Diagram](./classdiagram.png)
+![Class Diagram](https://github.com/samiBendou/meca3/blob/master/classdiagram.png?raw=true)
 
 **Notes :** 
 - This diagram represents **only the main features** of the package.
