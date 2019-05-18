@@ -56,7 +56,7 @@ inputs and outputs of a function.
 
 ##### Object oriented syntax
 
-The object oriented structure allows to perform operations chaining with manual copy management :
+The object oriented structure allows to perform operations chaining with manual copy management.
 ```js
     u = v.copy().add(w); // Creates a new Vector3 : u = v + w
     v.add(w); // Add w into v : v = v + w
