@@ -33,14 +33,16 @@ module.exports = class Solver {
         return cur.copy().mul(2).sub(prev).add(this.field(cur, t).mul(step2));
     }
 
+    initialTransform(u0, v0) {
+        let u1 = v0.copy().mul(this.step).add(u0);
+        return u1.add(this.field(u1, 0).mul(this.step * this.step / 2));
+    }
+
     solve(u0, v0, count) {
         var u = new Array(count);
-        var step2 = this.step * this.step;
 
         u[0] = u0.copy();
-        u[1] = v0.copy().mul(this.step).add(u0);
-        u[1].add(this.field(u[1], 0).mul(step2 / 2));
-
+        u[1] = this.initialTransform(u0, v0);
         for (var i = 2; i < count; i++) {
             u[i] = this.eulerStep(u[i - 1], u[i - 2], i * this.step);
         }
