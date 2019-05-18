@@ -2,6 +2,7 @@ const assert = require("chai").assert;
 
 describe("PointPair Tests", function () {
     const Vector3 = require("../Vector3.mjs");
+    const Matrix3 = require("../Matrix3.mjs");
     const PointPair = require("../PointPair.mjs");
 
     let om = new PointPair(Vector3.ex, Vector3.ey);
@@ -21,5 +22,12 @@ describe("PointPair Tests", function () {
 
         op.length = 2;
         assert(op.vector.isEqual(Vector3.ex.mul(2)));
+    });
+
+    it("Affine", function() {
+        console.log(om.toString());
+        let affOM = om.copy().affine(Matrix3.rotZ(Math.PI / 4), Vector3.ones);
+        assert.approximately(affOM.length, om.length, Number.EPSILON);
+        assert.approximately(affOM.origin.y, affOM.vector.y, Number.EPSILON);
     });
 });

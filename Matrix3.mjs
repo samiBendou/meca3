@@ -237,7 +237,7 @@ module.exports = class Matrix3 {
     static rot(axis, theta) {
         //R = P + cos(theta) * (I - P) + sin(theta) * Q
 
-        var id = Matrix3.eye; // antisymetric representation of u
+        var id = Matrix3.eye; // antisymmetric representation of u
         var q = Matrix3.zeros;
         var u = axis.copy().div(axis.r); // normalized axis
         var p = Matrix3.tens(u); // projection on rotation axis
@@ -267,7 +267,7 @@ module.exports = class Matrix3 {
         );
     }
 
-    static aff(m, u, v) {
-        return m.map(u).add(v);
+    static makeAffine(m, v) {
+        return function(u) {return m.map(u).add(v)};
     }
 };

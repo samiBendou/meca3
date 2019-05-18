@@ -16,6 +16,7 @@
  */
 
 const Vector3 = require("./Vector3.mjs");
+const Matrix3 = require("./Matrix3.mjs");
 
 module.exports = class PointPair {
 
@@ -59,8 +60,9 @@ module.exports = class PointPair {
     }
 
     affine(matrix, vector) {
-        this.origin = this.origin.aff(matrix, vector);
-        this.vector = this.vector.aff(matrix, vector);
+        let aff = Matrix3.makeAffine(matrix, vector);
+        this.origin = aff(this.origin);
+        this.vector = aff(this.vector);
         return this;
     }
 
