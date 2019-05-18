@@ -33,10 +33,12 @@ describe("BufferTrajectory Tests", function () {
     it("Add", function () {
         gamma1.add(om2);
         assert(gamma1.isEqual(Trajectory.cstStep([om2, om2], step)));
+        gamma1 = new BufferTrajectory(2, gamma);
 
         gamma2.add(om2);
         gamma2.add(om1);
         assert(gamma2.isEqual(Trajectory.cstStep([om1, om1, om2, om2], step)));
+        gamma2 = new BufferTrajectory(4, gamma);
     });
 
     it("First/Last", function() {
@@ -48,5 +50,33 @@ describe("BufferTrajectory Tests", function () {
 
         assert(gamma1.first.isEqual(om1));
         assert(gamma1.last.isEqual(om0));
+
+        gamma1 = new BufferTrajectory(2, gamma);
+    });
+
+    it("At/Get", function() {
+        assert(gamma1.get(0).isEqual(om1));
+        assert(gamma1.at(0).isEqual(om1));
+        assert(gamma1.get(1).isEqual(om2));
+        assert(gamma1.at(0.5).vector.isEqual(Vector3.ex.opp.add(Vector3.ey).mul(0.5)));
+
+        assert(gamma2.get(0).isEqual(PointPair.zeros()));
+        assert(gamma2.at(0).isEqual(PointPair.zeros()));
+        assert(gamma2.get(1).isEqual(om0));
+        assert(gamma2.at(1.5).vector.isEqual(Vector3.ex.add(Vector3.ey).mul(0.5)));
+    });
+
+    it("Time", function(){
+        assert.equal(gamma0.t(0), 0);
+        assert.equal(gamma0.t(0.5), 0.05);
+        assert.equal(gamma0.t(1), 0.1);
+        assert.equal(gamma0.t(2.5), 0.25);
+        assert.approximately(gamma0.t(3), 0.3, Number.EPSILON);
+
+        assert.equal(gamma2.t(0), 0);
+        assert.equal(gamma2.t(0.5), 0);
+        assert.equal(gamma2.t(1), 0);
+        assert.approximately(gamma2.t(2.5), 0.15, Number.EPSILON);
+        assert.approximately(gamma2.t(3), 0.2, Number.EPSILON);
     });
 });

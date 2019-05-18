@@ -68,8 +68,26 @@ module.exports = class BufferTrajectory extends Trajectory {
         this.addIndex = delta >= 0 ? 0 : trajectory.pairs.length;
     }
 
-    at(t) {
-        return this.pairs[(t + this.addIndex) % this.size];
+    t(s) {
+        let s0 = Math.floor((s + this.addIndex) % this.size);
+        let t = this.duration(Math.floor(s));
+        return s0 < this.steps.length ? t + (s - Math.floor(s)) * this.steps[s0] : t;
+    }
+
+    duration(i) {
+        if(i === undefined) {
+            return this.steps.reduce(function(prev, curr) {return prev += curr}, 0);
+        } else if(i + this.addIndex < this.steps.length) {
+            return this.steps.slice(this.addIndex, i + this.addIndex).reduce(function(prev, curr) {return prev += curr}, 0);
+        } else {
+            let end = (i + this.addIndex) % this.size;
+            let sum0 = this.steps.slice(0, end).reduce(function(prev, curr) {return prev += curr}, 0);
+            return sum0 + this.steps.slice(this.addIndex, this.size).reduce(function(prev, curr) {return prev += curr}, 0);
+        }
+    }
+
+    get(i) {
+        return this.pairs[(i + this.addIndex) % this.size];
     }
 
     add(pair, step) {

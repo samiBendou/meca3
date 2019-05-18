@@ -1,6 +1,6 @@
 /**
  *
- * @type {module.Trajectory}
+ * @class {module.Trajectory}
  * @date 09/05/2019
  * @author samiBendou sbdh75@gmail.com
  * @brief Represents a discrete trajectory
@@ -107,8 +107,26 @@ module.exports = class Trajectory {
         return this;
     }
 
-    at(t) {
-        return this.pairs[t];
+    at(s) {
+        let s0 = Math.floor(s), s1 = (s0 + 1);
+        let x0 = this.get(s0).copy(), x1 = this.get(s1).copy();
+        return new PointPair(   x1.origin.sub(x0.origin).mul(s - s0).add(x0.origin),
+                                x1.vector.sub(x0.vector).mul(s - s0).add(x0.vector));
+    }
+
+    t(s) {
+        let s0 = Math.floor(s);
+        let t = this.duration(s0);
+        return s0 < this.steps.length ? t + (s - s0) * this.steps[s0] : t;
+    }
+
+    duration(i) {
+        i = i === undefined ? this.steps.length : i;
+        return this.steps.slice(0, i).reduce(function(prev, curr) {return prev += curr}, 0);
+    }
+
+    get(i) {
+        return this.pairs[i];
     }
 
     isEqual(trajectory) {
@@ -152,16 +170,12 @@ module.exports = class Trajectory {
     }
 
     static cstStep(pairs, step) {
-        var steps = Array(pairs.length).map(function () {
-            return step
-        });
+        var steps = Array(pairs.length).fill(step);
         return new Trajectory(pairs, steps);
     }
 
-    static fromVect(vectors, origin, steps) {
-        var steps = (typeof steps == "number") ? Array(vectors.length).map(function () {
-            return steps
-        }) : steps;
+    static fromVect(vectors, origin, step) {
+        var steps = (typeof step == "number") ? Array(vectors.length).fill(step) : step;
         var pairs = vectors.map(function (u) {
             return new PointPair(origin, u);
         });
