@@ -22,11 +22,13 @@
  * is of size 3 and only 2 elements have been added addIndex is equal 2.
  */
 
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    PointPair = require("./PointPair.mjs");
+    Trajectory = require("./Trajectory.mjs");
+}
 
-const PointPair = require("./PointPair.mjs");
-const Trajectory = require("./Trajectory.mjs");
 
-module.exports = class BufferTrajectory extends Trajectory {
+class BufferTrajectory extends Trajectory {
     constructor(size, trajectory) {
         super(new Array(size), new Array(size));
         this.size = size;
@@ -108,4 +110,9 @@ module.exports = class BufferTrajectory extends Trajectory {
         this.pairs = new Array(this.size);
         this.steps = new Array(this.steps);
     }
-};
+}
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = BufferTrajectory;
+else
+    window.BufferTrajectory = BufferTrajectory;

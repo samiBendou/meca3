@@ -20,11 +20,12 @@
  * @property {Array} steps Array storing the time step between each position
  */
 
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    PointPair = require("./PointPair.mjs");
+    Vector3 = require("./Vector3.mjs");
+}
 
-const PointPair = require("./PointPair.mjs");
-const Vector3 = require("./Vector3.mjs");
-
-module.exports = class Trajectory {
+class Trajectory {
 
     constructor(pairs = [], steps = []) {
         this.pairs = pairs;
@@ -182,4 +183,9 @@ module.exports = class Trajectory {
 
         return new Trajectory(pairs, steps);
     }
-};
+}
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Trajectory;
+else
+    window.Trajectory = Trajectory;

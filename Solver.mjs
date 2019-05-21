@@ -20,9 +20,10 @@
  * @property {Number} step Constant time step between two solving instant.
  */
 
-const Vector3 = require("./Vector3.mjs");
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    Vector3 = require("./Vector3.mjs");
 
-module.exports = class Solver {
+class Solver {
     constructor(field, step = 1) {
         this.field = field;
         this.step = step;
@@ -50,3 +51,8 @@ module.exports = class Solver {
         return u;
     }
 }
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Solver;
+else
+    window.Solver = Solver;

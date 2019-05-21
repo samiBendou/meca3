@@ -25,7 +25,7 @@
  * @property phi {number} angle between ez and this vector
  * @property rxy {number} length of the projection of this vector on the (ex, ey) plan
  */
-module.exports = class Vector3 {
+class Vector3 {
 
     constructor(x = 0, y = 0, z = 0) {
         this.x = x;
@@ -209,4 +209,9 @@ module.exports = class Vector3 {
         }
         return der;
     }
-};
+}
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Vector3;
+else
+    window.Vector3 = Vector3;

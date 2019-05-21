@@ -17,10 +17,10 @@
  *
  *          It provides many generators and especially for rotation matrices.
  */
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    Vector3 = require("./Vector3.mjs");
 
-const Vector3 = require("./Vector3.mjs");
-
-module.exports = class Matrix3 {
+class Matrix3 {
 
     constructor(xx = 0, xy = 0, xz = 0,
                 yx = 0, yy = 0, yz = 0,
@@ -63,9 +63,9 @@ module.exports = class Matrix3 {
     }
 
     get opp() {
-        this.x.opp();
-        this.y.opp();
-        this.z.opp();
+        this.x.opp;
+        this.y.opp;
+        this.z.opp;
         return this;
     }
 
@@ -270,4 +270,9 @@ module.exports = class Matrix3 {
     static makeAffine(m, v) {
         return function(u) {return m.map(u).add(v)};
     }
-};
+}
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Matrix3;
+else
+    window.Matrix3 = Matrix3;

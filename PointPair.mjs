@@ -14,11 +14,12 @@
  * @property {Vector3} vector denotes the absolute coordinates of the extremity point.
  * @property {Vector3} origin denotes the absolute coordinates the origin point.
  */
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    Vector3 = require("./Vector3.mjs");
+    Matrix3 = require("./Matrix3.mjs");
+}
 
-const Vector3 = require("./Vector3.mjs");
-const Matrix3 = require("./Matrix3.mjs");
-
-module.exports = class PointPair {
+class PointPair {
 
     constructor(origin = Vector3.zeros, vector = Vector3.zeros) {
         this.origin = origin.copy();
@@ -84,5 +85,10 @@ module.exports = class PointPair {
 
     static zeros(u = Vector3.zeros) {
         return new PointPair(u, u)
-    };
-};
+    }
+}
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = PointPair;
+else
+    window.PointPair = PointPair;
