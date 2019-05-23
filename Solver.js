@@ -21,7 +21,7 @@
  */
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    Vector3 = require("./Vector3.mjs");
+    Vector3 = require("./Vector3.js");
 
 class Solver {
     constructor(field, step = 1) {

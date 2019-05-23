@@ -1,8 +1,8 @@
 const assert = require("chai").assert;
 
 describe("Solver Tests", function () {
-    const Vector3 = require("../Vector3.mjs");
-    const Solver = require("../Solver.mjs");
+    const Vector3 = require("../Vector3.js");
+    const Solver = require("../Solver.js");
 
     let oSolver = new Solver(function(u, t) {
         return u.copy().opp;

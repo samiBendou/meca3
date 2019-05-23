@@ -1,10 +1,10 @@
 const assert = require("chai").assert;
 
 describe("BufferTrajectory Tests", function () {
-    const Vector3 = require("../Vector3.mjs");
-    const PointPair = require("../PointPair.mjs");
-    const Trajectory = require("../Trajectory.mjs");
-    const BufferTrajectory = require("../BufferTrajectory.mjs");
+    const Vector3 = require("../Vector3.js");
+    const PointPair = require("../PointPair.js");
+    const Trajectory = require("../Trajectory.js");
+    const BufferTrajectory = require("../BufferTrajectory.js");
 
     let step = 0.1;
     let org = Vector3.zeros;

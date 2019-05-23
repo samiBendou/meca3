@@ -18,7 +18,7 @@
  *          It provides many generators and especially for rotation matrices.
  */
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    Vector3 = require("./Vector3.mjs");
+    Vector3 = require("./Vector3.js");
 
 class Matrix3 {
 

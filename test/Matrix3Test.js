@@ -1,8 +1,8 @@
 const assert = require("chai").assert;
 
 describe("Matrix3 Tests", function () {
-    const Vector3 = require("../Vector3.mjs");
-    const Matrix3 = require("../Matrix3.mjs");
+    const Vector3 = require("../Vector3.js");
+    const Matrix3 = require("../Matrix3.js");
 
     let a = Matrix3.eye;
 

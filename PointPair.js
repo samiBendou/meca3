@@ -15,8 +15,8 @@
  * @property {Vector3} origin denotes the absolute coordinates the origin point.
  */
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    Vector3 = require("./Vector3.mjs");
-    Matrix3 = require("./Matrix3.mjs");
+    Vector3 = require("./Vector3.js");
+    Matrix3 = require("./Matrix3.js");
 }
 
 class PointPair {

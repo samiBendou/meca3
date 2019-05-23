@@ -23,8 +23,8 @@
  */
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    PointPair = require("./PointPair.mjs");
-    Trajectory = require("./Trajectory.mjs");
+    PointPair = require("./PointPair.js");
+    Trajectory = require("./Trajectory.js");
 }
 
 

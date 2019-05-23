@@ -1,11 +1,10 @@
 const chai = require("chai");
 const assert = chai.assert;
-const expect = chai.expect;
 
 describe("Trajectory Tests", function () {
-    const Vector3 = require("../Vector3.mjs");
-    const PointPair = require("../PointPair.mjs");
-    const Trajectory = require("../Trajectory.mjs");
+    const Vector3 = require("../Vector3.js");
+    const PointPair = require("../PointPair.js");
+    const Trajectory = require("../Trajectory.js");
 
     // Initialisation of trajectory
     var step = 0.1;

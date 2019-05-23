@@ -1,9 +1,9 @@
 const assert = require("chai").assert;
 
 describe("PointPair Tests", function () {
-    const Vector3 = require("../Vector3.mjs");
-    const Matrix3 = require("../Matrix3.mjs");
-    const PointPair = require("../PointPair.mjs");
+    const Vector3 = require("../Vector3.js");
+    const Matrix3 = require("../Matrix3.js");
+    const PointPair = require("../PointPair.js");
 
     let om = new PointPair(Vector3.ex, Vector3.ey);
     let op = new PointPair(Vector3.zeros, Vector3.ex);

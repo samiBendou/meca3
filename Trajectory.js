@@ -21,8 +21,8 @@
  */
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    PointPair = require("./PointPair.mjs");
-    Vector3 = require("./Vector3.mjs");
+    PointPair = require("./PointPair.js");
+    Vector3 = require("./Vector3.js");
 }
 
 class Trajectory {

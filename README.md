@@ -19,7 +19,7 @@ Use `npm i meca3` in terminal to import package into your `node_modules` directo
 Import each class you want use the following syntax :
 
 ```js
-const Vector3 = require("[path_to_meca3]/Vector3.mjs");
+const Vector3 = require(Vector3.js);
 ```
 
 ### Run unit tests
