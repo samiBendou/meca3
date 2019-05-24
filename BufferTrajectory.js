@@ -62,16 +62,16 @@ class BufferTrajectory extends Trajectory {
     }
 
     bufferize(trajectory) {
-        var delta = (trajectory.pairs.length - this.size);
-        var end = delta >= 0 ? this.size : trajectory.pairs.length;
+        let delta = (trajectory.pairs.length - this.size);
+        let end = delta >= 0 ? this.size : trajectory.pairs.length;
 
-        for (var i = 0; i < end; i++) {
-            var index = delta >= 0 ? (i + delta) : i;
+        for (let i = 0; i < end; i++) {
+            let index = delta >= 0 ? (i + delta) : i;
             this.pairs[i] = trajectory.pairs[index].copy();
             this.steps[i] = trajectory.steps[index];
         }
 
-        for (i = end; i < this.size; i++) {
+        for (let i = end; i < this.size; i++) {
             this.pairs[i] = PointPair.zeros();
             this.steps[i] = 0.0;
         }

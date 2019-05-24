@@ -25,8 +25,8 @@ describe("Trajectory Tests", function () {
     });
 
     it("Positions", function () {
-        let expectPos0 = Trajectory.fromVect([om0.relative, om1.relative, om2.relative], Vector3.zeros, step);
-        let expectPos1 = Trajectory.fromVect([Vector3.ex, Vector3.ex, Vector3.ex], Vector3.zeros, step);
+        let expectPos0 = Trajectory.cstOrigin([om0.relative, om1.relative, om2.relative], Vector3.zeros, step);
+        let expectPos1 = Trajectory.cstOrigin([Vector3.ex, Vector3.ex, Vector3.ex], Vector3.zeros, step);
 
         assert(gamma0.isEqual(expectPos0));
         assert(gamma1.isEqual(expectPos1));

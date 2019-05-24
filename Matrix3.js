@@ -32,12 +32,12 @@ class Matrix3 {
     }
 
     row(i) {
-        var labels = ["x", "y", "z"];
+        let labels = ["x", "y", "z"];
         return this[labels[i]].copy();
     }
 
     col(j) {
-        var labels = ["x", "y", "z"];
+        let labels = ["x", "y", "z"];
         return new Vector3(this.x[labels[j]], this.y[labels[j]], this.z[labels[j]]);
     }
 
@@ -84,7 +84,7 @@ class Matrix3 {
     }
 
     get trans() {
-        var copy = this.copy();
+        let copy = this.copy();
 
         copy.x.y = this.y.x;
         copy.x.z = this.z.x;
@@ -99,8 +99,8 @@ class Matrix3 {
     }
 
     prod(m) {
-        var mTrs = m.copy().trans;
-        var copy = this.copy();
+        let mTrs = m.copy().trans;
+        let copy = this.copy();
 
         copy.x.x = this.x.scal(mTrs.x);
         copy.x.y = this.x.scal(mTrs.y);
@@ -118,7 +118,7 @@ class Matrix3 {
     }
 
     map(u) {
-        var copy = u.copy();
+        let copy = u.copy();
 
         copy.x = this.x.scal(u);
         copy.y = this.y.scal(u);
@@ -147,7 +147,7 @@ class Matrix3 {
     }
 
     copy() {
-        var copy = new Matrix3();
+        let copy = new Matrix3();
 
         copy.x = this.x.copy();
         copy.y = this.y.copy();
@@ -190,8 +190,8 @@ class Matrix3 {
     }
 
     static can(i, j) {
-        var labels = ["x", "y", "z"];
-        var can = Matrix3.zeros;
+        let labels = ["x", "y", "z"];
+        let can = Matrix3.zeros;
 
         can[labels[i]][labels[j]] = 1;
         return can;
@@ -237,11 +237,11 @@ class Matrix3 {
     static rot(axis, theta) {
         //R = P + cos(theta) * (I - P) + sin(theta) * Q
 
-        var id = Matrix3.eye; // antisymmetric representation of u
-        var q = Matrix3.zeros;
-        var u = axis.copy().div(axis.r); // normalized axis
-        var p = Matrix3.tens(u); // projection on rotation axis
-        var r = p.copy();
+        let id = Matrix3.eye; // antisymmetric representation of u
+        let q = Matrix3.zeros;
+        let u = axis.copy().div(axis.r); // normalized axis
+        let p = Matrix3.tens(u); // projection on rotation axis
+        let r = p.copy();
 
         q.x = u.cross(Vector3.ex);
         q.y = u.cross(Vector3.ey);

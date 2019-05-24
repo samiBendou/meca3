@@ -57,6 +57,7 @@ describe("BufferTrajectory Tests", function () {
         assert(gamma2.nexto.isEqual(org));
 
         gamma1 = new BufferTrajectory(2, gamma);
+        gamma2 = new BufferTrajectory(4, gamma);
     });
 
     it("At/Get", function() {

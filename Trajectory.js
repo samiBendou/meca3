@@ -55,7 +55,7 @@ class Trajectory {
     }
 
     get length() {
-        var steps = this.steps;
+        let steps = this.steps;
         return this.speeds.reduce(function (prev, cur, index) {
             return prev + cur.r * steps[index];
         }, 0.0);
@@ -95,7 +95,7 @@ class Trajectory {
         return this;
     }
 
-    homothety(scalar) {
+    homothetic(scalar) {
         this.pairs.forEach(function (pair) {
             pair.homothetic(scalar)
         });
@@ -152,7 +152,7 @@ class Trajectory {
     }
 
     add(pair, step) {
-        if (step != undefined) {
+        if (step !== undefined) {
             this.steps.push(step);
         } else if (this.steps.length > 0) {
             this.steps.push(this.steps[this.steps.length - 1]);
@@ -171,7 +171,7 @@ class Trajectory {
     }
 
     toString() {
-        var str = "";
+        let str = "";
         this.pairs.forEach(function (pair) {
             str += pair.toString() + "\n";
         });
@@ -179,13 +179,13 @@ class Trajectory {
     }
 
     static cstStep(pairs, step) {
-        var steps = Array(pairs.length).fill(step);
+        let steps = Array(pairs.length).fill(step);
         return new Trajectory(pairs, steps);
     }
 
-    static fromVect(vectors, origin, step) {
-        var steps = (typeof step == "number") ? Array(vectors.length).fill(step) : step;
-        var pairs = vectors.map(function (u) {
+    static cstOrigin(vectors, origin, step) {
+        let steps = (typeof step == "number") ? Array(vectors.length).fill(step) : step;
+        let pairs = vectors.map(function (u) {
             return new PointPair(origin, u);
         });
 

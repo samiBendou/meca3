@@ -30,7 +30,7 @@ class Solver {
     }
 
     eulerStep(cur, prev, t) {
-        var step2 = this.step * this.step;
+        let step2 = this.step * this.step;
         return cur.copy().mul(2).sub(prev).add(this.field(cur, t).mul(step2));
     }
 
@@ -40,11 +40,11 @@ class Solver {
     }
 
     solve(u0, v0, count) {
-        var u = new Array(count);
+        let u = new Array(count);
 
         u[0] = u0.copy();
         u[1] = this.initialTransform(u0, v0);
-        for (var i = 2; i < count; i++) {
+        for (let i = 2; i < count; i++) {
             u[i] = this.eulerStep(u[i - 1], u[i - 2], i * this.step);
         }
 

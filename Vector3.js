@@ -62,9 +62,9 @@ class Vector3 {
     }
 
     setRThetaPhi(r, theta, phi) {
-        this.x = r * Math.sin(phi) * Math.cos(theta),
-            this.y = r * Math.sin(phi) * Math.sin(theta),
-            this.z = r * Math.cos(phi);
+        this.x = r * Math.sin(phi) * Math.cos(theta);
+        this.y = r * Math.sin(phi) * Math.sin(theta);
+        this.z = r * Math.cos(phi);
     }
 
     fill(s) {
@@ -183,7 +183,7 @@ class Vector3 {
     }
 
     static can(k) {
-        return new Vector3(k == 0 ? 1 : 0, k == 1 ? 1 : 0, k == 2 ? 1 : 0);
+        return new Vector3(k === 0 ? 1 : 0, k === 1 ? 1 : 0, k === 2 ? 1 : 0);
     }
 
     static sum(vectors) {
@@ -203,8 +203,8 @@ class Vector3 {
     }
 
     static der(vectors, steps) {
-        var der = new Array(vectors.length - 1);
-        for (var i = 1; i < vectors.length; i++) {
+        let der = new Array(vectors.length - 1);
+        for (let i = 1; i < vectors.length; i++) {
             der[i - 1] = vectors[i].copy().sub(vectors[i - 1]).div(steps[i - 1]);
         }
         return der;
