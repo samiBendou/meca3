@@ -60,15 +60,18 @@ describe("Trajectory Tests", function () {
         gamma1 = Trajectory.cstStep([om0, om3, om4], step);
     });
 
-    it("First/Last", function() {
+    it("First/Last/Nexto", function () {
         assert(gamma0.first.isEqual(om0));
         assert(gamma0.last.isEqual(om2));
+        assert(gamma0.nexto.isEqual(om1));
 
         gamma0.first = om1;
         gamma0.last = om0;
+        gamma0.nexto = om4;
 
         assert(gamma0.first.isEqual(om1));
         assert(gamma0.last.isEqual(om0));
+        assert(gamma0.nexto.isEqual(om4));
 
         gamma0 = Trajectory.cstStep([om0, om1, om2], step);
     });

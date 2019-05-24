@@ -53,6 +53,14 @@ class BufferTrajectory extends Trajectory {
         this.pairs[this.addIndex > 0 ? this.addIndex - 1 : this.pairs.length - 1] = newLast;
     }
 
+    get nexto() {
+        return this.pairs[this.addIndex > 1 ? this.addIndex - 2 : this.pairs.length - 2 + this.addIndex];
+    }
+
+    set nexto(newNexto) {
+        this.pairs[this.addIndex > 1 ? this.addIndex - 2 : this.pairs.length - 2 + this.addIndex] = newNexto;
+    }
+
     bufferize(trajectory) {
         var delta = (trajectory.pairs.length - this.size);
         var end = delta >= 0 ? this.size : trajectory.pairs.length;
@@ -63,7 +71,7 @@ class BufferTrajectory extends Trajectory {
             this.steps[i] = trajectory.steps[index];
         }
 
-        for (var i = end; i < this.size; i++) {
+        for (i = end; i < this.size; i++) {
             this.pairs[i] = PointPair.zeros();
             this.steps[i] = 0.0;
         }

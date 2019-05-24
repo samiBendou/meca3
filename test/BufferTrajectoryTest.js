@@ -41,15 +41,20 @@ describe("BufferTrajectory Tests", function () {
         gamma2 = new BufferTrajectory(4, gamma);
     });
 
-    it("First/Last", function() {
+    it("First/Last/Nexto", function () {
         assert(gamma1.first.isEqual(om1));
         assert(gamma1.last.isEqual(om2));
 
+        assert(gamma2.last.isEqual(om2));
+        assert(gamma2.nexto.isEqual(om1));
+
         gamma1.first = om1;
         gamma1.last = om0;
+        gamma2.nexto = org;
 
         assert(gamma1.first.isEqual(om1));
         assert(gamma1.last.isEqual(om0));
+        assert(gamma2.nexto.isEqual(org));
 
         gamma1 = new BufferTrajectory(2, gamma);
     });

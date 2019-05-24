@@ -46,6 +46,14 @@ class Trajectory {
         this.pairs[this.pairs.length - 1] = newLast;
     }
 
+    get nexto() {
+        return this.pairs[this.pairs.length - 2];
+    }
+
+    set nexto(newLast) {
+        this.pairs[this.pairs.length - 2] = newLast;
+    }
+
     get length() {
         var steps = this.steps;
         return this.speeds.reduce(function (prev, cur, index) {
