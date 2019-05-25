@@ -9,7 +9,6 @@ describe("Trajectory Tests", function () {
     // Initialisation of trajectory
     let step = 0.1;
     let steps = [step, step, step];
-    let org = Vector3.zeros;
     let om0 = PointPair.vect(Vector3.ex);
     let om1 = PointPair.vect(Vector3.ey);
     let om2 = PointPair.vect(Vector3.ex.opp);
