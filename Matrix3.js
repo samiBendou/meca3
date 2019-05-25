@@ -8,16 +8,16 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
  * @brief Representation of 3x3 matrices
  * @details The matrix is stored in memory as an aggregation of three Vector3 rows : x, y, z.
  *
- *          Access a component of the matrix using the following syntax : m.i.j where
- *          both i and j e be equal to x, y or z. eg m.x.x or m.y.z
+ * Access a component of the matrix using the following syntax : m.i.j where
+ * both i and j e be equal to x, y or z. eg m.x.x or m.y.z
  *
- *          Matrix3 class extends vector space operations from Vector3 and provide other
- *          matrix related algebraical operations.
+ * Matrix3 class extends vector space operations from Vector3 and provide other
+ * matrix related algebraical operations.
  *
- *          Matrix3 class is designed to provide fast inversion, product and determinant
- *          computation.
+ * Matrix3 class is designed to provide fast inversion, product and determinant
+ * computation.
  *
- *          It provides many generators and especially for rotation matrices.
+ * It provides many generators and especially for rotation matrices.
  */
 class Matrix3 {
 
@@ -340,7 +340,7 @@ class Matrix3 {
     /**
      * @brief tensor product of a vector against itself
      * @details tensor product is the matrix obtained from two vectors
-     *          such that mij = ui * vj
+     * such that mij = ui * vj
      * @param u {Vector3} vector to transform
      * @returns {Matrix3} value of the matrix product
      */

@@ -9,17 +9,17 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  * @author samiBendou sbdh75@gmail.com
  * @brief Represents the trajectory of a point pair
  * @details The trajectory is stored into memory as an array of PointPair representing the successive positions
- *          of a mobile over time. The value of the array must be chronological ordered.
+ * of a mobile over time. The value of the array must be chronological ordered.
  *
- *          Each value of the array denotes the position of both the mobile and the observer at a given time.
+ * Each value of the array denotes the position of both the mobile and the observer at a given time.
  *
- *          Trajectory class is designed to perform continuous representation of a trajectory from a discrete set of
- *          positions
+ * Trajectory class is designed to perform continuous representation of a trajectory from a discrete set of
+ * positions
  *
- *          Trajectory class allows to compute the duration and time along the trajectory
+ * Trajectory class allows to compute the duration and time along the trajectory
  *
- *          You have to provide a time step for the trajectory in order to compute speed and acceleration.
- *          The time step e be variable but if so you have to precise the value of each time step in an array.
+ * You have to provide a time step for the trajectory in order to compute speed and acceleration.
+ * The time step e be variable but if so you have to precise the value of each time step in an array.
  *
  * @property {PointPair} first initial position in trajectory
  * @property {PointPair} last last position in trajectory
@@ -129,7 +129,7 @@ class Trajectory {
     /**
      * @brief Get position at real index
      * @details The trajectory is made continuous by using linear interpolation between the point pairs in trajectory.
-     *          The real index is the curvilinear abscissa.
+     * The real index is the curvilinear abscissa.
      * @param s {number} curvilinear abscissa, real between 0 and the number of point pairs in trajectory
      * @returns {PointPair} value of position at parameter s
      */
@@ -143,7 +143,7 @@ class Trajectory {
     /**
      * @brief Get duration at real index
      * @details The time is made continuous by using linear interpolation between the steps in trajectory.
-     *          The real index is the curvilinear abscissa.
+     * The real index is the curvilinear abscissa.
      * @param s {number} curvilinear abscissa, real between 0 and the number of point pairs in trajectory
      * @returns {number} value of duration at parameter s
      */

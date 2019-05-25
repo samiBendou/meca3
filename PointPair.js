@@ -9,18 +9,18 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  * @author samiBendou sbdh75@gmail.com
  * @brief Represents a couple of points
  * @details A PointPair can be represented as a pair of points, the observer and the mobile.
- *          Each point is represented by a Vector3.
+ * Each point is represented by a Vector3.
  *
- *          The origin object is the absolute position of the observer of the trajectory.
- *          The vector object is the absolute position of the mobile of the trajectory.
+ * The origin object is the absolute position of the observer of the trajectory.
+ * The vector object is the absolute position of the mobile of the trajectory.
  *
- *          PointPair class is designed to perform geometrical transformation on the segment joining the two points.
+ * PointPair class is designed to perform geometrical transformation on the segment joining the two points.
  *
- *          PointPair class allows to manipulate relative coordinates of the mobile using the .relative property.
+ * PointPair class allows to manipulate relative coordinates of the mobile using the .relative property.
  *
  * @property {Vector3} relative relative coordinates of the mobile
  * @property {number} length distance between the two points.
- *           When the length is changed, only the mobile position is changed.
+ * When the length is changed, only the mobile position is changed.
  */
 class PointPair {
 
@@ -63,8 +63,8 @@ class PointPair {
 
     /**
      * @brief Homothetic transformation of the point pair
-     * @datails a homothetic transformation is a scalar multiplication of the
-     *          of the two points contained in the point pair
+     * @details a homothetic transformation is a scalar multiplication of the
+     * of the two points contained in the point pair
      * @param scalar {Vector3} translation vector
      * @returns {PointPair} reference to this
      */

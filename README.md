@@ -15,17 +15,30 @@ to compute **trajectory** of **moving bodies**.
 - **geometrical transformations** such as translation of affine transform
 
 ### Install
-Use `npm i meca3` in terminal to import package into your `node_modules` directory.
-Import each class you want use the following syntax :
 
-```js
-const Vector3 = require(Vector3.js);
+Install with the following command
 ```
+npm install meca3
+```
+
+Use the provided modules with require
+```js
+const Vector3 = require("meca3").Vector3;
+```
+
+**Browser**: the module is compatible with browser. Install the module and import each file as follows
+```html
+<script src="path/to/meca3/Vector3.js"></script>
+```
+You can then use the modules in your browser js files.
 
 ### Run unit tests
 Unit testing is performed using **mocha** and **chai** frameworks. 
-Install the framework and go to the test directory. 
-For each class .mjs file a unit test file is provided.
+Install the framework and go to the test directory. Run the following command
+
+```
+npm test
+```
 
 ## Documentation
 

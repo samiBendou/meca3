@@ -5,19 +5,19 @@
  * @brief Representation of 3D vectors
  * @details The 3D vectors are stored by components using cartesian coordinates (x, y, z).
  *
- *          Vector3 class allows to perform vector space operations between vectors (u + v, s * u).
- *          Operations are performed using a object-syntax eg. u.add(v), they e be chained eg. u.add(v).mul(s).
+ * Vector3 class allows to perform vector space operations between vectors (u + v, s * u).
+ * Operations are performed using a object-syntax eg. u.add(v), they e be chained eg. u.add(v).mul(s).
  *
- *          Vector3 class provides setters and getters for cylindrical (r, theta, z)
- *          and spherical coordinates (r, theta, phi).
+ * Vector3 class provides setters and getters for cylindrical (r, theta, z)
+ * and spherical coordinates (r, theta, phi).
  *
- *          Vector3 class is designed to provide many features related to geometry such
- *          as the angle of between two vector, the cross product.
+ * Vector3 class is designed to provide many features related to geometry such
+ * as the angle of between two vector, the cross product.
  *
- *          The Vector3 class provides vectors generator in a numpy-style syntax such as ones, zeros, ...
+ * The Vector3 class provides vectors generator in a numpy-style syntax such as ones, zeros, ...
  *
- *          We denote the canonical basis of 3D euclidean space ex, ey, ez such that :
- *              - ex = (1, 0, 0), - ey = (0, 1, 0), - ez = (0, 0, 1)
+ * We denote the canonical basis of 3D euclidean space ex, ey, ez such that :
+ * - ex = (1, 0, 0), - ey = (0, 1, 0), - ez = (0, 0, 1)
  *
  * @property r {number} length of this vector, also the r spherical coordinate
  * @property theta {number} angle between ex and this vector in radians
@@ -318,8 +318,8 @@ class Vector3 {
     /**
      * @brief Derivative of an array of vector with given steps
      * @details Representing derivative of the array of Vector3 depending on a variable s
-     *          such that s0 = 0, smax = sum of the steps
-     *          If the original array is of size N, than the derivative is of size N - 1
+     * such that s0 = 0, smax = sum of the steps
+     * If the original array is of size N, than the derivative is of size N - 1
      *
      * @param vectors {Array} array of Vector3 to process
      * @param steps {Array} array of numbers representing steps between Vector3

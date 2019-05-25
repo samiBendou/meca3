@@ -7,19 +7,19 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
  * @author samiBendou sbdh75@gmail.com
  * @brief Solve second order differential equation
  * @details Solve equations with the form  d2u/dt2 = f(u, t) where :
- *          - u is the unknown vector function also know as state vector
- *          - d2u / dt2 denotes the second order derivative of u
- *          - f(u, t) is a smooth function depending only on coordinates of u and time t
- *          - v = du/dt is the derivative of u
+ * - u is the unknown vector function also know as state vector
+ * - d2u / dt2 denotes the second order derivative of u
+ * - f(u, t) is a smooth function depending only on coordinates of u and time t
+ * - v = du/dt is the derivative of u
  *
- *          This solver is designed to be used in two ways :
- *          1. Step by step solving. Get the next value of u giving the current and previous values of u
- *          2. Trajectory solving. Give the number of steps, u0 and v0 and get an array containing u at each step
+ * This solver is designed to be used in two ways :
+ * 1. Step by step solving. Get the next value of u giving the current and previous values of u
+ * 2. Trajectory solving. Give the number of steps, u0 and v0 and get an array containing u at each step
  *
- *          Only explicit Euler's method is available for the moment.
+ * Only explicit Euler's method is available for the moment.
  *
- *          The solver stores the field function used as Javacript function and the time step between each solving step
- *          as a real number
+ * The solver stores the field function used as Javacript function and the time step between each solving step
+ * as a real number
  *
  * @property {function} field Javascript function representing the output of the f(., .) function.
  * @property {Number} step Constant time step between two solving instant.
@@ -51,8 +51,8 @@ class Solver {
     /**
      * @brief Transform speed and position initial conditions
      * @details Transforms the u0, v0 initial condition into a u0, u1 initial condition
-     *          for the ODE. This mean that instead of giving initial speed and position,
-     *          you give initial position and position right after initial instant.
+     * for the ODE. This mean that instead of giving initial speed and position,
+     * you give initial position and position right after initial instant.
      * @param u0 {Vector3} initial position
      * @param v0 {Vector3} initial speed
      * @returns {Vector3} position right after initial instant
