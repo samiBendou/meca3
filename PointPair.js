@@ -125,11 +125,11 @@ class PointPair {
 
     /**
      * @brief point pair by providing the mobile only
-     * @details origin is set to 0
+     * @details origin is set to 0. The point pair represents only a vector
      * @param u {Vector3} absolute position of the mobile
      * @returns {PointPair} newly created point pair
      */
-    static fromVect(u) {
+    static vect(u) {
         return new PointPair(Vector3.zeros, u);
     }
 }

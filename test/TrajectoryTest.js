@@ -10,9 +10,9 @@ describe("Trajectory Tests", function () {
     let step = 0.1;
     let steps = [step, step, step];
     let org = Vector3.zeros;
-    let om0 = new PointPair(org, Vector3.ex);
-    let om1 = new PointPair(org, Vector3.ey);
-    let om2 = new PointPair(org, Vector3.ex.opp);
+    let om0 = new PointPair.vect(Vector3.ex);
+    let om1 = new PointPair.vect(Vector3.ey);
+    let om2 = new PointPair.vect(Vector3.ex.opp);
     let om3 = om0.copy().translate(Vector3.ex);
     let om4 = om0.copy().translate(Vector3.ey);
 

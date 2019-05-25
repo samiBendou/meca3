@@ -6,7 +6,7 @@ describe("PointPair Tests", function () {
     const PointPair = require("../PointPair.js");
 
     let om = new PointPair(Vector3.ex, Vector3.ey);
-    let op = PointPair.fromVect(Vector3.ex);
+    let op = PointPair.vect(Vector3.ex);
 
     it("Relative", function(){
        assert(om.relative.isEqual(new Vector3(-1, 1, 0)));
