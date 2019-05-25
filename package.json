@@ -2,17 +2,25 @@
   "name": "meca3",
   "version": "1.0.2",
   "description": "Represent trajectories and solve point dynamic equations",
-  "main": "meca3.js",
+  "main": "main.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "Vector3Test.mjs"
+    "test": "mocha"
   },
   "author": "samiBendou",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "wicked": "^0.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samiBendou/meca3.git"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "^5.0.0"
   }
 }

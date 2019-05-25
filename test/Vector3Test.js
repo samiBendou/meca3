@@ -1,7 +1,7 @@
 const assert = require("chai").assert;
 
 describe("Vector3 Tests", function () {
-    const Vector3 = require("../Vector3.mjs");
+    const Vector3 = require("../Vector3.js");
 
     let u = Vector3.ex;
     let v = Vector3.ey;

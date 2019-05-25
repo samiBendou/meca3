@@ -1,27 +1,30 @@
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    Vector3 = require("./Vector3.js");
+
 /**
- *
- * @type {module.Matrix3}
+ * @class Matrix3
  * @date 09/05/2019
  * @author samiBendou sbdh75@gmail.com
  * @brief Representation of 3x3 matrices
  * @details The matrix is stored in memory as an aggregation of three Vector3 rows : x, y, z.
  *
- *          Access a component of the matrix using the following syntax : m.i.j where
- *          both i and j are equal to x, y or z. eg m.x.x or m.y.z
+ * Access a component of the matrix using the following syntax : m.i.j where
+ * both i and j e be equal to x, y or z. eg m.x.x or m.y.z
  *
- *          Matrix3 class extends vector space operations from Vector3 and provide other
- *          matrix related algebraical operations.
+ * Matrix3 class extends vector space operations from Vector3 and provide other
+ * matrix related algebraical operations.
  *
- *          Matrix3 class is designed to provide fast inversion, product and determinant
- *          computation.
+ * Matrix3 class is designed to provide fast inversion, product and determinant
+ * computation.
  *
- *          It provides many generators and especially for rotation matrices.
+ * It provides many generators and especially for rotation matrices.
  */
+class Matrix3 {
 
-const Vector3 = require("./Vector3.mjs");
-
-module.exports = class Matrix3 {
-
+    /**
+     * @brief Construct a matrix by explicitly giving components
+     * @details The component are ordered as rows, eg. Matrix3(1, 2, 3) fills the first row with (1 2 3)
+     */
     constructor(xx = 0, xy = 0, xz = 0,
                 yx = 0, yy = 0, yz = 0,
                 zx = 0, zy = 0, zz = 0) {
@@ -32,12 +35,12 @@ module.exports = class Matrix3 {
     }
 
     row(i) {
-        var labels = ["x", "y", "z"];
+        let labels = ["x", "y", "z"];
         return this[labels[i]].copy();
     }
 
     col(j) {
-        var labels = ["x", "y", "z"];
+        let labels = ["x", "y", "z"];
         return new Vector3(this.x[labels[j]], this.y[labels[j]], this.z[labels[j]]);
     }
 
@@ -63,9 +66,9 @@ module.exports = class Matrix3 {
     }
 
     get opp() {
-        this.x.opp();
-        this.y.opp();
-        this.z.opp();
+        this.x.opp;
+        this.y.opp;
+        this.z.opp;
         return this;
     }
 
@@ -83,8 +86,12 @@ module.exports = class Matrix3 {
         return this;
     }
 
+    /**
+     * @brief Transpose the matrix
+     * @returns {Matrix3} value of the transposed matrix
+     */
     get trans() {
-        var copy = this.copy();
+        let copy = this.copy();
 
         copy.x.y = this.y.x;
         copy.x.z = this.z.x;
@@ -98,9 +105,14 @@ module.exports = class Matrix3 {
         return copy;
     }
 
+    /**
+     * @brief Product between two matrix
+     * @param m {Matrix3} matrix to multiply
+     * @returns {Matrix3} value of the product
+     */
     prod(m) {
-        var mTrs = m.copy().trans;
-        var copy = this.copy();
+        let mTrs = m.copy().trans;
+        let copy = this.copy();
 
         copy.x.x = this.x.scal(mTrs.x);
         copy.x.y = this.x.scal(mTrs.y);
@@ -117,8 +129,14 @@ module.exports = class Matrix3 {
         return copy;
     }
 
+    /**
+     * @brief Product between matrix and vector
+     * @details Also called linear mapping between matrix and vector
+     * @param u {Vector3} vector to multiply
+     * @returns {Vector3} value of linear mapping
+     */
     map(u) {
-        var copy = u.copy();
+        let copy = u.copy();
 
         copy.x = this.x.scal(u);
         copy.y = this.y.scal(u);
@@ -127,11 +145,20 @@ module.exports = class Matrix3 {
         return copy;
     }
 
+    /**
+     * @brief Determinant of a matrix
+     * @returns {number} value of the determinant
+     */
     get det() {
         return this.x.x * this.y.y * this.z.z + this.x.y * this.y.z * this.z.x + this.x.z * this.y.x * this.z.y
             - this.x.z * this.y.y * this.z.x - this.x.y * this.y.x * this.z.z - this.x.x * this.y.z * this.z.y;
     }
 
+    /**
+     * @brief Inverse of a matrix
+     * @details returns a NaN matrix when the determinant is 0
+     * @returns {Matrix3} value of the inverse matrix
+     */
     get inv() {
         return (new Matrix3(this.y.y * this.z.z - this.y.z * this.z.y,
             this.x.z * this.z.y - this.x.y * this.z.z,
@@ -147,7 +174,7 @@ module.exports = class Matrix3 {
     }
 
     copy() {
-        var copy = new Matrix3();
+        let copy = new Matrix3();
 
         copy.x = this.x.copy();
         copy.y = this.y.copy();
@@ -177,21 +204,38 @@ module.exports = class Matrix3 {
     }
 
     static get ones() {
-        return Matrix3.scal(1);
+        return new Matrix3(1, 1, 1, 1, 1, 1, 1, 1, 1);
     }
 
-
+    /**
+     * @brief Identity matrix
+     * @details Diagonal matrix filled with 1
+     * @returns {Matrix3} value of identity matrix
+     */
     static get eye() {
         return new Matrix3(1, 0, 0, 0, 1, 0, 0, 0, 1);
     }
 
+    /**
+     * @brief Scalar matrix
+     * @details Diagonal matrix filled with a single value
+     * @param s {number} scalar value
+     * @returns {Matrix3} value of scalar matrix
+     */
     static scal(s) {
-        return new Matrix3(s, s, s, s, s, s, s, s, s);
+        return new Matrix3(s, 0, 0, 0, s, 0, 0, 0, s);
     }
 
-    static can(i, j) {
-        var labels = ["x", "y", "z"];
-        var can = Matrix3.zeros;
+    /**
+     * @brief Canonical matrix
+     * @details Matrix with 0 everywhere except in i, j position
+     * @param i {number} row index of 1
+     * @param j {number} column index of 1
+     * @returns {Matrix3} value of canonical matrix
+     */
+    static e(i, j) {
+        let labels = ["x", "y", "z"];
+        let can = Matrix3.zeros;
 
         can[labels[i]][labels[j]] = 1;
         return can;
@@ -209,39 +253,68 @@ module.exports = class Matrix3 {
         });
     }
 
+    /**
+     * @details Product of the matrices in array
+     * @details The product is performed in the same order of the elements in the array
+     * @param matrices {Array} array of Vector3
+     * @returns {Matrix3} value of the product
+     */
     static prod(matrices) {
         return matrices.reduce(function (prev, cur) {
             return prev.copy().prod(cur);
         });
     }
 
-
+    /**
+     * @brief rotation matrix of axis (0, ex)
+     * @details anticlockwise rotation
+     * @param theta {number} angle of rotation
+     * @returns {Matrix3} Value of rotation matrix for specified angle
+     */
     static rotX(theta) {
         return new Matrix3(1, 0, 0,
             0, Math.cos(theta), -Math.sin(theta),
             0, Math.sin(theta), Math.cos(theta));
     }
 
+    /**
+     * @brief rotation matrix of axis (0, ey)
+     * @details anticlockwise rotation
+     * @param theta {number} angle of rotation
+     * @returns {Matrix3} Value of rotation matrix for specified angle
+     */
     static rotY(theta) {
         return new Matrix3(Math.cos(theta), 0, Math.sin(theta),
             0, 1, 0,
             -Math.sin(theta), 0, Math.cos(theta));
     }
 
+    /**
+     * @brief rotation matrix of axis (0, ez)
+     * @details anticlockwise rotation
+     * @param theta {number} angle of rotation
+     * @returns {Matrix3} Value of rotation matrix for specified angle
+     */
     static rotZ(theta) {
         return new Matrix3(Math.cos(theta), -Math.sin(theta), 0,
             Math.sin(theta), Math.cos(theta), 0,
             0, 0, 1);
     }
 
+    /**
+     * @brief rotation matrix with specified axis and angle
+     * @details anticlockwise rotation
+     * @param theta {number} angle of rotation
+     * @returns {Matrix3} Value of rotation matrix for specified angle
+     */
     static rot(axis, theta) {
         //R = P + cos(theta) * (I - P) + sin(theta) * Q
 
-        var id = Matrix3.eye; // antisymetric representation of u
-        var q = Matrix3.zeros;
-        var u = axis.copy().div(axis.r); // normalized axis
-        var p = Matrix3.tens(u); // projection on rotation axis
-        var r = p.copy();
+        let id = Matrix3.eye; // antisymmetric representation of u
+        let q = Matrix3.zeros;
+        let u = axis.copy().div(axis.r); // normalized axis
+        let p = Matrix3.tens(u); // projection on rotation axis
+        let r = p.copy();
 
         q.x = u.cross(Vector3.ex);
         q.y = u.cross(Vector3.ey);
@@ -253,12 +326,24 @@ module.exports = class Matrix3 {
         return r;
     }
 
+    /**
+     * @brief Create a matrix with given array
+     * @param arr {Array} bi-dimensional array containing rows of the matrix
+     * @returns {Matrix3} newly created matrix
+     */
     static fromArray(arr) {
         return new Matrix3(arr[0][0], arr[0][1], arr[0][2],
             arr[1][0], arr[1][1], arr[1][2],
             arr[2][0], arr[2][1], arr[2][2]);
     }
 
+    /**
+     * @brief tensor product of a vector against itself
+     * @details tensor product is the matrix obtained from two vectors
+     * such that mij = ui * vj
+     * @param u {Vector3} vector to transform
+     * @returns {Matrix3} value of the matrix product
+     */
     static tens(u) {
         return new Matrix3(
             u.x * u.x, u.x * u.y, u.x * u.z,
@@ -267,7 +352,21 @@ module.exports = class Matrix3 {
         );
     }
 
-    static aff(m, u, v) {
-        return m.map(u).add(v);
+    /**
+     * @brief Creates an affine transformation of the vector
+     * @details Generates a Javascript function that returns the affine transform of the vector
+     * @param m {Matrix3} matrix of the affine transform
+     * @param v {Vector3} vector of the affine transform
+     * @returns {function(Vector3): Vector3}
+     */
+    static makeAffine(m, v) {
+        return function (u) {
+            return m.map(u).add(v)
+        };
     }
-};
+}
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Matrix3;
+else
+    window.Matrix3 = Matrix3;
