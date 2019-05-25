@@ -7,7 +7,7 @@ describe("Trajectory Tests", function () {
     const Trajectory = require("../Trajectory.js");
 
     // Initialisation of trajectory
-    var step = 0.1;
+    let step = 0.1;
     let steps = [step, step, step];
     let org = Vector3.zeros;
     let om0 = new PointPair(org, Vector3.ex);
@@ -45,8 +45,8 @@ describe("Trajectory Tests", function () {
     });
 
     it("Origins", function () {
-        var expectedOrg = [om0.origin, om3.origin, om4.origin];
-        var originToSet = [Vector3.zeros, Vector3.zeros, Vector3.zeros];
+        let expectedOrg = [om0.origin, om3.origin, om4.origin];
+        let originToSet = [Vector3.zeros, Vector3.zeros, Vector3.zeros];
 
         assert(gamma1.origins.reduce(function (acc, cur, index) {
             return acc && cur.isEqual(expectedOrg[index]);

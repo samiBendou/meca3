@@ -61,20 +61,6 @@ class Trajectory {
         }, 0.0);
     }
 
-    get pos() {
-        return this.pairs.map(function (pair) {
-            return pair.relative
-        });
-    }
-
-    get speeds() {
-        return Vector3.der(this.pos, this.steps);
-    }
-
-    get accels() {
-        return Vector3.der(this.speeds, this.steps);
-    }
-
     get origins() {
         return this.pairs.map(function (pair) {
             return pair.origin;
@@ -84,6 +70,19 @@ class Trajectory {
     set origins(origins) {
         this.pairs.forEach(function (pair, index) {
             pair.origin = origins[index];
+        });
+        return this;
+    }
+
+    get absolute() {
+        return this.pairs.map(function (pair) {
+            return pair.vector;
+        });
+    }
+
+    set absolute(absolute) {
+        this.pairs.forEach(function (pair, index) {
+            pair.vector = absolute[index];
         });
         return this;
     }
