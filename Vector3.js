@@ -12,7 +12,7 @@
  * and spherical coordinates (r, theta, phi).
  *
  * Vector3 class is designed to provide many features related to geometry such
- * as the angle of between two vector, the cross product.
+ * as compute the angle between two vector, the cross product.
  *
  * The Vector3 class provides vectors generator in a numpy-style syntax such as ones, zeros, ...
  *
