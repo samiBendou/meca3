@@ -67,10 +67,10 @@ The object oriented structure allows to perform operations chaining with manual 
 
 The `Matrix3` and `Vector3` classes are using a cartesian coordinates syntax.
 ```js
-    var u = Vector3.ex; // u = (1, 0, 0)
+    let u = Vector3.ex; // u = (1, 0, 0)
     u.y = 2; // u = (1, 2, 0)
     
-    var m = Matrix3.eye; // m = identity 3x3 matrix
+    let m = Matrix3.eye; // m = identity 3x3 matrix
     m.x.x = 2; // m00 = 2
     m.x.y = 2; // m01 = 2
     m.y.x = 2; // m10 = 2
@@ -78,7 +78,7 @@ The `Matrix3` and `Vector3` classes are using a cartesian coordinates syntax.
 
 The `Vector3` can be represented in commons different modes such as cylindrical and spherical.
 ```js
-var u = Vector3.ones;
+let u = Vector3.ones;
 console.log(u.r); // outputs +sqrt(3), the norm of u
 console.log(u.theta); // outputs +pi/4, the angle between u and ex
 console.log(u.phi); // outputs +pi/4, the angle between u and ez
@@ -86,8 +86,8 @@ console.log(u.phi); // outputs +pi/4, the angle between u and ez
 
 Operations can be performed between `Matrix3` and `Vector3`.
 ```js
-var m = Matrix3.ones; // m = matrix filled with ones
-var u = Vector3.ey; // u = (0, 1, 0)
+let m = Matrix3.ones; // m = matrix filled with ones
+let u = Vector3.ey; // u = (0, 1, 0)
 console.log(m.map(u).toString()) // outputs (1, 1, 1)
 ```
 
