@@ -32,10 +32,14 @@ class Trajectory {
 
     /**
      * @brief Construct a trajectory with given
+     * @details If the specified step is a number then the trajectory is constructed with a constant step
      * @params {Array} pairs Array storing position of the object as a PointPair
-     * @params {Array} steps Array storing the time step between each position
+     * @params {Array|number} step array storing the time step between each position
+     *
      */
-    constructor(pairs = [], steps = []) {
+    constructor(pairs = [], step = 1) {
+        let steps = (typeof step == "number") ? Array(pairs.length).fill(step) : step;
+
         this.pairs = pairs;
         this.steps = steps;
     }
@@ -227,17 +231,6 @@ class Trajectory {
     }
 
     /**
-     * @brief Constant step trajectory
-     * @param pairs {Array} array storing position of the object as a PointPair
-     * @param step {number} time step between each position
-     * @returns {Trajectory} newly created trajectory
-     */
-    static cstStep(pairs, step) {
-        let steps = Array(pairs.length).fill(step);
-        return new Trajectory(pairs, steps);
-    }
-
-    /**
      * @brief Constant origin trajectory
      * @details The trajectory can also have a constant time step
      * @param vectors {Array} storing position of the object as a Vector3
@@ -245,13 +238,12 @@ class Trajectory {
      * @param step {Array|number} time step between each position
      * @returns {Trajectory} newly created trajectory
      */
-    static cstOrigin(vectors, origin, step) {
-        let steps = (typeof step == "number") ? Array(vectors.length).fill(step) : step;
+    static fromOrigin(vectors, origin, step) {
         let pairs = vectors.map(function (u) {
             return new PointPair(origin, u);
         });
 
-        return new Trajectory(pairs, steps);
+        return new Trajectory(pairs, step);
     }
 }
 
