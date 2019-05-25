@@ -30,4 +30,6 @@ describe("PointPair Tests", function () {
         assert.approximately(affOM.length, om.length, Number.EPSILON);
         assert.approximately(affOM.origin.y, affOM.vector.y, Number.EPSILON);
     });
+
+    it("")
 });
