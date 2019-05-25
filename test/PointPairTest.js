@@ -6,7 +6,7 @@ describe("PointPair Tests", function () {
     const PointPair = require("../PointPair.js");
 
     let om = new PointPair(Vector3.ex, Vector3.ey);
-    let op = new PointPair(Vector3.zeros, Vector3.ex);
+    let op = PointPair.fromVect(Vector3.ex);
 
     it("Relative", function(){
        assert(om.relative.isEqual(new Vector3(-1, 1, 0)));
@@ -30,6 +30,4 @@ describe("PointPair Tests", function () {
         assert.approximately(affOM.length, om.length, Number.EPSILON);
         assert.approximately(affOM.origin.y, affOM.vector.y, Number.EPSILON);
     });
-
-    it("")
 });
