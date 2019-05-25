@@ -1,6 +1,5 @@
 /**
- *
- * @type {module.Trajectory}
+ * @class BufferTrajectory
  * @date 09/05/2019
  * @author samiBendou sbdh75@gmail.com
  * @brief Fixed size buffer for Trajectory class
@@ -9,17 +8,9 @@
  *
  *          When adding a new PointPair, if there is not enough space in the array the point is added at the beginning
  *          of the array and old values are replaced progressively.
-
- *          A BufferTrajectory can be initialized with a Trajectory :
- *          - If buffer's size is greater then trajectory size, than the whole
- *          trajectory is added at the beginning of the buffer and the rest is filled with zeros.
  *
- *          - If buffer's size is smaller then trajectory size, than the trajectory is
- *          truncated and only the last elements are taken.
- *
- * @property {Number} size Number of samples in buffer trajectory
  * @property {Number} addIndex Index where to put new values of position. Eg. If the buffer
- * is of size 3 and only 2 elements have been added addIndex is equal 2.
+ *           is of size 3 and only 2 elements have been added addIndex is equal 2.
  */
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
@@ -29,6 +20,13 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 
 class BufferTrajectory extends Trajectory {
+
+    /**
+     * @brief Construct buffer trajectory using buffer trajectory
+     * @details bufferize method is used
+     * @param size {Number} size Number of samples in the buffer
+     * @param trajectory {Trajectory} trajectory to bufferize
+     */
     constructor(size, trajectory) {
         super(new Array(size), new Array(size));
         this.size = size;
@@ -61,6 +59,17 @@ class BufferTrajectory extends Trajectory {
         this.pairs[this.addIndex > 1 ? this.addIndex - 2 : this.pairs.length - 2 + this.addIndex] = newNexto;
     }
 
+    /**
+     * @brief Initialize a buffer trajectory with a trajectory
+     * @details The behavior is the following :
+     *          - If buffer's size is greater then trajectory size, than the whole
+     *          trajectory is added at the beginning of the buffer and the rest is filled with zeros.
+     *
+     *          - If buffer's size is smaller then trajectory size, than the trajectory is
+     *          truncated and only the last elements of the trajectory are added.
+     * @param trajectory {Trajectory} trajectory to bufferize
+     * @return {BufferTrajectory} reference to this
+     */
     bufferize(trajectory) {
         let delta = (trajectory.pairs.length - this.size);
         let end = delta >= 0 ? this.size : trajectory.pairs.length;
@@ -76,6 +85,7 @@ class BufferTrajectory extends Trajectory {
             this.steps[i] = 0.0;
         }
         this.addIndex = delta >= 0 ? 0 : trajectory.pairs.length;
+        return this;
     }
 
     t(s) {
@@ -100,6 +110,14 @@ class BufferTrajectory extends Trajectory {
         return this.pairs[(i + this.addIndex) % this.size];
     }
 
+    /**
+     * @brief Add a new point pair to the trajectory
+     * @details The point pair moves the add index such that when it's greater than the size of the buffer,
+     *          it is set to zero. addIndex is incremented each time this function is called.
+     * @param pair {PointPair} position point pair
+     * @param step {number|undefined} time step elapsed between last position
+     * @returns {Trajectory} reference to this
+     */
     add(pair, step) {
         if (step !== undefined) {
             this.steps[this.addIndex] = step;

@@ -13,10 +13,14 @@
   "license": "GPL-3.0",
   "dependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "wicked": "^0.3.1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/samiBendou/meca3.git"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "^5.0.0"
   }
 }

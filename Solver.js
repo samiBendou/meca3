@@ -1,11 +1,13 @@
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    Vector3 = require("./Vector3.js");
+
 /**
- *
- * @type {module.Solver}
+ * @class Solver
  * @date 09/05/2019
  * @author samiBendou sbdh75@gmail.com
  * @brief Solve second order differential equation
  * @details Solve equations with the form  d2u/dt2 = f(u, t) where :
- *          - u is the unknown vector function
+ *          - u is the unknown vector function also know as state vector
  *          - d2u / dt2 denotes the second order derivative of u
  *          - f(u, t) is a smooth function depending only on coordinates of u and time t
  *          - v = du/dt is the derivative of u
@@ -16,29 +18,58 @@
  *
  *          Only explicit Euler's method is available for the moment.
  *
+ *          The solver stores the field function used as Javacript function and the time step between each solving step
+ *          as a real number
+ *
  * @property {function} field Javascript function representing the output of the f(., .) function.
  * @property {Number} step Constant time step between two solving instant.
  */
-
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    Vector3 = require("./Vector3.js");
-
 class Solver {
+    /**
+     * @brief Construct a Solver with a given field and step
+     * @param {function} field Javascript function representing the output of the f(., .) function.
+     * @param {Number} step Constant time step between two solving instant.
+     */
     constructor(field, step = 1) {
         this.field = field;
         this.step = step;
     }
 
+    /**
+     * @brief Get the next approximation value of ODE
+     * @details Euler's explicit method is used to compute next state
+     * @param cur {Vector3} current state vector
+     * @param prev {Vector3} previous state vector
+     * @param t {Vector3} current duration
+     * @returns {Vector3} value of next state vector from ODE
+     */
     eulerStep(cur, prev, t) {
         let step2 = this.step * this.step;
         return cur.copy().mul(2).sub(prev).add(this.field(cur, t).mul(step2));
     }
 
+    /**
+     * @brief Transform speed and position initial conditions
+     * @details Transforms the u0, v0 initial condition into a u0, u1 initial condition
+     *          for the ODE. This mean that instead of giving initial speed and position,
+     *          you give initial position and position right after initial instant.
+     * @param u0 {Vector3} initial position
+     * @param v0 {Vector3} initial speed
+     * @returns {Vector3} position right after initial instant
+     */
     initialTransform(u0, v0) {
         let u1 = v0.copy().mul(this.step).add(u0);
         return u1.add(this.field(u1, 0).mul(this.step * this.step / 2));
     }
 
+    /**
+     * @brief Solve a given number of steps of ODE
+     * @details
+     * @param u0 {Vector3} initial position
+     * @param v0 {Vector3} initial speed
+     * @param count {number}
+     * @returns {Array} array containing successive solutions of ODE as Vector3
+     */
     solve(u0, v0, count) {
         let u = new Array(count);
 
