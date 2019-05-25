@@ -41,4 +41,4 @@ npm test
 ``` 
 
 ### Documenation
-The module has a GitHub wiki as full documentation, it can be founded [here](https://github.com/samiBendou/meca3/wiki).
+The module has a GitHub wiki as full documentation. Check at repository for more details

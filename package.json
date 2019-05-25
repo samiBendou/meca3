@@ -9,17 +9,29 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "samiBendou",
+  "homepage": "https://github.com/samiBendou/meca3/wiki",
+  "bugs": "https://github.com/samiBendou/meca3/issues",
+  "author": "Sami Dahoux <sbdh75@gmail.com> (https://github.com/samiBendou)",
   "license": "GPL-3.0",
   "dependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.1.4",
-    "wicked": "^0.3.1"
+    "mocha": "^6.1.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/samiBendou/meca3.git"
   },
+  "keywords": [
+    "maths",
+    "mechanics",
+    "physics",
+    "vector",
+    "matrix",
+    "3d",
+    "trajectory",
+    "ode",
+    "solver"
+  ],
   "devDependencies": {
     "jsdoc-to-markdown": "^5.0.0"
   }
