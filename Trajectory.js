@@ -65,10 +65,11 @@ class Trajectory {
     }
 
     get length() {
-        let steps = this.steps;
-        return this.speeds.reduce(function (prev, cur, index) {
-            return prev + cur.r * steps[index];
-        }, 0.0);
+        let length = 0;
+        for (let i = 1; i < this.pairs.length; i++) {
+            length += this.pairs[i].relative.dist(this.pairs[i - 1].relative);
+        }
+        return length;
     }
 
     get origins() {

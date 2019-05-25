@@ -32,11 +32,6 @@ describe("Trajectory Tests", function () {
         assert(gamma1.isEqual(expectPos1));
     });
 
-    it("Accelerations", function () {
-        assert(gamma0.accels[0].isEqual(new Vector3(0, -2 / step / step, 0)));
-        assert(gamma1.accels[0].isEqual(Vector3.zeros));
-    });
-
     it("Add", function () {
         let pp = new PointPair(om1.origin.copy(), om1.vector.copy().opp);
         assert(gamma0.add(pp).isEqual(Trajectory.cstStep([om0, om1, om2, pp], step)));

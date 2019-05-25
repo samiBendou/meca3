@@ -86,7 +86,7 @@ class PointPair {
     }
 
     /**
-     * @brief Affine transformation of the point pair
+     * @brief Affine transfoËrmation of the point pair
      * @param matrix {Matrix3} transformation matrix
      * @param vector {Matrix3} translation vector
      * @returns {PointPair} reference to this
