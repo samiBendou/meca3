@@ -17,7 +17,7 @@
  * The Vector3 class provides vectors generator in a numpy-style syntax such as ones, zeros, ...
  *
  * We denote the canonical basis of 3D euclidean space ex, ey, ez such that :
- * - ex = (1, 0, 0), - ey = (0, 1, 0), - ez = (0, 0, 1)
+ * ex = (1, 0, 0), ey = (0, 1, 0), ez = (0, 0, 1)
  *
  * @property r {number} length of this vector, also the r spherical coordinate
  * @property theta {number} angle between ex and this vector in radians
