@@ -1,4 +1,8 @@
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Version](https://img.shields.io/npm/v/meca3.svg?style=flat-square)](https://www.npmjs.com/package/meca3)
+[![Build status](https://img.shields.io/travis/samiBendou/meca3.svg?style=flat-square)](https://travis-ci.org/samiBendou/meca3)
+[![Coverage](https://img.shields.io/coveralls/github/samiBendou/meca3.svg?style=flat-square)](https://coveralls.io/github/samiBendou/meca3)
+[![Issues](https://img.shields.io/github/issues-raw/samiBendou/meca3.svg?style=flat-square)](https://github.com/samiBendou/meca3/issues)
+[![License](https://img.shields.io/npm/l/meca3.svg?style=flat-square)](https://www.npmjs.com/package/meca3)
 
 # meca3
 
