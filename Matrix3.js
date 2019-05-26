@@ -359,7 +359,7 @@ class Matrix3 {
      * @returns {Matrix3} value of the matrix product
      */
     static tens(u, v) {
-        let right = v === undefined ? u : v;
+        let right = v || u;
         return new Matrix3(
             u.x * right.x, u.x * right.y, u.x * right.z,
             u.y * right.x, u.y * right.y, u.y * right.z,
