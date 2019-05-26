@@ -115,7 +115,7 @@ class BufferTrajectory extends Trajectory {
      * @details The point pair moves the add index such that when it's greater than the size of the buffer,
      * it is set to zero. addIndex is incremented each time this function is called.
      * @param pair {PointPair} position point pair
-     * @param step {number|undefined} time step elapsed between last position
+     * @param step {number|undefined} time dt elapsed between last position
      * @returns {Trajectory} reference to this
      */
     add(pair, step) {

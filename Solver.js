@@ -14,26 +14,24 @@ Trajectory = require("./Trajectory.js");
  * - v = du/dt is the derivative of u
  *
  * This solver is designed to be used in two ways :
- * 1. Step by step solving. Get the next value of u giving the current and previous values of u
- * 2. Trajectory solving. Give the number of steps, u0 and v0 and get an array containing u at each step
+ * 1. Step by dt solving. Get the next value of u giving the current and previous values of u
+ * 2. Trajectory solving. Give the number of steps, u0 and v0 and get an array containing u at each dt
  *
  * Only explicit Euler's method is available for the moment.
  *
- * The solver stores the field function used as Javacript function and the time step between each solving step
+ * The solver stores the field function used as Javacript function and the time dt between each solving dt
  * as a real number
- *
- * @property {function} field Javascript function representing the output of the f(., .) function.
- * @property {Number} step Constant time step between two solving instant.
  */
+
 class Solver {
     /**
-     * @brief Construct a Solver with a given field and step
-     * @param {function} field Javascript function representing the output of the f(., .) function.
-     * @param {Number} step Constant time step between two solving instant.
+     * @brief Construct a Solver with a given field and dt
+     * @param {function} field Javascript function representing the output of the f() function.
+     * @param {number} dt Constant time dt between two solving instant.
      */
-    constructor(field, step = 1) {
+    constructor(field, dt = 1) {
         this.field = field;
-        this.step = step;
+        this.dt = dt;
     }
 
     /**
@@ -44,8 +42,8 @@ class Solver {
      * @param t {number} current duration
      * @returns {Vector3} value of next state vector from ODE
      */
-    eulerStep(cur, prev, t) {
-        let step2 = this.step * this.step;
+    step(cur, prev, t) {
+        let step2 = this.dt * this.dt;
         return cur.copy().mul(2).sub(prev).add(this.field(cur, t).mul(step2));
     }
 
@@ -59,8 +57,8 @@ class Solver {
      * @returns {Vector3} position right after initial instant
      */
     initialTransform(u0, v0) {
-        let u1 = v0.copy().mul(this.step).add(u0);
-        return u1.add(this.field(u1, 0).mul(this.step * this.step / 2));
+        let u1 = v0.copy().mul(this.dt).add(u0);
+        return u1.add(this.field(u1, 0).mul(this.dt * this.dt / 2));
     }
 
     /**
@@ -76,7 +74,7 @@ class Solver {
         u[0] = u0.copy();
         u[1] = this.initialTransform(u0, v0);
         for (let i = 2; i < count; i++) {
-            u[i] = this.eulerStep(u[i - 1], u[i - 2], i * this.step);
+            u[i] = this.step(u[i - 1], u[i - 2], i * this.dt);
         }
 
         return u;
@@ -92,7 +90,7 @@ class Solver {
      * @returns {Trajectory|BufferTrajectory} reference to `trajectory`
      */
     trajectory(u0, v0, count, origin = Vector3.zeros) {
-        return Trajectory.fromVect(this.solve(u0, v0, count), this.step, origin);
+        return Trajectory.discrete(this.solve(u0, v0, count), this.dt, origin);
     }
 }
 

@@ -18,8 +18,8 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  *
  * Trajectory class allows to compute the duration and time along the trajectory
  *
- * You have to provide a time step for the trajectory in order to compute speed and acceleration.
- * The time step e be variable but if so you have to precise the value of each time step in an array.
+ * You have to provide a time dt for the trajectory in order to compute speed and acceleration.
+ * The time dt e be variable but if so you have to precise the value of each time dt in an array.
  *
  * @property {PointPair} first initial position in trajectory
  * @property {PointPair} last last position in trajectory
@@ -32,9 +32,9 @@ class Trajectory {
 
     /**
      * @brief Construct a trajectory with given
-     * @details If the specified step is a number then the trajectory is constructed with a constant step
+     * @details If the specified dt is a number then the trajectory is constructed with a constant dt
      * @params {Array} pairs Array storing position of the object as a PointPair
-     * @params {Array|number} step array storing the time step between each position
+     * @params {Array|number} dt array storing the time dt between each position
      *
      */
     constructor(pairs = [], step = 1) {
@@ -195,7 +195,7 @@ class Trajectory {
     /**
      * @brief Add a new point pair to the trajectory
      * @param pair {PointPair} position point pair
-     * @param step {number|undefined} time step elapsed between last position
+     * @param step {number|undefined} time dt elapsed between last position
      * @returns {Trajectory} reference to this
      */
     add(pair, step) {
@@ -231,13 +231,13 @@ class Trajectory {
     }
 
     /**
-     * @brief Constant origin trajectory from array of vectors
+     * @brief Constant origin trajectory from array of position vectors
      * @param vectors {Array} storing position of the object as a Vector3
-     * @param step {Array|number} time step between each position
+     * @param step {Array|number} time dt between each position
      * @param origin {Vector3} origin to use all along the trajectory
      * @returns {Trajectory} newly created trajectory
      */
-    static fromVect(vectors, step = 1, origin = Vector3.zeros) {
+    static discrete(vectors, step = 1, origin = Vector3.zeros) {
         let pairs = vectors.map(function (u) {
             return new PointPair(origin, u);
         });
