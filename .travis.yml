@@ -3,10 +3,6 @@ language: node_js
 node_js:
   - '8'
 
-branches:
-  only:
-    - master
-
 env:
   global:
     - GITHUB_USER = samiBendou
@@ -18,4 +14,4 @@ after_success:
   - bash ../gendoc.sh
   - git add .
   - git commit -m "Generated Wiki via Travis-CI"
-  - git push
+  - git push origin HEAD:master
