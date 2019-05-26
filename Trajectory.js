@@ -34,7 +34,7 @@ class Trajectory {
      * @brief Construct a trajectory with given
      * @details If the specified dt is a number then the trajectory is constructed with a constant dt
      * @params {Array} pairs Array storing position of the object as a PointPair
-     * @params {Array|number} dt array storing the time dt between each position
+     * @params {Array|number} dt array storing the time step between each position
      *
      */
     constructor(pairs = [], step = 1) {
@@ -195,7 +195,7 @@ class Trajectory {
     /**
      * @brief Add a new point pair to the trajectory
      * @param pair {PointPair} position point pair
-     * @param step {number|undefined} time dt elapsed between last position
+     * @param step {number|undefined} time step elapsed between last position
      * @returns {Trajectory} reference to this
      */
     add(pair, step) {
@@ -233,7 +233,7 @@ class Trajectory {
     /**
      * @brief Constant origin trajectory from array of position vectors
      * @param vectors {Array} storing position of the object as a Vector3
-     * @param step {Array|number} time dt between each position
+     * @param step {Array|number} time step between each position
      * @param origin {Vector3} origin to use all along the trajectory
      * @returns {Trajectory} newly created trajectory
      */

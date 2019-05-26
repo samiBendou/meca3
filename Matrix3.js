@@ -326,32 +326,6 @@ class Matrix3 {
     }
 
     /**
-     * @brief Create a matrix with given array
-     * @param arr {Array} bi-dimensional array containing rows of the matrix
-     * @returns {Matrix3} newly created matrix
-     */
-    static fromArray(arr) {
-        return new Matrix3(arr[0][0], arr[0][1], arr[0][2],
-            arr[1][0], arr[1][1], arr[1][2],
-            arr[2][0], arr[2][1], arr[2][2]);
-    }
-
-    /**
-     * @brief tensor product of a vector against itself
-     * @details tensor product is the matrix obtained from two vectors
-     * such that mij = ui * vj
-     * @param u {Vector3} vector to transform
-     * @returns {Matrix3} value of the matrix product
-     */
-    static tens(u) {
-        return new Matrix3(
-            u.x * u.x, u.x * u.y, u.x * u.z,
-            u.y * u.x, u.y * u.y, u.y * u.z,
-            u.z * u.x, u.z * u.y, u.z * u.z,
-        );
-    }
-
-    /**
      * @brief Creates an affine transformation of the vector
      * @details Generates a Javascript function that returns the affine transform of the vector
      * @param m {Matrix3} matrix of the affine transform
@@ -362,6 +336,35 @@ class Matrix3 {
         return function (u) {
             return m.map(u).add(v)
         };
+    }
+
+    /**
+     * @brief Create a matrix with given array
+     * @param arr {Array} bi-dimensional array containing rows of the matrix
+     * @returns {Matrix3} newly created matrix
+     */
+    static fromArray(arr) {
+        return new Matrix3(
+            arr[0][0], arr[0][1], arr[0][2],
+            arr[1][0], arr[1][1], arr[1][2],
+            arr[2][0], arr[2][1], arr[2][2]);
+    }
+
+    /**
+     * @brief tensor product of a vector against itself
+     * @details tensor product is the matrix obtained from two vectors
+     * such that mij = ui * vj
+     * @param u {Vector3} first vector to transform
+     * @param v {Vector3} second vector to transform
+     * @returns {Matrix3} value of the matrix product
+     */
+    static tens(u, v) {
+        let right = v === undefined ? u : v;
+        return new Matrix3(
+            u.x * right.x, u.x * right.y, u.x * right.z,
+            u.y * right.x, u.y * right.y, u.y * right.z,
+            u.z * right.x, u.z * right.y, u.z * right.z,
+        );
     }
 }
 
