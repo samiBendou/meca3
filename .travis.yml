@@ -12,4 +12,4 @@ after_success:
   - bash ../gendoc.sh
   - git add .
   - git commit -m "Generated Wiki via Travis-CI"
-  - git push
+  - git push -f
