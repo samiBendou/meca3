@@ -351,7 +351,7 @@ class Matrix3 {
     }
 
     /**
-     * @brief tensor product of a vector against itself
+     * @brief tensor product of two vectors
      * @details tensor product is the matrix obtained from two vectors
      * such that mij = ui * vj
      * @param u {Vector3} first vector to transform
