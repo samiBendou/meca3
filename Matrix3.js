@@ -304,10 +304,9 @@ class Matrix3 {
     /**
      * @brief rotation matrix with specified axis and angle
      * @details anticlockwise rotation
-     * @param theta {number} angle of rotation
-     * @returns {Matrix3} Value of rotation matrix for specified angle
+     * @returns {function(number):Matrix3} Value of rotation matrix for specified angle
      */
-    static rot(axis, theta) {
+    static makeRot(axis) {
         //R = P + cos(theta) * (I - P) + sin(theta) * Q
 
         let id = Matrix3.eye; // antisymmetric representation of u
@@ -321,9 +320,9 @@ class Matrix3 {
         q.z = u.cross(Vector3.ez);
         q = q.trans;
 
-        r.add(id.sub(p).mul(Math.cos(theta))).add(q.mul(Math.sin(theta)));
-
-        return r;
+        return function (theta) {
+            return r.add(id.sub(p).mul(Math.cos(theta))).add(q.mul(Math.sin(theta)));
+        };
     }
 
     /**

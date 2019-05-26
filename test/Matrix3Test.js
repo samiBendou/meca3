@@ -43,7 +43,7 @@ describe("Matrix3 Tests", function () {
         assert(Math.abs(c.det - 4) < Number.EPSILON);
     });
 
-    it("Inverse", function() {
+    it("Inverse", function () {
         assert(a.inv.isEqual(a));
         assert(c.prod(c.inv).isEqual(a));
         assert(c.inv.isEqual(new Matrix3(
@@ -53,7 +53,7 @@ describe("Matrix3 Tests", function () {
         )));
     });
 
-    it("Get elements", function() {
+    it("Get elements", function () {
         let assertRow = new Vector3(1, 2, 3);
         assert(b.row(0).isEqual(assertRow));
         assert(b.row(2).isEqual(assertRow));
@@ -62,13 +62,19 @@ describe("Matrix3 Tests", function () {
         assert(a.col(2).isEqual(Vector3.ez));
     });
 
-    it("Rotates", function() {
+    it("Rotates", function () {
         const angle = Math.PI / 2;
-       assert(Matrix3.rotX(Math.PI / 2).map(Vector3.ey).isEqual(Vector3.ez));
-       assert(Matrix3.rotY(Math.PI / 2).map(Vector3.ez).isEqual(Vector3.ex));
-       assert(Matrix3.rotZ(Math.PI / 2).map(Vector3.ex).isEqual(Vector3.ey));
-       assert(Matrix3.rotX(angle).isEqual(Matrix3.rot(Vector3.ex, angle)));
-       assert(Matrix3.rotY(angle).isEqual(Matrix3.rot(Vector3.ey, angle)));
-       assert(Matrix3.rotZ(angle).isEqual(Matrix3.rot(Vector3.ez, angle)));
+
+        const rotX = Matrix3.makeRot(Vector3.ex);
+        const rotY = Matrix3.makeRot(Vector3.ey);
+        const rotZ = Matrix3.makeRot(Vector3.ez);
+
+        assert(Matrix3.rotX(Math.PI / 2).map(Vector3.ey).isEqual(Vector3.ez));
+        assert(Matrix3.rotY(Math.PI / 2).map(Vector3.ez).isEqual(Vector3.ex));
+        assert(Matrix3.rotZ(Math.PI / 2).map(Vector3.ex).isEqual(Vector3.ey));
+
+        assert(Matrix3.rotX(angle).isEqual(rotX(angle)));
+        assert(Matrix3.rotY(angle).isEqual(rotY(angle)));
+        assert(Matrix3.rotZ(angle).isEqual(rotZ(angle)));
     });
 });
