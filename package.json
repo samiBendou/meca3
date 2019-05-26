@@ -1,6 +1,6 @@
 {
   "name": "meca3",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Represent trajectories and solve point dynamic equations",
   "main": "main.js",
   "directories": {
