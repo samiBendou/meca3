@@ -34,4 +34,22 @@ describe("Solver Tests", function () {
             assert(u.isEqual(Vector3.ez.mul(index * index)));
         })
     });
+
+    it("Trajectory", function () {
+        let oExpected = [
+            Vector3.zeros,
+            Vector3.ones.mul(0.5),
+            Vector3.ones.mul(0.5),
+            Vector3.zeros,
+            Vector3.ones.opp.mul(0.5),
+            Vector3.ones.opp.mul(0.5),
+        ];
+
+        let oSolved = oSolver.trajectory(Vector3.zeros, Vector3.ones, 200);
+
+        oSolved.pairs.forEach(function (pair, index) {
+            assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
+            assert(pair.origin.isEqual(Vector3.zeros));
+        });
+    });
 });

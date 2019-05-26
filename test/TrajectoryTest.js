@@ -23,8 +23,8 @@ describe("Trajectory Tests", function () {
     });
 
     it("Positions", function () {
-        let expectPos0 = Trajectory.fromOrigin([om0.relative, om1.relative, om2.relative], Vector3.zeros, step);
-        let expectPos1 = Trajectory.fromOrigin([Vector3.ex, Vector3.ex, Vector3.ex], Vector3.zeros, step);
+        let expectPos0 = Trajectory.fromVect([om0.relative, om1.relative, om2.relative], step);
+        let expectPos1 = Trajectory.fromVect([Vector3.ex, Vector3.ex, Vector3.ex], step);
 
         assert(gamma0.isEqual(expectPos0));
         assert(gamma1.isEqual(expectPos1));
@@ -87,6 +87,6 @@ describe("Trajectory Tests", function () {
     it("Origin", function () {
         assert(
             gamma0.isEqual(
-                Trajectory.fromOrigin([om0.vector, om1.vector, om2.vector], Vector3.zeros, 0.1)));
+                Trajectory.fromVect([om0.vector, om1.vector, om2.vector], 0.1, Vector3.zeros)));
     })
 });

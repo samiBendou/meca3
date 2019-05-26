@@ -231,18 +231,16 @@ class Trajectory {
     }
 
     /**
-     * @brief Constant origin trajectory
-     * @details The trajectory can also have a constant time step
+     * @brief Constant origin trajectory from array of vectors
      * @param vectors {Array} storing position of the object as a Vector3
-     * @param origin {Vector3} origin to use all along the trajectory
      * @param step {Array|number} time step between each position
+     * @param origin {Vector3} origin to use all along the trajectory
      * @returns {Trajectory} newly created trajectory
      */
-    static fromOrigin(vectors, origin, step) {
+    static fromVect(vectors, step = 1, origin = Vector3.zeros) {
         let pairs = vectors.map(function (u) {
             return new PointPair(origin, u);
         });
-
         return new Trajectory(pairs, step);
     }
 }

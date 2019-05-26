@@ -1,5 +1,6 @@
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
     Vector3 = require("./Vector3.js");
+Trajectory = require("./Trajectory.js");
 
 /**
  * @class Solver
@@ -40,7 +41,7 @@ class Solver {
      * @details Euler's explicit method is used to compute next state
      * @param cur {Vector3} current state vector
      * @param prev {Vector3} previous state vector
-     * @param t {Vector3} current duration
+     * @param t {number} current duration
      * @returns {Vector3} value of next state vector from ODE
      */
     eulerStep(cur, prev, t) {
@@ -63,11 +64,10 @@ class Solver {
     }
 
     /**
-     * @brief Solve a given number of steps of ODE
-     * @details
+     * @brief Solve ODE with speed and position initial condition
      * @param u0 {Vector3} initial position
      * @param v0 {Vector3} initial speed
-     * @param count {number}
+     * @param count {number} number of steps to solve
      * @returns {Array} array containing successive solutions of ODE as Vector3
      */
     solve(u0, v0, count) {
@@ -80,6 +80,19 @@ class Solver {
         }
 
         return u;
+    }
+
+    /**
+     * @brief Solve ODE and get trajectory
+     * @details All the vectors will have the same origin
+     * @param u0 {Vector3} initial position
+     * @param v0 {Vector3} initial speed
+     * @param count {number} number of steps to solve
+     * @param origin {Vector3} origin to set for all point pairs
+     * @returns {Trajectory|BufferTrajectory} reference to `trajectory`
+     */
+    trajectory(u0, v0, count, origin = Vector3.zeros) {
+        return Trajectory.fromVect(this.solve(u0, v0, count), this.step, origin);
     }
 }
 
