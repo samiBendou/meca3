@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 jsdoc2md Vector3.js > doc/Vector3.md
 jsdoc2md Matrix3.js > doc/Matrix3.md
 jsdoc2md PointPair.js > doc/PointPair.md
