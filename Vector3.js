@@ -3,7 +3,7 @@
  * @date 09/05/2019
  * @author samiBendou sbdh75@gmail.com
  * @brief Representation of 3D vectors
- * @details The 3D vectors are stored by components using cartesian coordinates (x, y, z).
+ * @details TEST The 3D vectors are stored by components using cartesian coordinates (x, y, z).
  *
  * Vector3 class allows to perform vector space operations between vectors (u + v, s * u).
  * Operations are performed using a object-syntax eg. u.add(v), they e be chained eg. u.add(v).mul(s).

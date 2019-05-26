@@ -2,4 +2,11 @@ language: node_js
 node_js:
   - "8"
 
-after_success: npm run coverage
+after_success:
+  - npm run coverage
+  - cd ..
+  - git clone "https://${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/meca3.wiki.git"
+  - bash gendoc.sh
+  - git add .
+  - git commit -m "Generated Wiki via Travis-CI"
+  - git push
