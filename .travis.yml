@@ -3,8 +3,8 @@ node_js:
   - "8"
 
 before_script:
-  -GITHUB_TOKEN = $GITHUB_TOKEN
-  -GITHUB_USER = $GITHUB_USER
+  - GITHUB_TOKEN = $GITHUB_TOKEN
+  - GITHUB_USER = $GITHUB_USER
 
 after_success:
   - npm run coverage
