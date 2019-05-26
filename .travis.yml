@@ -2,9 +2,8 @@ language: node_js
 node_js:
   - "8"
 
-before_script:
-  - GITHUB_TOKEN = $GITHUB_TOKEN
-  - GITHUB_USER = $GITHUB_USER
+env:
+  - GITHUB_TOKEN = $GITHUB_TOKEN GITHUB_USER = $GITHUB_USER
 
 after_success:
   - npm run coverage
