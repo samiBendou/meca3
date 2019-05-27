@@ -6,36 +6,34 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 /**
  * @class Trajectory
  * @author samiBendou
- * @brief Represents the trajectory of a point pair
- * @details The trajectory is stored into memory as an array of PointPair representing the successive positions
- * of a mobile over time. The value of the array must be chronological ordered.
+ * @brief trajectory of a mobile
+ * @details `Trajectory` class represents the trajectory of a _mobile_ from the point of view of a moving _observer_.
  *
- * Each value of the array denotes the position of both the mobile and the observer at a given time.
+ * Constructor a trajectory by giving an array of _sample_ `PointPair`representing the successive position of the mobile
+ * over time.
  *
- * Trajectory class is designed to perform continuous representation of a trajectory from a discrete set of
- * positions
+ * You can also specify the time step between each successive positions.
  *
- * Trajectory class allows to compute the duration and time along the trajectory
+ * Will we use the notion of _curvilinear abscissa_ defined as real number `s` which can evolve between `0` and `N` where
+ * `N` is the number of `PointPair` composing the trajectory.
  *
- * You have to provide a time dt for the trajectory in order to compute speed and acceleration.
- * The time dt e be variable but if so you have to precise the value of each time dt in an array.
+ * #### Features
  *
- * @property {PointPair} first initial position in trajectory
- * @property {PointPair} last last position in trajectory
- * @property {PointPair} nexto position next to last in trajectory
- * @property {number} length total length of the trajectory
- * @property {Array} origins array containing all the origins of the positions in trajectory
- * @property {Array} absolute array containing all the absolute position of the positions in trajectory
+ * - **Continuous representation** of the trajectory at any given real time by linear interpolation.
+ *
+ * - **Variable** and **constant time step** modes
+ *
+ * - Extend all **geometrical transformation** of `PointPair`
+ *
+ * @property first {PointPair} initial position of the mobile
+ * @property last {PointPair} final position of the mobile
+ * @property nexto {PointPair} position of the mobile next to last
+ * @property length {number} total length of the trajectory
+ * @property origins {Array} array of `Vector3` containing all the successive observer positions
+ * @property absolute {Array} array of `Vector3` containing all the successive mobile positions
  */
 class Trajectory {
 
-    /**
-     * @brief Construct a trajectory with given
-     * @details If the specified dt is a number then the trajectory is constructed with a constant dt
-     * @params {Array} pairs Array storing position of the object as a PointPair
-     * @params {Array|number} dt array storing the time step between each position
-     *
-     */
     constructor(pairs = [], step = 1) {
         let steps = (typeof step == "number") ? Array(pairs.length).fill(step) : step;
 
@@ -130,11 +128,9 @@ class Trajectory {
     }
 
     /**
-     * @brief Get position at real index
-     * @details The trajectory is made continuous by using linear interpolation between the point pairs in trajectory.
-     * The real index is the curvilinear abscissa.
-     * @param s {number} curvilinear abscissa, real between 0 and the number of point pairs in trajectory
-     * @returns {PointPair} value of position at parameter s
+     * @brief position at curvilinear abscissa
+     * @param s {number} curvilinear abscissa
+     * @returns {PointPair} value of position at curvilinear abscissa
      */
     at(s) {
         let s0 = Math.floor(s), s1 = (s0 + 1);
@@ -144,11 +140,10 @@ class Trajectory {
     }
 
     /**
-     * @brief Get duration at real index
-     * @details The time is made continuous by using linear interpolation between the steps in trajectory.
-     * The real index is the curvilinear abscissa.
-     * @param s {number} curvilinear abscissa, real between 0 and the number of point pairs in trajectory
-     * @returns {number} value of duration at parameter s
+     * @brief duration at curvilinear abscissa
+     * @details Time elapsed since the beginning of the movement.
+     * @param s {number} curvilinear abscissa
+     * @returns {number} value of duration at curvilinear abscissa
      */
     t(s) {
         let s0 = Math.floor(s);
@@ -157,25 +152,25 @@ class Trajectory {
     }
 
     /**
-     * @brief Get duration at integer index
-     * @details The duration is the partial sum of the steps
-     * @param i {number} index of point pair
-     * @returns {number} value of duration at index i
+     * @brief position at integer index
+     * @param i {number} number of samples to count
+     * @returns {PointPair} position at index `i`
+     */
+    get(i) {
+        return this.pairs[i];
+    }
+
+    /**
+     * @brief duration at integer index
+     * @details Time elapsed since the beginning of the movement.
+     * @param i {number} number of samples to count
+     * @returns {number} value of duration at index `i`
      */
     duration(i) {
         i = i === undefined ? this.steps.length : i;
         return this.steps.slice(0, i).reduce(function (prev, curr) {
             return prev += curr
         }, 0);
-    }
-
-    /**
-     * @brief Get position at integer index
-     * @param i {number} index of point pair
-     * @returns {PointPair} position at index i
-     */
-    get(i) {
-        return this.pairs[i];
     }
 
     isEqual(trajectory) {
@@ -192,9 +187,10 @@ class Trajectory {
     }
 
     /**
-     * @brief Add a new point pair to the trajectory
-     * @param pair {PointPair} position point pair
-     * @param step {number|undefined} time step elapsed between last position
+     * @brief add a new position to the trajectory
+     * @details If you let `step` undefined, then the method will take the last added step if it exists.
+     * @param pair {PointPair} position of the mobile
+     * @param step {number|undefined} time step elapsed since `last` position
      * @returns {Trajectory} reference to this
      */
     add(pair, step) {
@@ -211,8 +207,8 @@ class Trajectory {
     }
 
     /**
-     * @brief Clears the trajectory
-     * @details Removes all pairs at steps
+     * @brief clears the trajectory
+     * @details Removes all pairs and steps.
      * @returns {Trajectory} reference to this
      */
     clear() {
@@ -230,11 +226,12 @@ class Trajectory {
     }
 
     /**
-     * @brief Constant origin trajectory from array of position vectors
-     * @param vectors {Array} storing position of the object as a Vector3
+     * @brief trajectory from array of position vectors
+     * @details The observer is considered as immobile.
+     * @param vectors {Array} successive positions of the mobile as `Vector3`
      * @param step {Array|number} time step between each position
-     * @param origin {Vector3} origin to use all along the trajectory
-     * @returns {Trajectory} newly created trajectory
+     * @param origin {Vector3} observer's position
+     * @returns {Trajectory} new instance of trajectory
      */
     static discrete(vectors, step = 1, origin = Vector3.zeros) {
         let pairs = vectors.map(function (u) {
