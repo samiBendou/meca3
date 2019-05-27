@@ -1,15 +1,21 @@
 /**
  * @class BufferTrajectory
  * @author samiBendou
- * @brief Fixed size buffer for Trajectory class
- * @details This trajectory behaves the same as Trajectory class for the most expect that
- * it stores a fixed number of PointPairs in the pairs array.
+ * @brief fixed size trajectory
+ * @details `BufferTrajectory` class inherit from `Trajectory` class.
  *
- * When adding a new PointPair, if there is not enough space in the array the point is added at the beginning
- * of the array and old values are replaced progressively.
+ * Construct a `BufferTrajectory` by giving the _size_ of the buffer and a base `Trajectory` object.
  *
- * @property {Number} addIndex Index where to put new values of position. Eg. If the buffer
- * is of size 3 and only 2 elements have been added addIndex is equal 2.
+ * #### Features
+ *
+ * - **Fixed size** array to represent trajectory
+ *
+ * - **Insertion by replacement** when buffer is full
+ *
+ * - Extends all the features from `Trajectory` class
+ *
+ * @property size {number} number of elements to store in buffer
+ * @property addIndex {number} index where to insert new values of position
  */
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
@@ -20,12 +26,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 class BufferTrajectory extends Trajectory {
 
-    /**
-     * @brief Construct buffer trajectory using buffer trajectory
-     * @details bufferize method is used
-     * @param size {Number} size Number of samples in the buffer
-     * @param trajectory {Trajectory} trajectory to bufferize
-     */
     constructor(size, trajectory) {
         super(new Array(size), new Array(size));
         this.size = size;
@@ -59,13 +59,14 @@ class BufferTrajectory extends Trajectory {
     }
 
     /**
-     * @brief Initialize a buffer trajectory with a trajectory
-     * @details The behavior is the following :
-     * - If buffer's size is greater then trajectory size, than the whole
+     * @brief initialize a buffer trajectory with a `Trajectory
+     * @details This method behaves as follows :
+     * - If buffer's size is greater then trajectory size, then the whole
      * trajectory is added at the beginning of the buffer and the rest is filled with zeros.
      *
-     * - If buffer's size is smaller then trajectory size, than the trajectory is
+     * - If buffer's size is smaller then trajectory size, then the trajectory is
      * truncated and only the last elements of the trajectory are added.
+     *
      * @param trajectory {Trajectory} trajectory to bufferize
      * @return {BufferTrajectory} reference to this
      */
@@ -110,9 +111,10 @@ class BufferTrajectory extends Trajectory {
     }
 
     /**
-     * @brief Add a new point pair to the trajectory
-     * @details The point pair moves the add index such that when it's greater than the size of the buffer,
-     * it is set to zero. addIndex is incremented each time this function is called.
+     * @brief add a new point pair to the trajectory
+     * @details `addIndex` is incremented each time a point is added.
+     * When `addIndex` is greater than the size of the buffer, it is set to zero.
+     * The value contained at `addIndex` is replaced when adding new points.
      * @param pair {PointPair} position point pair
      * @param step {number|undefined} time step elapsed between last position
      * @returns {Trajectory} reference to this
