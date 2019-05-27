@@ -13,27 +13,24 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
  * Access a component of the matrix with the syntax `m.i.j` where `i` and `j` might be equal to `x`, `y` or `z`.
  * eg. `m.x.x`, `m.y.z`, ...
  *
- * `i` denotes the row index and `j` the column index.
+ * Construct a matrix by explicitly giving components.
+ * eg. ` new Matrix3(1, 2, 3)` fills the first row `x` with `{x = 1, y = 2, z = 3}`.
  *
- * Use extended **vector space operations** and **geometrical operations** from `Vector3`.
+ * #### Features
  *
- * Compute  **algebraical operations** such as inversion, product or determinant.
+ * - Use extended **vector space operations** and **geometrical operations** from `Vector3`.
  *
- * Create matrices using **generators** in a Matlab-style syntax such as `eye`, `ones`, ...
+ * - Compute  **algebraical operations** such as inversion, product or determinant.
  *
- * All the generators from `Vector3` are extended to `Matrix3` class.
+ * - Create matrices using **generators** in a Matlab-style syntax such as `eye`, `ones`, ...
+ *
+ * - All the generators from `Vector3` are extended to `Matrix3` class.
  *
  * @property x {Vector3} first row
  * @property y {Vector3} second row
  * @property z {Vector3} third row
  */
 class Matrix3 {
-
-    /**
-     * @brief construct a matrix by explicitly giving components
-     * @details The component in parameter are ordered as rows,
-     * eg. `Matrix3(1, 2, 3)` fills the first row `x` with `{x = 1, y = 2, z = 3}`.
-     */
     constructor(xx = 0, xy = 0, xz = 0,
                 yx = 0, yy = 0, yz = 0,
                 zx = 0, zy = 0, zz = 0) {
@@ -380,7 +377,7 @@ class Matrix3 {
      * @brief creates a matrix with given array
      *  @details The order of the rows in matrix is the same as in `arr` array
      * @param arr {Array} bi-dimensional array containing rows of the matrix
-     * @returns {Matrix3} newly created matrix
+     * @returns {Matrix3} new instance of matrix
      */
     static fromArray(arr) {
         return new Matrix3(

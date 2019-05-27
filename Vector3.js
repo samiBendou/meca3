@@ -5,31 +5,31 @@
  * @brief vectors in 3D space
  * @details `Vector3` class represents vectors in 3D space.
  *
- * Components are stored using **cartesian coordinates** (`x`, `y`, `z`).
+ * Construct a `Vector3` **cartesian coordinates** `x`, `y`, `z`.
  *
- * Perform **vector space operations** between vectors such as addition or scalar multiplication.
+ * #### Features
  *
- * Compute the angle between two vector, the cross product and many other **geometrical operations**.
+ * - Perform **vector space operations** between vectors such as addition or scalar multiplication.
  *
- * **Chain operations** with an **object syntax** eg. `u.add(v)`, eg. `u.add(v).mul(s)`.
+ * - Compute the angle between two vector, the cross product and many other **geometrical operations**.
  *
- * Use cylindrical (`r`, `theta`, `z`) and spherical (`rxy`, `theta`, `phi`) coordinates
+ * - **Chain operations** with an **object syntax** eg. `u.add(v)`, eg. `u.add(v).mul(s)`.
+ *
+ * - Use cylindrical `r`, `theta`, `z` and spherical `rxy`, `theta`, `phi` coordinates
  * with provided **setters and getters**.
  *
- * Create vectors using **generators** in a Matlab-style syntax such as `ones`, `zeros`, ...
+ * - Create vectors using **generators** in a Matlab-style syntax such as `ones`, `zeros`, ...
  *
  * @property x {number} x cartesian coordinate
  * @property y {number} y cartesian coordinate
  * @property z {number} z cartesian coordinate
- * @property r {number} r spherical coordinate, also the length of this vector
- * @property rxy {number} r cylindrical coordinate, length of the projection of this vector on the (`ex`, `ey`) plan
- * @property theta {number} angle between `ex` and this vector in radians
- * @property phi {number} angle between `ez` and this vector in radians
+ * @property r {number} r spherical coordinate
+ * @property rxy {number} r cylindrical coordinate
+ * @property theta {number} angle formed with `ex` in radians
+ * @property phi {number} angle formed with  `ez` in radians
  */
 class Vector3 {
-    /**
-     * @brief Construct a Vector3 using cartesian coordinates
-     */
+
     constructor(x = 0, y = 0, z = 0) {
         this.x = x;
         this.y = y;
@@ -348,7 +348,7 @@ class Vector3 {
      * @brief create a vector with given array
      * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2.
      * @param arr {Array} array containing cartesian coordinates
-     * @returns {Vector3} newly created vector
+     * @returns {Vector3} new instance of vector
      */
     static fromArray(arr) {
         return new Vector3(arr[0], arr[1], arr[2]);
