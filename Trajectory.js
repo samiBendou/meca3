@@ -9,7 +9,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  * @brief trajectory of a mobile
  * @details `Trajectory` class represents the trajectory of a _mobile_ from the point of view of a moving _observer_.
  *
- * Constructor a trajectory by giving an array of _sample_ `PointPair`representing the successive position of the mobile
+ * Construct a trajectory by giving an array of _sample_ `PointPair`representing the successive position of the mobile
  * over time.
  *
  * You can also specify the time step between each successive positions.
