@@ -5,29 +5,29 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 /**
  * @class PointPair
- * @date 09/05/2019
- * @author samiBendou sbdh75@gmail.com
- * @brief Represents a couple of points
- * @details A PointPair can be represented as a pair of points, the observer and the mobile.
- * Each point is represented by a Vector3.
+ * @date 2019-05-09
+ * @author samiBendou
+ * @brief couple of points
+ * @details `PointPair` class represents a pair of point, the _observer_ and the _mobile_.
  *
- * The origin object is the absolute position of the observer of the trajectory.
- * The vector object is the absolute position of the mobile of the trajectory.
+ * Construct a point pair by giving position of the observer and the mobile as `Vector3`.
  *
- * PointPair class is designed to perform geometrical transformation on the segment joining the two points.
+ * #### Features
  *
- * PointPair class allows to manipulate relative coordinates of the mobile using the .relative property.
+ * - Perform **geometrical transformation** on the segment joining the two points.
  *
- * @property {Vector3} relative relative coordinates of the mobile
- * @property {number} length distance between the two points.
- * When the length is changed, only the mobile position is changed.
+ * - Manipulate **relative coordinates** of the mobile.
+ *
+ * @property {Vector3} vector absolute coordinates of the mobile
+ * @property {Vector3} origin absolute coordinates the observer
+ * @property relative {Vector3} relative coordinates of the mobile
+ * @property length {number} length distance between the mobile and the observer
  */
+
 class PointPair {
 
     /**
-     * @brief Construct a PointPair with given mobile and origin
-     * @param {Vector3} vector absolute coordinates of the mobile.
-     * @param {Vector3} origin absolute coordinates the origin point.
+     * @brief construct a pair of point with given origin and mobile
      */
     constructor(origin = Vector3.zeros, vector = Vector3.zeros) {
         this.origin = origin.copy();
@@ -51,7 +51,7 @@ class PointPair {
     }
 
     /**
-     * @brief Translate a point pair
+     * @brief translation a point pair
      * @param vector {Vector3} translation vector
      * @returns {PointPair} reference to this
      */
@@ -62,10 +62,9 @@ class PointPair {
     }
 
     /**
-     * @brief Homothetic transformation of the point pair
-     * @details a homothetic transformation is a scalar multiplication of the
-     * of the two points contained in the point pair
-     * @param scalar {Vector3} translation vector
+     * @brief homothetic transformation of a point pair
+     * @details Scalar multiplication of the of the two points by the ratio.
+     * @param scalar {number} ratio of transformation
      * @returns {PointPair} reference to this
      */
     homothetic(scalar) {
@@ -75,8 +74,8 @@ class PointPair {
     }
 
     /**
-     * @brief Matrix transformation of the point pair
-     * @param matrix {Matrix3}  transformation matrix
+     * @brief matrix transformation of the point pair
+     * @param matrix {Matrix3} transformation matrix
      * @returns {PointPair} reference to this
      */
     transform(matrix) {
@@ -86,9 +85,9 @@ class PointPair {
     }
 
     /**
-     * @brief Affine transfoËrmation of the point pair
+     * @brief affine transformation of the point pair
      * @param matrix {Matrix3} transformation matrix
-     * @param vector {Matrix3} translation vector
+     * @param vector {Vector3} translation vector
      * @returns {PointPair} reference to this
      */
     affine(matrix, vector) {
@@ -115,25 +114,25 @@ class PointPair {
     }
 
     /**
-     * @brief point pair of length 0
-     * @param u absolution position of the point pair
-     * @returns {PointPair} newly created point pair
+     * @brief point pair of length `0`
+     * @details The observer can be located everywhere.
+     * @param u {Vector3} absolution position of both the observer and mobile
+     * @returns {PointPair} new instance of point pair
      */
     static zeros(u = Vector3.zeros) {
         return new PointPair(u, u);
     }
 
     /**
-     * @brief point pair by providing the mobile only
-     * @details origin is set to 0. The point pair represents only a vector
+     * @brief point pair by providing mobile's position only
+     * @details Observer's position is set to zero.
      * @param u {Vector3} absolute position of the mobile
-     * @returns {PointPair} newly created point pair
+     * @returns {PointPair} new instance of point pair
      */
     static vect(u) {
         return new PointPair(Vector3.zeros, u);
     }
 }
-
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
     module.exports = PointPair;
 else
