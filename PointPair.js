@@ -97,6 +97,12 @@ class PointPair {
         return new PointPair(this.origin.copy(), this.vector.copy());
     }
 
+    /**
+     * @brief equality between two point pairs
+     * @details Verifies if relatives position of mobile are equal.
+     * @param om {PointPair} other point pair
+     * @return {boolean} `true` if the point pairs are equal
+     */
     isEqual(om) {
         return this.relative.isEqual(om.relative);
     }
