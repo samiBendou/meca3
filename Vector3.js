@@ -1,6 +1,5 @@
 /**
  * @class Vector3
- * @date 2019-05-09
  * @author samiBendou
  * @brief vectors in 3D space
  * @details `Vector3` class represents vectors in 3D space.

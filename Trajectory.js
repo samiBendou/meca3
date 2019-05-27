@@ -5,8 +5,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 /**
  * @class Trajectory
- * @date 09/05/2019
- * @author samiBendou sbdh75@gmail.com
+ * @author samiBendou
  * @brief Represents the trajectory of a point pair
  * @details The trajectory is stored into memory as an array of PointPair representing the successive positions
  * of a mobile over time. The value of the array must be chronological ordered.

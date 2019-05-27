@@ -5,7 +5,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 /**
  * @class PointPair
- * @date 2019-05-09
  * @author samiBendou
  * @brief couple of points
  * @details `PointPair` class represents a pair of point, the _observer_ and the _mobile_.
@@ -26,9 +25,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 class PointPair {
 
-    /**
-     * @brief construct a pair of point with given origin and mobile
-     */
     constructor(origin = Vector3.zeros, vector = Vector3.zeros) {
         this.origin = origin.copy();
         this.vector = vector.copy();
@@ -133,6 +129,7 @@ class PointPair {
         return new PointPair(Vector3.zeros, u);
     }
 }
+
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
     module.exports = PointPair;
 else

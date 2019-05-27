@@ -3,7 +3,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
 
 /**
  * @class Matrix3
- * @date 2019-05-09
  * @author samiBendou
  * @brief 3x3 matrices
  * @details `Matrix3` class represents dense 3x3 matrices.
@@ -31,6 +30,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
  * @property z {Vector3} third row
  */
 class Matrix3 {
+
     constructor(xx = 0, xy = 0, xz = 0,
                 yx = 0, yy = 0, yz = 0,
                 zx = 0, zy = 0, zz = 0) {

@@ -1,7 +1,6 @@
 /**
  * @class BufferTrajectory
- * @date 09/05/2019
- * @author samiBendou sbdh75@gmail.com
+ * @author samiBendou
  * @brief Fixed size buffer for Trajectory class
  * @details This trajectory behaves the same as Trajectory class for the most expect that
  * it stores a fixed number of PointPairs in the pairs array.

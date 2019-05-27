@@ -4,8 +4,7 @@ Trajectory = require("./Trajectory.js");
 
 /**
  * @class Solver
- * @date 09/05/2019
- * @author samiBendou sbdh75@gmail.com
+ * @author samiBendou
  * @brief Solve second order differential equation
  * @details Solve equations with the form  d2u/dt2 = f(u, t) where :
  * - u is the unknown vector function also know as state vector
