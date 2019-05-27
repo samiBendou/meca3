@@ -1,35 +1,34 @@
 /**
  * @class Vector3
- * @date 09/05/2019
- * @author samiBendou sbdh75@gmail.com
- * @brief Representation of 3D vectors
- * @details The 3D vectors are stored by components using cartesian coordinates (x, y, z).
+ * @date 2019-05-09
+ * @author samiBendou
+ * @brief vectors in 3D space
+ * @details `Vector3` class represents vectors in 3D space.
  *
- * Vector3 class allows to perform vector space operations between vectors (u + v, s * u).
- * Operations are performed using a object-syntax eg. u.add(v), they e be chained eg. u.add(v).mul(s).
+ * Components are stored using **cartesian coordinates** (`x`, `y`, `z`).
  *
- * Vector3 class provides setters and getters for cylindrical (r, theta, z)
- * and spherical coordinates (r, theta, phi).
+ * Perform **vector space operations** between vectors such as addition or scalar multiplication.
  *
- * Vector3 class is designed to provide many features related to geometry such
- * as compute the angle between two vector, the cross product.
+ * Compute the angle between two vector, the cross product and many other **geometrical operations**.
  *
- * The Vector3 class provides vectors generator in a numpy-style syntax such as ones, zeros, ...
+ * **Chain operations** with an **object syntax** eg. `u.add(v)`, eg. `u.add(v).mul(s)`.
  *
- * We denote the canonical basis of 3D euclidean space ex, ey, ez such that :
- * ex = (1, 0, 0), ey = (0, 1, 0), ez = (0, 0, 1)
+ * Use cylindrical (`r`, `theta`, `z`) and spherical (`rxy`, `theta`, `phi`) coordinates
+ * with provided **setters and getters**.
  *
- * @property r {number} length of this vector, also the r spherical coordinate
- * @property theta {number} angle between ex and this vector in radians
- * @property phi {number} angle between ez and this vector in radians
- * @property rxy {number} length of the projection of this vector on the (ex, ey) plan
+ * Create vectors using **generators** in a Matlab-style syntax such as `ones`, `zeros`, ...
+ *
+ * @property x {number} x cartesian coordinate
+ * @property y {number} y cartesian coordinate
+ * @property z {number} z cartesian coordinate
+ * @property r {number} r spherical coordinate, also the length of this vector
+ * @property rxy {number} r cylindrical coordinate, length of the projection of this vector on the (`ex`, `ey`) plan
+ * @property theta {number} angle between `ex` and this vector in radians
+ * @property phi {number} angle between `ez` and this vector in radians
  */
 class Vector3 {
     /**
      * @brief Construct a Vector3 using cartesian coordinates
-     * @param x {number} x coordinate
-     * @param y {number} y coordinate
-     * @param z {number} z coordinate
      */
     constructor(x = 0, y = 0, z = 0) {
         this.x = x;
@@ -67,7 +66,7 @@ class Vector3 {
 
     /**
      * @brief sets spherical coordinates
-     * @details Transforms spherical coordinates to cartesian coordinates
+     * @details Transforms spherical coordinates to cartesian coordinates.
      */
     setRThetaPhi(r, theta, phi) {
         this.x = r * Math.sin(phi) * Math.cos(theta);
@@ -86,7 +85,7 @@ class Vector3 {
     }
 
     /**
-     * @brief Addition between two vectors
+     * @brief addition between two vectors
      * @param u {Vector3} vector to add
      * @returns {Vector3} reference to this
      */
@@ -98,7 +97,7 @@ class Vector3 {
     }
 
     /**
-     * @brief Subtraction between two vectors
+     * @brief subtraction between two vectors
      * @param u {Vector3} vector to subtract
      * @returns {Vector3} reference to this
      */
@@ -110,7 +109,7 @@ class Vector3 {
     }
 
     /**
-     * @brief Opposite of the vector
+     * @brief opposite of the vector
      * @returns {Vector3} reference to this
      */
     get opp() {
@@ -121,7 +120,7 @@ class Vector3 {
     }
 
     /**
-     * @brief Scalar multiplication of the vector
+     * @brief scalar multiplication of the vector
      * @param s {number} scalar to multiply
      * @returns {Vector3} reference to this
      */
@@ -133,7 +132,7 @@ class Vector3 {
     }
 
     /**
-     * @brief Scalar division of the vector
+     * @brief scalar division of the vector
      * @param s {number} scalar to divide
      * @returns {Vector3} reference to this
      */
@@ -145,8 +144,8 @@ class Vector3 {
     }
 
     /**
-     * @brief Scalar product of two vector
-     * @param u {Vector3} Vector to multiply
+     * @brief scalar product of two vector
+     * @param u {Vector3} vector to multiply
      * @returns {number} value of scalar multiplication
      */
     scal(u) {
@@ -154,8 +153,8 @@ class Vector3 {
     }
 
     /**
-     * @brief Cross product of two vector
-     * @param u {Vector3} Vector to multiply
+     * @brief cross product of two vector
+     * @param u {Vector3} vector to multiply
      * @returns {Vector3} value of cross product
      */
     cross(u) {
@@ -165,8 +164,8 @@ class Vector3 {
     }
 
     /**
-     * @brief Distance between two vector
-     * @param u {Vector3} Other vector
+     * @brief distance between two vector
+     * @param u {Vector3} other vector
      * @returns {number} value of the distance
      */
     dist(u) {
@@ -174,8 +173,8 @@ class Vector3 {
     }
 
     /**
-     * @brief Angle between two vector
-     * @param u {Vector3} Other vector
+     * @brief angle between two vector
+     * @param u {Vector3} other vector
      * @returns {number} value of the angle in radians
      */
     angle(u) {
@@ -183,8 +182,8 @@ class Vector3 {
     }
 
     /**
-     * @brief Cosine of the angle between two vector
-     * @param u {Vector3} Other vector
+     * @brief cosine of the angle between two vector
+     * @param u {Vector3} other vector
      * @returns {number} value of the cosine
      */
     cos(u) {
@@ -192,8 +191,8 @@ class Vector3 {
     }
 
     /**
-     * @brief Sine of the angle between two vector
-     * @param u {Vector3} Other vector
+     * @brief sine of the angle between two vector
+     * @param u {Vector3} other vector
      * @returns {number} value of the sine
      */
     sin(u) {
@@ -201,22 +200,35 @@ class Vector3 {
     }
 
     /**
-     * @brief Tangent of the angle between two vector
-     * @param u {Vector3} Other vector
+     * @brief tangent of the angle between two vector
+     * @param u {Vector3} other vector
      * @returns {number} value of the tangent
      */
     tan(u) {
         return this.sin(u) / this.cos(u);
     }
 
+    /**
+     * @brief clone a vector
+     * @return {Vector3} new instance of cloned vector
+     */
     copy() {
         return new Vector3(this.x, this.y, this.z);
     }
 
+    /**
+     * @brief equality between two vectors
+     * @details distance based equality
+     * @param u {Vector3} other vector
+     * @return {boolean} `true` if vectors are equal
+     */
     isEqual(u) {
         return Math.abs(this.dist(u)) < Number.EPSILON;
     }
 
+    /**
+     * @return {boolean} `true` if vector is filled with zeros
+     */
     isZero() {
         return this.r < Number.EPSILON;
     }
@@ -225,67 +237,72 @@ class Vector3 {
         return "(" + this.x.toFixed(2) + " " + this.y.toFixed(2) + " " + this.z.toFixed(2) + ")";
     }
 
+    /**
+     * @brief transform vector to array
+     * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2
+     * @return {Array} value of the vector
+     */
     toArray() {
         return [this.x, this.y, this.z];
     }
 
     /**
-     * @returns {Vector3} vector filled with 0
+     * @returns {Vector3} vector filled with `0`
      */
     static get zeros() {
         return new Vector3();
     }
 
     /**
-     * @returns {Vector3} vector filled with 1
+     * @returns {Vector3} vector filled with `1`
      */
     static get ones() {
         return Vector3.scal(1);
     }
 
     /**
-     * @brief Scalar vector
+     * @brief scalar vector
      * @param s {number} scalar value
-     * @returns {Vector3} vector filled with s
+     * @returns {Vector3} vector filled with `s`
      */
     static scal(s) {
         return new Vector3(s, s, s);
     }
 
     /**
-     * @returns {Vector3} (1 0 0)
+     * @returns {Vector3} `ex = {x = 1, y = 0, z = 0}`
      */
     static get ex() {
         return Vector3.e(0);
     }
 
     /**
-     * @returns {Vector3} (0 1 0)
+     * @returns {Vector3} `ey = {x = 0, y = 1, z = 0}`
      */
     static get ey() {
         return Vector3.e(1);
     }
 
     /**
-     * @returns {Vector3} (0 0 1)
+     * @returns {Vector3} `ez = {x = 0, y = 0, z = 1}`
      */
     static get ez() {
         return Vector3.e(2);
     }
 
     /**
-     * @brief Canonical basis
-     * @details The basis is ordered as e0 = ex, e1 = ey, e2 = ez
-     * @param k
-     * @returns {Vector3}
+     * @brief canonical basis
+     * @details The basis is ordered as `e(0) == ex`, `e(1) == ey`, `e(2) == ez`.
+     * @param k {number} order of the vector in basis
+     * @returns {Vector3} value of the canonical vector
      */
     static e(k) {
         return new Vector3(k === 0 ? 1 : 0, k === 1 ? 1 : 0, k === 2 ? 1 : 0);
     }
 
     /**
-     * @brief Sums vectors in array
-     * @param vectors {Array} array of Vector3
+     * @brief sums vectors in array
+     * @param vectors {Array} array of `Vector3`
      * @returns {Vector3} value of the sum
      */
     static sum(vectors) {
@@ -295,9 +312,9 @@ class Vector3 {
     }
 
     /**
-     * @brief Linear combination of vectors in array with scalars
+     * @brief linear combination of vectors in array
      * @param scalars {Array} array of numbers
-     * @param vectors {Array} array of Vector3
+     * @param vectors {Array} array of `Vector3`
      * @returns {Vector3} value of linear combination
      */
     static comb(scalars, vectors) {
@@ -307,23 +324,16 @@ class Vector3 {
     }
 
     /**
-     * @brief Create a vector with given array
-     * @param arr {Array} array containing cartesian coordinates
-     * @returns {Vector3} newly created vector
-     */
-    static fromArray(arr) {
-        return new Vector3(arr[0], arr[1], arr[2]);
-    }
-
-    /**
-     * @brief Derivative of an array of vector with given steps
-     * @details Representing derivative of the array of Vector3 depending on a variable s
-     * such that s0 = 0, smax = sum of the steps
-     * If the original array is of size N, than the derivative is of size N - 1
+     * @brief derivative of an array of vector with given steps
+     * @details Representing discrete derivative of the array of Vector3.
+     * If the original array is of size `N`, than the derivative is of size `N - 1`.
      *
-     * @param vectors {Array} array of Vector3 to process
+     * The derivative is approximated according using the given steps between
+     * each value and using lower bound approximation.
+     *
+     * @param vectors {Array} array of `Vector3` to process
      * @param steps {Array} array of numbers representing steps between Vector3
-     * @returns {Array} array representing the value of the derivative
+     * @returns {Array} array of `Vector` representing the value of the derivative
      */
     static der(vectors, steps) {
         let der = new Array(vectors.length - 1);
@@ -331,6 +341,17 @@ class Vector3 {
             der[i - 1] = vectors[i].copy().sub(vectors[i - 1]).div(steps[i - 1]);
         }
         return der;
+    }
+
+
+    /**
+     * @brief create a vector with given array
+     * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2.
+     * @param arr {Array} array containing cartesian coordinates
+     * @returns {Vector3} newly created vector
+     */
+    static fromArray(arr) {
+        return new Vector3(arr[0], arr[1], arr[2]);
     }
 }
 

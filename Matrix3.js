@@ -3,27 +3,36 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
 
 /**
  * @class Matrix3
- * @date 09/05/2019
- * @author samiBendou sbdh75@gmail.com
- * @brief Representation of 3x3 matrices
- * @details The matrix is stored in memory as an aggregation of three Vector3 rows : x, y, z.
+ * @date 2019-05-09
+ * @author samiBendou
+ * @brief 3x3 matrices
+ * @details `Matrix3` class represents dense 3x3 matrices.
  *
- * Access a component of the matrix using the following syntax : m.i.j where
- * both i and j e be equal to x, y or z. eg m.x.x or m.y.z
+ * Components are stored in memory as an aggregation of three Vector3 rows : `x`, `y`, `z`.
  *
- * Matrix3 class extends vector space operations from Vector3 and provide other
- * matrix related algebraical operations.
+ * Access a component of the matrix with the syntax `m.i.j` where `i` and `j` might be equal to `x`, `y` or `z`.
+ * eg. `m.x.x`, `m.y.z`, ...
  *
- * Matrix3 class is designed to provide fast inversion, product and determinant
- * computation.
+ * `i` denotes the row index and `j` the column index.
  *
- * It provides many generators and especially for rotation matrices.
+ * Use extended **vector space operations** and **geometrical operations** from `Vector3`.
+ *
+ * Compute  **algebraical operations** such as inversion, product or determinant.
+ *
+ * Create matrices using **generators** in a Matlab-style syntax such as `eye`, `ones`, ...
+ *
+ * All the generators from `Vector3` are extended to `Matrix3` class.
+ *
+ * @property x {Vector3} first row
+ * @property y {Vector3} second row
+ * @property z {Vector3} third row
  */
 class Matrix3 {
 
     /**
-     * @brief Construct a matrix by explicitly giving components
-     * @details The component are ordered as rows, eg. Matrix3(1, 2, 3) fills the first row with (1 2 3)
+     * @brief construct a matrix by explicitly giving components
+     * @details The component in parameter are ordered as rows,
+     * eg. `Matrix3(1, 2, 3)` fills the first row `x` with `{x = 1, y = 2, z = 3}`.
      */
     constructor(xx = 0, xy = 0, xz = 0,
                 yx = 0, yy = 0, yz = 0,
@@ -34,11 +43,21 @@ class Matrix3 {
         this.z = new Vector3(zx, zy, zz);
     }
 
+    /**
+     * @brief i-th row
+     * @param i {number} index of the row to get
+     * @return {Vector3} value of the row
+     */
     row(i) {
         let labels = ["x", "y", "z"];
         return this[labels[i]].copy();
     }
 
+    /**
+     * @brief j-th column
+     * @param j {number} index of the column to get
+     * @return {Vector3} value of the column
+     */
     col(j) {
         let labels = ["x", "y", "z"];
         return new Vector3(this.x[labels[j]], this.y[labels[j]], this.z[labels[j]]);
@@ -87,7 +106,7 @@ class Matrix3 {
     }
 
     /**
-     * @brief Transpose the matrix
+     * @brief transpose the matrix
      * @returns {Matrix3} value of the transposed matrix
      */
     get trans() {
@@ -106,7 +125,7 @@ class Matrix3 {
     }
 
     /**
-     * @brief Product between two matrix
+     * @brief product between two matrix
      * @param m {Matrix3} matrix to multiply
      * @returns {Matrix3} value of the product
      */
@@ -130,8 +149,8 @@ class Matrix3 {
     }
 
     /**
-     * @brief Product between matrix and vector
-     * @details Also called linear mapping between matrix and vector
+     * @brief product between matrix and vector
+     * @details Also called linear mapping between matrix and vector.
      * @param u {Vector3} vector to multiply
      * @returns {Vector3} value of linear mapping
      */
@@ -146,7 +165,7 @@ class Matrix3 {
     }
 
     /**
-     * @brief Determinant of a matrix
+     * @brief determinant of a matrix
      * @returns {number} value of the determinant
      */
     get det() {
@@ -155,8 +174,8 @@ class Matrix3 {
     }
 
     /**
-     * @brief Inverse of a matrix
-     * @details returns a NaN matrix when the determinant is 0
+     * @brief inverse of a matrix
+     * @details returns a `NaN` matrix when the determinant is zero.
      * @returns {Matrix3} value of the inverse matrix
      */
     get inv() {
@@ -195,6 +214,10 @@ class Matrix3 {
         return this.x.toString() + "\n" + this.y.toString() + "\n" + this.z.toString();
     }
 
+    /**
+     * @brief transform matrix to array
+     * @return {Array} bi-dimensional array containing rows of the matrix
+     */
     toArray() {
         return [this.x.toArray(), this.y.toArray(), this.z.toArray()];
     }
@@ -208,8 +231,8 @@ class Matrix3 {
     }
 
     /**
-     * @brief Identity matrix
-     * @details Diagonal matrix filled with 1
+     * @brief identity matrix
+     * @details Diagonal matrix filled with `1`.
      * @returns {Matrix3} value of identity matrix
      */
     static get eye() {
@@ -217,8 +240,8 @@ class Matrix3 {
     }
 
     /**
-     * @brief Scalar matrix
-     * @details Diagonal matrix filled with a single value
+     * @brief scalar matrix
+     * @details Diagonal matrix filled with a single value.
      * @param s {number} scalar value
      * @returns {Matrix3} value of scalar matrix
      */
@@ -227,10 +250,10 @@ class Matrix3 {
     }
 
     /**
-     * @brief Canonical matrix
-     * @details Matrix with 0 everywhere except in i, j position
-     * @param i {number} row index of 1
-     * @param j {number} column index of 1
+     * @brief canonical matrix
+     * @details Matrix with `0` everywhere except in `i`, `j` position where there is a `1`.
+     * @param i {number} row index of `1`
+     * @param j {number} column index of `1`
      * @returns {Matrix3} value of canonical matrix
      */
     static e(i, j) {
@@ -254,9 +277,9 @@ class Matrix3 {
     }
 
     /**
-     * @details Product of the matrices in array
-     * @details The product is performed in the same order of the elements in the array
-     * @param matrices {Array} array of Vector3
+     * @details product of the matrices in array
+     * @details The product is performed in the same order as the elements in the array.
+     * @param matrices {Array} array of `Vector3`
      * @returns {Matrix3} value of the product
      */
     static prod(matrices) {
@@ -266,10 +289,10 @@ class Matrix3 {
     }
 
     /**
-     * @brief rotation matrix of axis (0, ex)
-     * @details anticlockwise rotation
+     * @brief rotation matrix of axis (`0`, `ex`)
+     * @details Anticlockwise rotation.
      * @param theta {number} angle of rotation
-     * @returns {Matrix3} Value of rotation matrix for specified angle
+     * @returns {Matrix3} value of rotation matrix for specified angle
      */
     static rotX(theta) {
         return new Matrix3(1, 0, 0,
@@ -278,10 +301,10 @@ class Matrix3 {
     }
 
     /**
-     * @brief rotation matrix of axis (0, ey)
-     * @details anticlockwise rotation
+     * @brief rotation matrix of axis (`0`, `ey`)
+     * @details Anticlockwise rotation.
      * @param theta {number} angle of rotation
-     * @returns {Matrix3} Value of rotation matrix for specified angle
+     * @returns {Matrix3} value of rotation matrix for specified angle
      */
     static rotY(theta) {
         return new Matrix3(Math.cos(theta), 0, Math.sin(theta),
@@ -290,10 +313,10 @@ class Matrix3 {
     }
 
     /**
-     * @brief rotation matrix of axis (0, ez)
-     * @details anticlockwise rotation
+     * @brief rotation matrix of axis (`0`, `ez`)
+     * @details Anticlockwise rotation.
      * @param theta {number} angle of rotation
-     * @returns {Matrix3} Value of rotation matrix for specified angle
+     * @returns {Matrix3} value of rotation matrix for specified angle
      */
     static rotZ(theta) {
         return new Matrix3(Math.cos(theta), -Math.sin(theta), 0,
@@ -302,9 +325,9 @@ class Matrix3 {
     }
 
     /**
-     * @brief rotation matrix with specified axis and angle
-     * @details anticlockwise rotation
-     * @returns {function(number):Matrix3} Value of rotation matrix for specified angle
+     * @brief rotation matrix with around axis
+     * @details Anticlockwise rotation.
+     * @returns {function(number):Matrix3} function that generates rotation `Matrix3` for given angle
      */
     static makeRot(axis) {
         //R = P + cos(theta) * (I - P) + sin(theta) * Q
@@ -326,11 +349,10 @@ class Matrix3 {
     }
 
     /**
-     * @brief Creates an affine transformation of the vector
-     * @details Generates a Javascript function that returns the affine transform of the vector
-     * @param m {Matrix3} matrix of the affine transform
-     * @param v {Vector3} vector of the affine transform
-     * @returns {function(Vector3): Vector3}
+     * @brief affine transformation of the vector
+     * @param m {Matrix3} matrix of the transformation
+     * @param v {Vector3} vector of the transformation
+     * @returns {function(Vector3): Vector3} function that computes affine transform for given `Vector3`
      */
     static makeAffine(m, v) {
         return function (u) {
@@ -339,24 +361,11 @@ class Matrix3 {
     }
 
     /**
-     * @brief Create a matrix with given array
-     * @param arr {Array} bi-dimensional array containing rows of the matrix
-     * @returns {Matrix3} newly created matrix
-     */
-    static fromArray(arr) {
-        return new Matrix3(
-            arr[0][0], arr[0][1], arr[0][2],
-            arr[1][0], arr[1][1], arr[1][2],
-            arr[2][0], arr[2][1], arr[2][2]);
-    }
-
-    /**
      * @brief tensor product of two vectors
-     * @details tensor product is the matrix obtained from two vectors
-     * such that mij = ui * vj
+     * @details Tensor product is the matrix obtained from two vectors such that `m.i.j = u.i * v.j`.
      * @param u {Vector3} first vector to transform
      * @param v {Vector3} second vector to transform
-     * @returns {Matrix3} value of the matrix product
+     * @returns {Matrix3} value of the tensor product
      */
     static tens(u, v) {
         let right = v || u;
@@ -365,6 +374,19 @@ class Matrix3 {
             u.y * right.x, u.y * right.y, u.y * right.z,
             u.z * right.x, u.z * right.y, u.z * right.z,
         );
+    }
+
+    /**
+     * @brief creates a matrix with given array
+     *  @details The order of the rows in matrix is the same as in `arr` array
+     * @param arr {Array} bi-dimensional array containing rows of the matrix
+     * @returns {Matrix3} newly created matrix
+     */
+    static fromArray(arr) {
+        return new Matrix3(
+            arr[0][0], arr[0][1], arr[0][2],
+            arr[1][0], arr[1][1], arr[1][2],
+            arr[2][0], arr[2][1], arr[2][2]);
     }
 }
 
