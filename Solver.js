@@ -1,45 +1,48 @@
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     Vector3 = require("./Vector3.js");
-Trajectory = require("./Trajectory.js");
+    Trajectory = require("./Trajectory.js");
+}
 
 /**
  * @class Solver
  * @author samiBendou
- * @brief Solve second order differential equation
- * @details Solve equations with the form  d2u/dt2 = f(u, t) where :
- * - u is the unknown vector function also know as state vector
- * - d2u / dt2 denotes the second order derivative of u
- * - f(u, t) is a smooth function depending only on coordinates of u and time t
- * - v = du/dt is the derivative of u
+ * @brief second order differential equations solver
+ * @details `Solver` class allows to solve equations with the form  **d2u/dt2 = f(u, t)**.
  *
- * This solver is designed to be used in two ways :
- * 1. Step by dt solving. Get the next value of u giving the current and previous values of u
- * 2. Trajectory solving. Give the number of steps, u0 and v0 and get an array containing u at each dt
+ * We introduce the following definition :
+ * - **u** is the _unknown vector_ function
+ * - **v = du/dt** is the _derivative_ of **u**
+ * - **d2u/dt2** denotes the _second order derivative_ of **u**
+ * - **f(u, t)** is a _smooth function_ depending only on coordinates of **u** and time **t**
  *
  * Only explicit Euler's method is available for the moment.
  *
- * The solver stores the field function used as Javacript function and the time dt between each solving dt
- * as a real number
+ * Construct a solver by giving a solving step **dt** as `number `and a function **f** as `function`.
+ *
+ * #### Features
+ *
+ * - **Step by step solving**. Get the next value of **u** giving the current and previous values of u
+ *
+ * - **Global solving**. Give the number of steps, **u0** and **v0** and get an array of samples solutions
+ *
+ * @property {function(Vector3): Vector3} **f** function as Javascript function that takes as parameter a `Vector3` and
+ * returns a `Vector3`.
+ * @property dt {number} constant step between solution samples
  */
 
 class Solver {
-    /**
-     * @brief Construct a Solver with a given field and dt
-     * @param {function} field Javascript function representing the output of the f() function.
-     * @param {number} dt Constant time dt between two solving instant.
-     */
+
     constructor(field, dt = 1) {
         this.field = field;
         this.dt = dt;
     }
 
     /**
-     * @brief Get the next approximation value of ODE
-     * @details Euler's explicit method is used to compute next state
-     * @param cur {Vector3} current state vector
-     * @param prev {Vector3} previous state vector
-     * @param t {number} current duration
-     * @returns {Vector3} value of next state vector from ODE
+     * @brief compute one solution step
+     * @param cur {Vector3} current value of unknown vector
+     * @param prev {Vector3} previous value of unknown vector
+     * @param t {number} duration since initial instant
+     * @returns {Vector3} value of next solution from ODE
      */
     step(cur, prev, t) {
         let step2 = this.dt * this.dt;
@@ -47,13 +50,11 @@ class Solver {
     }
 
     /**
-     * @brief Transform speed and position initial conditions
-     * @details Transforms the u0, v0 initial condition into a u0, u1 initial condition
-     * for the ODE. This mean that instead of giving initial speed and position,
-     * you give initial position and position right after initial instant.
-     * @param u0 {Vector3} initial position
-     * @param v0 {Vector3} initial speed
-     * @returns {Vector3} position right after initial instant
+     * @brief transform speed and position initial conditions
+     * @details Transforms the **u0**, **v0** initial condition into a **u0**, **u1** initial condition.
+     * @param u0 {Vector3} initial unknown
+     * @param v0 {Vector3} initial derivative of unknown
+     * @returns {Vector3} solution right after initial instant
      */
     initialTransform(u0, v0) {
         let u1 = v0.copy().mul(this.dt).add(u0);
@@ -61,11 +62,11 @@ class Solver {
     }
 
     /**
-     * @brief Solve ODE with speed and position initial condition
-     * @param u0 {Vector3} initial position
-     * @param v0 {Vector3} initial speed
+     * @brief solve ODE with `Vector3`
+     * @param u0 {Vector3} initial unknown
+     * @param v0 {Vector3} initial derivative of unknown
      * @param count {number} number of steps to solve
-     * @returns {Array} array containing successive solutions of ODE as Vector3
+     * @returns {Array} array containing successive solutions of ODE as `Vector3`
      */
     solve(u0, v0, count) {
         let u = new Array(count);
@@ -80,13 +81,13 @@ class Solver {
     }
 
     /**
-     * @brief Solve ODE and get trajectory
-     * @details All the vectors will have the same origin
-     * @param u0 {Vector3} initial position
-     * @param v0 {Vector3} initial speed
+     * @brief solve ODE with `PointPair`
+     * @details The observer is considered as immobile.
+     * @param u0 {Vector3} initial position of mobile
+     * @param v0 {Vector3} initial speed of mobile
      * @param count {number} number of steps to solve
-     * @param origin {Vector3} origin to set for all point pairs
-     * @returns {Trajectory|BufferTrajectory} reference to `trajectory`
+     * @param origin {Vector3} observer's position
+     * @returns {Trajectory} new instance of trajectory containing the solution
      */
     trajectory(u0, v0, count, origin = Vector3.zeros) {
         return Trajectory.discrete(this.solve(u0, v0, count), this.dt, origin);
