@@ -119,7 +119,7 @@ class BufferTrajectory extends Trajectory {
      * The value contained at `addIndex` is replaced when adding new points.
      *
      * @param pair {PointPair} position point pair
-     * @param step {number|undefined} time step elapsed between last position
+     * @param step {number=} time step elapsed between last position
      * @returns {Trajectory} reference to this
      */
     add(pair, step) {

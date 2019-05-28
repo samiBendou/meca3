@@ -190,7 +190,7 @@ class Trajectory {
      * @brief add a new position to the trajectory
      * @details If you let `step` undefined, then the method will take the last added step if it exists.
      * @param pair {PointPair} position of the mobile
-     * @param step {number|undefined} time step elapsed since `last` position
+     * @param step {number=} time step elapsed since `last` position
      * @returns {Trajectory} reference to this
      */
     add(pair, step) {
