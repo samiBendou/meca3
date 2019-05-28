@@ -13,14 +13,12 @@ It represents **3D space** and provides a **solver** to compute **trajectory** o
 
 - **linear algebra** commons features such as matrix and vectors
 
-- **affine geometry** support with point pairs
-
 - **geometrical transformations** such as translation of affine transform
 
 - **lightweight solver** to perform either step by step or global ODE solving
 
-- **object oriented** memory efficient syntax to perform mathematical operations
+- **object oriented** syntax to perform mathematical operations
 
-- **3D optimized implementation** of common vectors and matrix operations to provide fast computation
+- **3D optimized implementation** of common algebraical operations to provide fast computation
 
-- **Documentation and examples** that can be founded [here](https://github.com/samiBendou/meca3/wiki/)
+- **Documentation and examples** that can be found [here](https://github.com/samiBendou/meca3/wiki/)
