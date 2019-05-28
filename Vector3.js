@@ -12,12 +12,8 @@
  *
  * - Compute the angle between two vector, the cross product and many other **geometrical operations**.
  *
- * - **Chain operations** with an **object syntax** eg. `u.add(v)`, eg. `u.add(v).mul(s)`.
- *
  * - Use cylindrical `r`, `theta`, `z` and spherical `rxy`, `theta`, `phi` coordinates
  * with provided **setters and getters**.
- *
- * - Create vectors using **generators** in a Matlab-style syntax such as `ones`, `zeros`, ...
  *
  * @property x {number} x cartesian coordinate
  * @property y {number} y cartesian coordinate
