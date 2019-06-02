@@ -73,13 +73,13 @@ class Trajectory {
         return length;
     }
 
-    get origins() {
+    get origin() {
         return this.pairs.map(function (pair) {
             return pair.origin;
         });
     }
 
-    set origins(origins) {
+    set origin(origins) {
         this.pairs.forEach(function (pair, index) {
             pair.origin = origins[index];
         });
