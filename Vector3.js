@@ -210,7 +210,7 @@ class Vector3 {
      * @returns {number} value of the sine
      */
     sin(u) {
-        return (!this.isZero() && !u.isZero()) ? this.cross(u).r / (this.r * u.r) : 0;
+        return (!this.isZero() && !u.isZero()) ? this.copy().cross(u).r / (this.r * u.r) : 0;
     }
 
     /**
@@ -312,29 +312,6 @@ class Vector3 {
      */
     static e(k) {
         return new Vector3(k === 0 ? 1 : 0, k === 1 ? 1 : 0, k === 2 ? 1 : 0);
-    }
-
-    /**
-     * @brief sums vectors in array
-     * @param vectors {Array} array of `Vector3`
-     * @returns {Vector3} value of the sum
-     */
-    static sum(vectors) {
-        return vectors.reduce(function (prev, cur) {
-            return prev.copy().add(cur);
-        });
-    }
-
-    /**
-     * @brief linear combination of vectors in array
-     * @param scalars {Array} array of numbers
-     * @param vectors {Array} array of `Vector3`
-     * @returns {Vector3} value of linear combination
-     */
-    static comb(scalars, vectors) {
-        return vectors.reduce(function (prev, cur, index) {
-            return prev.copy().mul(scalars[index - 1]).add(cur.copy().mul(scalars[index]));
-        });
     }
 
     /**

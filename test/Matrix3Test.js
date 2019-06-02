@@ -77,4 +77,23 @@ describe("Matrix3 Tests", function () {
         assert(Matrix3.rotY(angle).isEqual(rotY(angle)));
         assert(Matrix3.rotZ(angle).isEqual(rotZ(angle)));
     });
+
+    it("Serialize", function () {
+        let aExpected = [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1]
+        ];
+        a.toArray().forEach(function (row, i) {
+            row.forEach(function (s, j) {
+                assert.equal(s, aExpected[i][j]);
+            });
+        });
+        assert(Matrix3.fromArray(
+            [
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1]
+            ]).isEqual(a));
+    })
 });

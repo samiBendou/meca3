@@ -260,18 +260,6 @@ class Matrix3 {
         return can;
     }
 
-    static sum(matrices) {
-        return matrices.reduce(function (prev, cur) {
-            return prev.copy().add(cur);
-        });
-    }
-
-    static comb(scalars, matrices) {
-        return matrices.reduce(function (prev, cur, index) {
-            return prev.copy().mul(scalars[index - 1]).add(cur.copy().mul(scalars[index]));
-        });
-    }
-
     /**
      * @details product of the matrices in array
      * @details The product is performed in the same order as the elements in the array.

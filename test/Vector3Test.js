@@ -27,6 +27,12 @@ describe("Vector3 Tests", function () {
         assert.approximately(u.scal(v), 0, Number.EPSILON);
     });
 
+    it("Angle", function () {
+        assert.approximately(u.angle(v), Math.PI / 2, Number.EPSILON);
+        assert.approximately(u.angle(w), Math.PI / 2, Number.EPSILON);
+        assert.approximately(u.angle(u), 0.0, Number.EPSILON);
+    });
+
     it("Cross Product", function () {
         assert(u.copy().cross(v).isEqual(new Vector3(0, 0, 1)));
         assert(v.copy().cross(w).isEqual(new Vector3(1, 0, 0)));
@@ -58,5 +64,20 @@ describe("Vector3 Tests", function () {
         assert.isFalse(u.isEqual(v));
         assert.isTrue(u.isEqual(u));
         assert.isFalse(u.isEqual(u.copy().mul(1 + Number.EPSILON)));
+    });
+
+    it("Derivative", function () {
+        let expected = [new Vector3(-1, 1, 0), new Vector3(0, -1, 1)];
+        Vector3.der([u, v, w], [1, 1, 1]).forEach(function (vector, index) {
+            assert(vector.isEqual(expected[index]));
+        });
+    });
+
+    it("Serialize", function () {
+        let uExpected = [1, 0, 0];
+        u.toArray().forEach(function (s, index) {
+            assert.equal(s, uExpected[index]);
+        });
+        assert(Vector3.fromArray([1, 0, 0]).isEqual(u));
     });
 });
