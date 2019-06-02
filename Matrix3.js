@@ -172,20 +172,23 @@ class Matrix3 {
     /**
      * @brief inverse of a matrix
      * @details returns a `NaN` matrix when the determinant is zero.
-     * @returns {Matrix3} value of the inverse matrix
+     * @returns {Matrix3} reference to this
      */
-    get inv() {
-        return (new Matrix3(this.y.y * this.z.z - this.y.z * this.z.y,
+    inv() {
+        let det = this.det;
+        this.set(
+            this.y.y * this.z.z - this.y.z * this.z.y,
             this.x.z * this.z.y - this.x.y * this.z.z,
             this.x.y * this.y.z - this.x.z * this.y.y,
-
             this.y.z * this.z.x - this.y.x * this.z.z,
             this.x.x * this.z.z - this.x.z * this.z.x,
             this.x.z * this.y.x - this.x.x * this.y.z,
-
             this.y.x * this.z.y - this.y.y * this.z.x,
             this.x.y * this.z.x - this.x.x * this.z.y,
-            this.x.x * this.y.y - this.x.y * this.y.x)).div(this.det);
+            this.x.x * this.y.y - this.x.y * this.y.x
+        ).div(det);
+
+        return this;
     }
 
     copy() {

@@ -44,13 +44,13 @@ describe("Matrix3 Tests", function () {
     });
 
     it("Inverse", function () {
-        assert(a.inv.isEqual(a));
-        assert(c.copy().prod(c.inv).isEqual(a));
-        assert(c.inv.isEqual(new Matrix3(
+        assert(a.copy().inv().isEqual(a));
+        assert(c.copy().inv().isEqual(new Matrix3(
             0.75, 0.50, 0.25,
             0.50, 1.00, 0.50,
             0.25, 0.50, 0.75
         )));
+        assert(c.copy().prod(c.copy().inv()).isEqual(a));
     });
 
     it("Get elements", function () {
