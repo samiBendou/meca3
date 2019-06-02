@@ -83,7 +83,6 @@ class Trajectory {
         this.pairs.forEach(function (pair, index) {
             pair.origin = origins[index];
         });
-        return this;
     }
 
     get absolute() {
@@ -96,7 +95,6 @@ class Trajectory {
         this.pairs.forEach(function (pair, index) {
             pair.vector = absolute[index];
         });
-        return this;
     }
 
     translate(vector) {
@@ -191,7 +189,7 @@ class Trajectory {
      * @details If you let `step` undefined, then the method will take the last added step if it exists.
      * @param pair {PointPair} position of the mobile
      * @param step {number=} time step elapsed since `last` position
-     * @returns {Trajectory} reference to this
+     * @returns {Trajectory} reference to `this`
      */
     add(pair, step) {
         if (step !== undefined) {
@@ -209,7 +207,7 @@ class Trajectory {
     /**
      * @brief clears the trajectory
      * @details Removes all pairs and steps.
-     * @returns {Trajectory} reference to this
+     * @returns {Trajectory} reference to `this`
      */
     clear() {
         this.pairs = [];

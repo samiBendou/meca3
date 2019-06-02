@@ -13,8 +13,8 @@ describe("Vector3 Tests", function () {
     });
 
     it("Opposite", function () {
-        assert(u.copy().opp.isEqual(new Vector3(-1, 0, 0)));
-        assert(v.copy().opp.isEqual(new Vector3(0, -1, 0)));
+        assert(u.copy().opp().isEqual(new Vector3(-1, 0, 0)));
+        assert(v.copy().opp().isEqual(new Vector3(0, -1, 0)));
     });
 
     it("Multiply", function () {
@@ -28,10 +28,10 @@ describe("Vector3 Tests", function () {
     });
 
     it("Cross Product", function () {
-        assert(u.cross(v).isEqual(new Vector3(0, 0, 1)));
-        assert(v.cross(w).isEqual(new Vector3(1, 0, 0)));
-        assert(w.cross(u).isEqual(new Vector3(0, 1, 0)));
-        assert(u.cross(u).isEqual(new Vector3(0, 0, 0)));
+        assert(u.copy().cross(v).isEqual(new Vector3(0, 0, 1)));
+        assert(v.copy().cross(w).isEqual(new Vector3(1, 0, 0)));
+        assert(w.copy().cross(u).isEqual(new Vector3(0, 1, 0)));
+        assert(u.copy().cross(u).isEqual(new Vector3(0, 0, 0)));
     });
 
     it("Get coordinates", function () {

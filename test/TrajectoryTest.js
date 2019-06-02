@@ -10,7 +10,7 @@ describe("Trajectory Tests", function () {
     let step = 0.1;
     let om0 = PointPair.vect(Vector3.ex);
     let om1 = PointPair.vect(Vector3.ey);
-    let om2 = PointPair.vect(Vector3.ex.opp);
+    let om2 = PointPair.vect(Vector3.ex.opp());
     let om3 = om0.copy().translate(Vector3.ex);
     let om4 = om0.copy().translate(Vector3.ey);
 
@@ -31,7 +31,7 @@ describe("Trajectory Tests", function () {
     });
 
     it("Add", function () {
-        let pp = new PointPair(om1.origin.copy(), om1.vector.copy().opp);
+        let pp = new PointPair(om1.origin.copy(), om1.vector.copy().opp());
         assert(gamma0.add(pp).isEqual(new Trajectory([om0, om1, om2, pp], step)));
 
         gamma0 = new Trajectory([om0, om1, om2], step);

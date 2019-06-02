@@ -5,7 +5,7 @@ describe("Solver Tests", function () {
     const Solver = require("../Solver.js");
 
     let oSolver = new Solver(function(u, t) {
-        return u.copy().opp;
+        return u.copy().opp();
     });
     let gSolver = new Solver(function (u, t) {
         return Vector3.ez.mul(2);
@@ -19,8 +19,8 @@ describe("Solver Tests", function () {
             Vector3.ones.mul(0.5),
             Vector3.ones.mul(0.5),
             Vector3.zeros,
-            Vector3.ones.opp.mul(0.5),
-            Vector3.ones.opp.mul(0.5),
+            Vector3.ones.opp().mul(0.5),
+            Vector3.ones.opp().mul(0.5),
         ];
 
         let oSolved = oSolver.solve(Vector3.zeros, Vector3.ones, 200);
@@ -41,8 +41,8 @@ describe("Solver Tests", function () {
             Vector3.ones.mul(0.5),
             Vector3.ones.mul(0.5),
             Vector3.zeros,
-            Vector3.ones.opp.mul(0.5),
-            Vector3.ones.opp.mul(0.5),
+            Vector3.ones.opp().mul(0.5),
+            Vector3.ones.opp().mul(0.5),
         ];
 
         let oSolved = oSolver.trajectory(Vector3.zeros, Vector3.ones, 200);

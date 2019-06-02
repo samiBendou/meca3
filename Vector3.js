@@ -25,10 +25,8 @@
  */
 class Vector3 {
 
-    constructor(x = 0, y = 0, z = 0) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    constructor(x, y, z) {
+        this.setXYZ(x, y, z);
     }
 
     get r() {
@@ -56,33 +54,51 @@ class Vector3 {
     }
 
     get rxy() {
-        return this.x * this.x + this.y * this.y;
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    /**
+     * @brief sets cartesian coordinate of a vector
+     * @property x {number} x cartesian coordinate
+     * @property y {number} y cartesian coordinate
+     * @property z {number} z cartesian coordinate
+     * @returns {Vector3} reference to `this`
+     */
+    setXYZ(x = 0, y = 0, z = 0) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
     }
 
     /**
      * @brief sets spherical coordinates
      * @details Transforms spherical coordinates to cartesian coordinates.
+     * @returns {Vector3} reference to `this`
      */
     setRThetaPhi(r, theta, phi) {
         this.x = r * Math.sin(phi) * Math.cos(theta);
         this.y = r * Math.sin(phi) * Math.sin(theta);
         this.z = r * Math.cos(phi);
+        return this;
     }
 
     /**
      * @brief fills the vector with a single value
      * @param s {number} value used to fill
+     * @returns {Vector3} reference to `this`
      */
     fill(s) {
         this.x = s;
         this.y = s;
         this.z = s;
+        return this;
     }
 
     /**
      * @brief addition between two vectors
      * @param u {Vector3} vector to add
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     add(u) {
         this.x += u.x;
@@ -94,7 +110,7 @@ class Vector3 {
     /**
      * @brief subtraction between two vectors
      * @param u {Vector3} vector to subtract
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     sub(u) {
         this.x -= u.x;
@@ -105,9 +121,9 @@ class Vector3 {
 
     /**
      * @brief opposite of the vector
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
-    get opp() {
+    opp() {
         this.x = -this.x;
         this.y = -this.y;
         this.z = -this.z;
@@ -117,7 +133,7 @@ class Vector3 {
     /**
      * @brief scalar multiplication of the vector
      * @param s {number} scalar to multiply
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     mul(s) {
         this.x *= s;
@@ -129,7 +145,7 @@ class Vector3 {
     /**
      * @brief scalar division of the vector
      * @param s {number} scalar to divide
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     div(s) {
         this.x /= s;
@@ -150,12 +166,15 @@ class Vector3 {
     /**
      * @brief cross product of two vector
      * @param u {Vector3} vector to multiply
-     * @returns {Vector3} value of cross product
+     * @returns {Vector3} reference to `this`
      */
     cross(u) {
-        return new Vector3(this.y * u.z - this.z * u.y,
+        this.setXYZ(
+            this.y * u.z - this.z * u.y,
             this.z * u.x - this.x * u.z,
-            this.x * u.y - this.y * u.x);
+            this.x * u.y - this.y * u.x
+        );
+        return this;
     }
 
     /**
@@ -205,7 +224,7 @@ class Vector3 {
 
     /**
      * @brief clone a vector
-     * @return {Vector3} new instance of cloned vector
+     * @returns {Vector3} new instance of cloned vector
      */
     copy() {
         return new Vector3(this.x, this.y, this.z);
@@ -215,14 +234,14 @@ class Vector3 {
      * @brief equality between two vectors
      * @details distance based equality
      * @param u {Vector3} other vector
-     * @return {boolean} `true` if vectors are equal
+     * @returns {boolean} `true` if vectors are equal
      */
     isEqual(u) {
         return Math.abs(this.dist(u)) < Number.EPSILON;
     }
 
     /**
-     * @return {boolean} `true` if vector is filled with zeros
+     * @returns {boolean} `true` if vector is filled with zeros
      */
     isZero() {
         return this.r < Number.EPSILON;
@@ -235,7 +254,7 @@ class Vector3 {
     /**
      * @brief transform vector to array
      * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2
-     * @return {Array} value of the vector
+     * @returns {Array} value of the vector
      */
     toArray() {
         return [this.x, this.y, this.z];

@@ -11,7 +11,7 @@ describe("BufferTrajectory Tests", function () {
 
     let om0 = new PointPair(org, Vector3.ex);
     let om1 = new PointPair(org, Vector3.ey);
-    let om2 = new PointPair(org, Vector3.ex.opp);
+    let om2 = new PointPair(org, Vector3.ex.opp());
 
     let gamma = new Trajectory([om0, om1, om2], step);
 
@@ -64,7 +64,7 @@ describe("BufferTrajectory Tests", function () {
         assert(gamma1.get(0).isEqual(om1));
         assert(gamma1.at(0).isEqual(om1));
         assert(gamma1.get(1).isEqual(om2));
-        assert(gamma1.at(0.5).vector.isEqual(Vector3.ex.opp.add(Vector3.ey).mul(0.5)));
+        assert(gamma1.at(0.5).vector.isEqual(Vector3.ex.opp().add(Vector3.ey).mul(0.5)));
 
         assert(gamma2.get(0).isEqual(PointPair.zeros()));
         assert(gamma2.at(0).isEqual(PointPair.zeros()));

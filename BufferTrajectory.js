@@ -68,7 +68,7 @@ class BufferTrajectory extends Trajectory {
      * truncated and only the last elements of the trajectory are added.
      *
      * @param trajectory {Trajectory} trajectory to bufferize
-     * @return {BufferTrajectory} reference to this
+     * @return {BufferTrajectory} reference to `this`
      */
     bufferize(trajectory) {
         let delta = (trajectory.pairs.length - this.size);
@@ -120,7 +120,7 @@ class BufferTrajectory extends Trajectory {
      *
      * @param pair {PointPair} position point pair
      * @param step {number=} time step elapsed between last position
-     * @returns {Trajectory} reference to this
+     * @returns {Trajectory} reference to `this`
      */
     add(pair, step) {
         if (step !== undefined) {
@@ -139,6 +139,7 @@ class BufferTrajectory extends Trajectory {
     clear() {
         this.pairs = new Array(this.size);
         this.steps = new Array(this.steps);
+        return this;
     }
 }
 

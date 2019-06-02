@@ -19,7 +19,7 @@ describe("Matrix3 Tests", function () {
     );
 
     it("Transpose", function () {
-        assert(b.trans.isEqual(new Matrix3(
+        assert(b.copy().trans().isEqual(new Matrix3(
             1, 1, 1,
             2, 2, 2,
             3, 3, 3
@@ -27,8 +27,8 @@ describe("Matrix3 Tests", function () {
     });
 
     it("Matrix Product", function () {
-        assert(a.prod(a).isEqual(a));
-        assert(b.prod(a.copy().mul(2)).isEqual(b.copy().mul(2)));
+        assert(a.copy().prod(a).isEqual(a));
+        assert(b.copy().prod(a.copy().mul(2)).isEqual(b.copy().mul(2)));
     });
 
     it("Linear mapping", function () {
@@ -45,7 +45,7 @@ describe("Matrix3 Tests", function () {
 
     it("Inverse", function () {
         assert(a.inv.isEqual(a));
-        assert(c.prod(c.inv).isEqual(a));
+        assert(c.copy().prod(c.inv).isEqual(a));
         assert(c.inv.isEqual(new Matrix3(
             0.75, 0.50, 0.25,
             0.50, 1.00, 0.50,
