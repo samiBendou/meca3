@@ -35,6 +35,22 @@ describe("Solver Tests", function () {
         })
     });
 
+    it("Variable step", function () {
+        let oExpected = [
+            Vector3.zeros,
+            Vector3.ones.mul(0.5),
+            Vector3.ones.mul(0.5),
+            Vector3.zeros,
+            Vector3.ones.opp().mul(0.5),
+            Vector3.ones.opp().mul(0.5),
+        ];
+
+        let oSolved = oSolver.solve(Vector3.zeros, Vector3.ones, 5, [1, 1, 1, 1]);
+        oSolved.forEach(function (u, index) {
+            assert(u.isEqual(oExpected[index % oExpected.length]));
+        });
+    });
+
     it("Trajectory", function () {
         let oExpected = [
             Vector3.zeros,
