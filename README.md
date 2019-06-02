@@ -11,9 +11,9 @@ _meca3_ is a **mechanics toolbox** :rocket:
 It represents **3D space** and provides a **solver** to compute **trajectory** of **moving points** 
 :heavy_plus_sign::heavy_multiplication_x::heavy_minus_sign:
 
-- **linear algebra** commons features such as matrix and vectors
+- **linear algebra** common features such as matrix and vectors
 
-- **geometrical transformations** such as translation of affine transform
+- **geometrical transformations** such as translation or affine transform
 
 - **lightweight solver** to perform either step by step or global ODE solving
 
