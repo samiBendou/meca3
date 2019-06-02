@@ -85,4 +85,9 @@ describe("BufferTrajectory Tests", function () {
         assert.approximately(gamma2.t(2.5), 0.15, Number.EPSILON);
         assert.approximately(gamma2.t(3), 0.2, Number.EPSILON);
     });
+
+    it("Generators", function () {
+        let phi = BufferTrajectory.discrete([Vector3.ex, Vector3.ey, Vector3.ex.opp()], 0.1);
+        assert(phi.isEqual(gamma0));
+    });
 });

@@ -149,6 +149,17 @@ class BufferTrajectory extends Trajectory {
         this.dt = new Array(this.dt);
         return this;
     }
+
+    static fromPairs(pairs, dt) {
+        return new BufferTrajectory(pairs.length, new Trajectory(pairs, dt));
+    }
+
+    static discrete(vectors, dt = 1, origin = Vector3.zeros) {
+        let pairs = vectors.map(function (u) {
+            return new PointPair(origin, u);
+        });
+        return BufferTrajectory.fromPairs(pairs, dt);
+    }
 }
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
