@@ -201,7 +201,7 @@ class Vector3 {
      * @returns {number} value of the cosine
      */
     cos(u) {
-        return (!this.isEqual(0) && !u.isEqual(0)) ? this.scal(u) / (this.r * u.r) : 1;
+        return (!this.isZero() && !u.isZero()) ? this.scal(u) / (this.r * u.r) : 1;
     }
 
     /**
@@ -210,7 +210,7 @@ class Vector3 {
      * @returns {number} value of the sine
      */
     sin(u) {
-        return (!this.isEqual(0) && !u.isEqual(0)) ? this.cross(u).r / (this.r * u.r) : 0;
+        return (!this.isZero() && !u.isZero()) ? this.cross(u).r / (this.r * u.r) : 0;
     }
 
     /**
