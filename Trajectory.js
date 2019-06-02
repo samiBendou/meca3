@@ -34,11 +34,9 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  */
 class Trajectory {
 
-    constructor(pairs = [], step = 1) {
-        let steps = (typeof step == "number") ? Array(pairs.length).fill(step) : step;
-
+    constructor(pairs = [], dt = 1) {
         this.pairs = pairs;
-        this.steps = steps;
+        this.dt = (typeof dt == "number") ? Array(pairs.length).fill(dt) : dt;
     }
 
     get first() {
@@ -146,7 +144,7 @@ class Trajectory {
     t(s) {
         let s0 = Math.floor(s);
         let t = this.duration(s0);
-        return s0 < this.steps.length ? t + (s - s0) * this.steps[s0] : t;
+        return s0 < this.dt.length ? t + (s - s0) * this.dt[s0] : t;
     }
 
     /**
@@ -165,8 +163,8 @@ class Trajectory {
      * @returns {number} value of duration at index `i`
      */
     duration(i) {
-        i = i === undefined ? this.steps.length : i;
-        return this.steps.slice(0, i).reduce(function (prev, curr) {
+        i = i === undefined ? this.dt.length : i;
+        return this.dt.slice(0, i).reduce(function (prev, curr) {
             return prev += curr
         }, 0);
     }
@@ -186,16 +184,16 @@ class Trajectory {
 
     /**
      * @brief add a new position to the trajectory
-     * @details If you let `step` undefined, then the method will take the last added step if it exists.
+     * @details If you let `dt` undefined, then the method will take the last added step if it exists.
      * @param pair {PointPair} position of the mobile
-     * @param step {number=} time step elapsed since `last` position
+     * @param dt {number=} time step elapsed since `last` position
      * @returns {Trajectory} reference to `this`
      */
-    add(pair, step) {
-        if (step !== undefined) {
-            this.steps.push(step);
-        } else if (this.steps.length > 0) {
-            this.steps.push(this.steps[this.steps.length - 1]);
+    add(pair, dt) {
+        if (dt !== undefined) {
+            this.dt.push(dt);
+        } else if (this.dt.length > 0) {
+            this.dt.push(this.dt[this.dt.length - 1]);
         } else {
             return this;
         }
@@ -211,7 +209,7 @@ class Trajectory {
      */
     clear() {
         this.pairs = [];
-        this.steps = [];
+        this.dt = [];
         return this;
     }
 
@@ -227,15 +225,15 @@ class Trajectory {
      * @brief trajectory from array of position vectors
      * @details The observer is considered as immobile.
      * @param vectors {Array} successive positions of the mobile as `Vector3`
-     * @param step {Array|number} time step between each position
+     * @param dt {Array|number} time step between each position
      * @param origin {Vector3} observer's position
      * @returns {Trajectory} new instance of trajectory
      */
-    static discrete(vectors, step = 1, origin = Vector3.zeros) {
+    static discrete(vectors, dt = 1, origin = Vector3.zeros) {
         let pairs = vectors.map(function (u) {
             return new PointPair(origin, u);
         });
-        return new Trajectory(pairs, step);
+        return new Trajectory(pairs, dt);
     }
 }
 

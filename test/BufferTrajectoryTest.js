@@ -6,14 +6,14 @@ describe("BufferTrajectory Tests", function () {
     const Trajectory = require("../Trajectory.js");
     const BufferTrajectory = require("../BufferTrajectory.js");
 
-    let step = 0.1;
+    let dt = 0.1;
     let org = Vector3.zeros;
 
     let om0 = new PointPair(org, Vector3.ex);
     let om1 = new PointPair(org, Vector3.ey);
     let om2 = new PointPair(org, Vector3.ex.opp());
 
-    let gamma = new Trajectory([om0, om1, om2], step);
+    let gamma = new Trajectory([om0, om1, om2], dt);
 
     let gamma0 = new BufferTrajectory(3, gamma);
     let gamma1 = new BufferTrajectory(2, gamma);
@@ -21,8 +21,8 @@ describe("BufferTrajectory Tests", function () {
 
     it("Bufferize", function () {
         assert(gamma0.isEqual(gamma));
-        assert(gamma1.isEqual(new Trajectory([om1, om2], step)));
-        assert(gamma2.isEqual(new Trajectory([om0, om1, om2, PointPair.zeros()], step)));
+        assert(gamma1.isEqual(new Trajectory([om1, om2], dt)));
+        assert(gamma2.isEqual(new Trajectory([om0, om1, om2, PointPair.zeros()], dt)));
     });
 
     it("At", function () {
@@ -32,12 +32,12 @@ describe("BufferTrajectory Tests", function () {
 
     it("Add", function () {
         gamma1.add(om2);
-        assert(gamma1.isEqual(new Trajectory([om2, om2], step)));
+        assert(gamma1.isEqual(new Trajectory([om2, om2], dt)));
         gamma1 = new BufferTrajectory(2, gamma);
 
         gamma2.add(om2);
         gamma2.add(om1);
-        assert(gamma2.isEqual(new Trajectory([om1, om1, om2, om2], step)));
+        assert(gamma2.isEqual(new Trajectory([om1, om1, om2, om2], dt)));
         gamma2 = new BufferTrajectory(4, gamma);
     });
 
