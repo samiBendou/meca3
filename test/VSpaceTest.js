@@ -20,6 +20,10 @@ describe("Vector3 Tests", function () {
 
     it("Comb", function () {
         assert(VSpace.comb(scalars, vectors).isEqual(new Vector3(1, 2, 3)));
-        assert(VSpace.comb(scalars, vectors).isEqual(new Vector3(1, 2, 3)));
+        assert(VSpace.comb(scalars, matrices).isEqual(new Matrix3(
+            18, 2, 2,
+            2, 18, 2,
+            2, 2, 18
+        )));
     });
 });
