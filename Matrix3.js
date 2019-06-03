@@ -223,7 +223,7 @@ class Matrix3 {
 
     /**
      * @brief transform matrix 1D to array
-     * @return {Array}
+     * @return {Array} array containing the components of the matrix ordered as rows
      */
     to1D() {
         return this.x.to1D().concat(this.y.to1D()).concat(this.z.to1D());
@@ -386,7 +386,7 @@ class Matrix3 {
 
     /**
      * @brief creates a matrix with given 1D array
-     *  @details The order of the rows in matrix is the same as in `arr` array
+     * @details The order of the rows in matrix is the same as in `arr` array
      * @param arr {Array} array containing the components of the matrix ordered as rows
      * @returns {Matrix3} new instance of matrix
      */
