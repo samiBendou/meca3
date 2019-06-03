@@ -159,14 +159,14 @@ class Trajectory {
     /**
      * @brief duration at integer index
      * @details Time elapsed since the beginning of the movement.
-     * @param i {number} number of samples to count
+     * @param i {number=} number of samples to count
      * @returns {number} value of duration at index `i`
      */
     duration(i) {
         i = i === undefined ? this.dt.length : i;
-        return this.dt.slice(0, i).reduce(function (prev, curr) {
+        return Number(this.dt.slice(0, i).reduce(function (prev, curr) {
             return prev += curr
-        }, 0);
+        }, 0));
     }
 
     isEqual(trajectory) {

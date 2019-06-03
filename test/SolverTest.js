@@ -3,6 +3,7 @@ const assert = require("chai").assert;
 describe("Solver Tests", function () {
     const Vector3 = require("../Vector3.js");
     const Solver = require("../Solver.js");
+    const BufferTrajectory = require("../BufferTrajectory.js");
 
     let oSolver = new Solver(function(u, t) {
         return u.copy().opp();
@@ -31,6 +32,16 @@ describe("Solver Tests", function () {
         gSolved.forEach(function (u, index) {
             assert(u.isEqual(Vector3.ez.mul(index * index)));
         })
+    });
+
+    it("Buffer step", function () {
+        let u0 = Vector3.zeros, u1 = oSolver.initialTransform(Vector3.zeros, Vector3.ones, 1);
+        let trajectory = BufferTrajectory.discrete([u0, u1]);
+        oSolver.buffer(trajectory, 1);
+
+        trajectory.pairs.forEach(function (pair, index) {
+            assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
+        });
     });
 
     it("Variable step", function () {

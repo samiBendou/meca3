@@ -52,6 +52,24 @@ class Solver {
     }
 
     /**
+     * @brief compute one solution step with given trajectory
+     * @details Adds an iteration of solution to the trajectory as a `PointPair` object.
+     * the position of the observer can be specified of the added `PointPair` but it will
+     * not be taken in account in movement computation.
+     * if no observer's position is specified then the last one in trajectory is taken.
+     * @param trajectory {BufferTrajectory} buffer to store the computed iteration
+     * @param dt {number=} time step for this iteration
+     * @param origin {Vector3=} origin to set for the solution
+     * @returns {BufferTrajectory} reference to `trajectory`
+     */
+    buffer(trajectory, dt, origin) {
+        let next = this.step(trajectory.last.vector, trajectory.nexto.vector, trajectory.duration(), dt);
+        let index = trajectory.addIndex > 0 ? trajectory.addIndex - 1 : trajectory.size - 1;
+        trajectory.add(new PointPair(next, origin || trajectory.pairs[index].origin), this.dt);
+        return trajectory;
+    }
+
+    /**
      * @brief transform speed and position initial conditions
      * @details Transforms the **u0**, **v0** initial condition into a **u0**, **u1** initial condition.
      * `this.dt` is modified after the operation.
