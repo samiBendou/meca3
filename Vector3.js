@@ -61,6 +61,22 @@ class Vector3 {
         this.setRThetaZ(newRxy, this.theta, this.z);
     }
 
+    get lat() {
+        return this.phi - Math.PI / 2;
+    }
+
+    set lat(newLat) {
+        this.setRThetaPhi(this.r, this.theta, newLat + Math.PI / 2);
+    }
+
+    get lon() {
+        return this.theta <= Math.PI ? this.theta : this.theta - 2 * Math.PI;
+    }
+
+    set lon(newLat) {
+        this.setRThetaPhi(this.r, newLat >= 0 ? newLat : newLat + 2 * Math.PI, this.phi);
+    }
+
     /**
      * @brief sets cartesian coordinate of a vector
      * @property x {number} x cartesian coordinate

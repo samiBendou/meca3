@@ -45,6 +45,10 @@ describe("Vector3 Tests", function () {
         assert.approximately(u.rxy, 1, Number.EPSILON);
         assert.approximately(u.theta, 0, Number.EPSILON);
         assert.approximately(u.phi, Math.PI / 2, Number.EPSILON);
+        assert.approximately(u.lat, 0, Number.EPSILON);
+        assert.approximately(u.lon, 0, Number.EPSILON);
+        assert.approximately(v.lon, Math.PI / 2, Number.EPSILON);
+        assert.approximately(v.copy().opp().lon, -Math.PI / 2, Number.EPSILON);
     });
 
     it("Set coordinates", function () {
@@ -62,6 +66,16 @@ describe("Vector3 Tests", function () {
         u.z = 1;
         u.rxy = 3;
         assert(u.isEqual(new Vector3(0, 3, 1)));
+
+        u.y = 0;
+        u.lat = 0;
+        assert(u.isEqual(new Vector3(1, 0, 0)));
+
+        u.lon = Math.PI / 2;
+        assert(u.isEqual(new Vector3(0, 1, 0)));
+
+        u.lon = -Math.PI / 2;
+        assert(u.isEqual(new Vector3(0, -1, 0)));
 
         u = Vector3.ex;
     });
