@@ -68,7 +68,7 @@ class BufferTrajectory extends Trajectory {
      * truncated and only the last elements of the trajectory are added.
      *
      * @param trajectory {Trajectory} trajectory to bufferize
-     * @return {BufferTrajectory} reference to this
+     * @return {BufferTrajectory} reference to `this`
      */
     bufferize(trajectory) {
         let delta = (trajectory.pairs.length - this.size);
@@ -77,12 +77,12 @@ class BufferTrajectory extends Trajectory {
         for (let i = 0; i < end; i++) {
             let index = delta >= 0 ? (i + delta) : i;
             this.pairs[i] = trajectory.pairs[index].copy();
-            this.steps[i] = trajectory.steps[index];
+            this.dt[i] = trajectory.dt[index];
         }
 
         for (let i = end; i < this.size; i++) {
             this.pairs[i] = PointPair.zeros();
-            this.steps[i] = 0.0;
+            this.dt[i] = 0.0;
         }
         this.addIndex = delta >= 0 ? 0 : trajectory.pairs.length;
         return this;
@@ -91,18 +91,26 @@ class BufferTrajectory extends Trajectory {
     t(s) {
         let s0 = Math.floor((s + this.addIndex) % this.size);
         let t = this.duration(Math.floor(s));
-        return s0 < this.steps.length ? t + (s - Math.floor(s)) * this.steps[s0] : t;
+        return s0 < this.dt.length ? t + (s - Math.floor(s)) * this.dt[s0] : t;
     }
 
     duration(i) {
         if(i === undefined) {
-            return this.steps.reduce(function(prev, curr) {return prev += curr}, 0);
-        } else if(i + this.addIndex < this.steps.length) {
-            return this.steps.slice(this.addIndex, i + this.addIndex).reduce(function(prev, curr) {return prev += curr}, 0);
+            return this.dt.reduce(function (prev, curr) {
+                return prev += curr
+            }, 0);
+        } else if (i + this.addIndex < this.dt.length) {
+            return this.dt.slice(this.addIndex, i + this.addIndex).reduce(function (prev, curr) {
+                return prev += curr
+            }, 0);
         } else {
             let end = (i + this.addIndex) % this.size;
-            let sum0 = this.steps.slice(0, end).reduce(function(prev, curr) {return prev += curr}, 0);
-            return sum0 + this.steps.slice(this.addIndex, this.size).reduce(function(prev, curr) {return prev += curr}, 0);
+            let sum0 = this.dt.slice(0, end).reduce(function (prev, curr) {
+                return prev += curr
+            }, 0);
+            return sum0 + this.dt.slice(this.addIndex, this.size).reduce(function (prev, curr) {
+                return prev += curr
+            }, 0);
         }
     }
 
@@ -119,14 +127,14 @@ class BufferTrajectory extends Trajectory {
      * The value contained at `addIndex` is replaced when adding new points.
      *
      * @param pair {PointPair} position point pair
-     * @param step {number=} time step elapsed between last position
-     * @returns {Trajectory} reference to this
+     * @param dt {number=} time step elapsed between last position
+     * @returns {Trajectory} reference to `this`
      */
-    add(pair, step) {
-        if (step !== undefined) {
-            this.steps[this.addIndex] = step;
-        } else if (this.steps.length > 0) {
-            this.steps[this.addIndex] = this.steps[this.steps.length - 1];
+    add(pair, dt) {
+        if (dt !== undefined) {
+            this.dt[this.addIndex] = dt;
+        } else if (this.dt.length > 0) {
+            this.dt[this.addIndex] = this.dt[this.dt.length - 1];
         } else {
             return this;
         }
@@ -138,7 +146,19 @@ class BufferTrajectory extends Trajectory {
 
     clear() {
         this.pairs = new Array(this.size);
-        this.steps = new Array(this.steps);
+        this.dt = new Array(this.dt);
+        return this;
+    }
+
+    static fromPairs(pairs, dt) {
+        return new BufferTrajectory(pairs.length, new Trajectory(pairs, dt));
+    }
+
+    static discrete(vectors, dt = 1, origin = Vector3.zeros) {
+        let pairs = vectors.map(function (u) {
+            return new PointPair(origin, u);
+        });
+        return BufferTrajectory.fromPairs(pairs, dt);
     }
 }
 

@@ -49,7 +49,7 @@ class PointPair {
     /**
      * @brief translation a point pair
      * @param vector {Vector3} translation vector
-     * @returns {PointPair} reference to this
+     * @returns {PointPair} reference to `this`
      */
     translate(vector) {
         this.origin.add(vector);
@@ -61,7 +61,7 @@ class PointPair {
      * @brief homothetic transformation of a point pair
      * @details Scalar multiplication of the of the two points by the ratio.
      * @param scalar {number} ratio of transformation
-     * @returns {PointPair} reference to this
+     * @returns {PointPair} reference to `this`
      */
     homothetic(scalar) {
         this.origin.mul(scalar);
@@ -72,11 +72,11 @@ class PointPair {
     /**
      * @brief matrix transformation of the point pair
      * @param matrix {Matrix3} transformation matrix
-     * @returns {PointPair} reference to this
+     * @returns {PointPair} reference to `this`
      */
     transform(matrix) {
-        this.origin = matrix.map(this.origin);
-        this.vector = matrix.map(this.vector);
+        matrix.map(this.origin);
+        matrix.map(this.vector);
         return this;
     }
 
@@ -84,7 +84,7 @@ class PointPair {
      * @brief affine transformation of the point pair
      * @param matrix {Matrix3} transformation matrix
      * @param vector {Vector3} translation vector
-     * @returns {PointPair} reference to this
+     * @returns {PointPair} reference to `this`
      */
     affine(matrix, vector) {
         let aff = Matrix3.makeAffine(matrix, vector);

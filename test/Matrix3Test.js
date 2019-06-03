@@ -19,7 +19,7 @@ describe("Matrix3 Tests", function () {
     );
 
     it("Transpose", function () {
-        assert(b.trans.isEqual(new Matrix3(
+        assert(b.copy().trans().isEqual(new Matrix3(
             1, 1, 1,
             2, 2, 2,
             3, 3, 3
@@ -27,8 +27,8 @@ describe("Matrix3 Tests", function () {
     });
 
     it("Matrix Product", function () {
-        assert(a.prod(a).isEqual(a));
-        assert(b.prod(a.copy().mul(2)).isEqual(b.copy().mul(2)));
+        assert(a.copy().prod(a).isEqual(a));
+        assert(b.copy().prod(a.copy().mul(2)).isEqual(b.copy().mul(2)));
     });
 
     it("Linear mapping", function () {
@@ -44,13 +44,13 @@ describe("Matrix3 Tests", function () {
     });
 
     it("Inverse", function () {
-        assert(a.inv.isEqual(a));
-        assert(c.prod(c.inv).isEqual(a));
-        assert(c.inv.isEqual(new Matrix3(
+        assert(a.copy().inv().isEqual(a));
+        assert(c.copy().inv().isEqual(new Matrix3(
             0.75, 0.50, 0.25,
             0.50, 1.00, 0.50,
             0.25, 0.50, 0.75
         )));
+        assert(c.copy().prod(c.copy().inv()).isEqual(a));
     });
 
     it("Get elements", function () {
@@ -76,5 +76,33 @@ describe("Matrix3 Tests", function () {
         assert(Matrix3.rotX(angle).isEqual(rotX(angle)));
         assert(Matrix3.rotY(angle).isEqual(rotY(angle)));
         assert(Matrix3.rotZ(angle).isEqual(rotZ(angle)));
+    });
+
+    it("Serialize", function () {
+        let aExpected = [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1]
+        ];
+
+        a.to1D().forEach(function (s, i) {
+            assert.equal(s, aExpected[Math.floor(i / 3)][i % 3]);
+        });
+
+        a.to2D().forEach(function (row, i) {
+            row.forEach(function (s, j) {
+                assert.equal(s, aExpected[i][j]);
+            });
+        });
+
+        assert(Matrix3.from1D(
+            [1, 0, 0, 0, 1, 0, 0, 0, 1]).isEqual(a));
+
+        assert(Matrix3.from2D(
+            [
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1]
+            ]).isEqual(a));
     });
 });

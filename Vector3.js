@@ -25,10 +25,8 @@
  */
 class Vector3 {
 
-    constructor(x = 0, y = 0, z = 0) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    constructor(x, y, z) {
+        this.setXYZ(x, y, z);
     }
 
     get r() {
@@ -56,33 +54,83 @@ class Vector3 {
     }
 
     get rxy() {
-        return this.x * this.x + this.y * this.y;
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    set rxy(newRxy) {
+        this.setRThetaZ(newRxy, this.theta, this.z);
+    }
+
+    get lat() {
+        return this.phi - Math.PI / 2;
+    }
+
+    set lat(newLat) {
+        this.setRThetaPhi(this.r, this.theta, newLat + Math.PI / 2);
+    }
+
+    get lon() {
+        return this.theta <= Math.PI ? this.theta : this.theta - 2 * Math.PI;
+    }
+
+    set lon(newLat) {
+        this.setRThetaPhi(this.r, newLat >= 0 ? newLat : newLat + 2 * Math.PI, this.phi);
+    }
+
+    /**
+     * @brief sets cartesian coordinate of a vector
+     * @property x {number} x cartesian coordinate
+     * @property y {number} y cartesian coordinate
+     * @property z {number} z cartesian coordinate
+     * @returns {Vector3} reference to `this`
+     */
+    setXYZ(x = 0, y = 0, z = 0) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
+
+    /**
+     * @brief sets cylindrical coordinates
+     * @details Transforms cylindrical coordinates to cartesian coordinates.
+     * @returns {Vector3} reference to `this`
+     */
+    setRThetaZ(rxy, theta, z) {
+        this.x = rxy * Math.cos(theta);
+        this.y = rxy * Math.sin(theta);
+        this.z = z;
+        return this;
     }
 
     /**
      * @brief sets spherical coordinates
      * @details Transforms spherical coordinates to cartesian coordinates.
+     * @returns {Vector3} reference to `this`
      */
     setRThetaPhi(r, theta, phi) {
         this.x = r * Math.sin(phi) * Math.cos(theta);
         this.y = r * Math.sin(phi) * Math.sin(theta);
         this.z = r * Math.cos(phi);
+        return this;
     }
 
     /**
      * @brief fills the vector with a single value
      * @param s {number} value used to fill
+     * @returns {Vector3} reference to `this`
      */
     fill(s) {
         this.x = s;
         this.y = s;
         this.z = s;
+        return this;
     }
 
     /**
      * @brief addition between two vectors
      * @param u {Vector3} vector to add
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     add(u) {
         this.x += u.x;
@@ -94,7 +142,7 @@ class Vector3 {
     /**
      * @brief subtraction between two vectors
      * @param u {Vector3} vector to subtract
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     sub(u) {
         this.x -= u.x;
@@ -105,9 +153,9 @@ class Vector3 {
 
     /**
      * @brief opposite of the vector
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
-    get opp() {
+    opp() {
         this.x = -this.x;
         this.y = -this.y;
         this.z = -this.z;
@@ -117,7 +165,7 @@ class Vector3 {
     /**
      * @brief scalar multiplication of the vector
      * @param s {number} scalar to multiply
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     mul(s) {
         this.x *= s;
@@ -129,7 +177,7 @@ class Vector3 {
     /**
      * @brief scalar division of the vector
      * @param s {number} scalar to divide
-     * @returns {Vector3} reference to this
+     * @returns {Vector3} reference to `this`
      */
     div(s) {
         this.x /= s;
@@ -150,12 +198,15 @@ class Vector3 {
     /**
      * @brief cross product of two vector
      * @param u {Vector3} vector to multiply
-     * @returns {Vector3} value of cross product
+     * @returns {Vector3} reference to `this`
      */
     cross(u) {
-        return new Vector3(this.y * u.z - this.z * u.y,
+        this.setXYZ(
+            this.y * u.z - this.z * u.y,
             this.z * u.x - this.x * u.z,
-            this.x * u.y - this.y * u.x);
+            this.x * u.y - this.y * u.x
+        );
+        return this;
     }
 
     /**
@@ -182,7 +233,7 @@ class Vector3 {
      * @returns {number} value of the cosine
      */
     cos(u) {
-        return (!this.isEqual(0) && !u.isEqual(0)) ? this.scal(u) / (this.r * u.r) : 1;
+        return (!this.isZero() && !u.isZero()) ? this.scal(u) / (this.r * u.r) : 1;
     }
 
     /**
@@ -191,7 +242,7 @@ class Vector3 {
      * @returns {number} value of the sine
      */
     sin(u) {
-        return (!this.isEqual(0) && !u.isEqual(0)) ? this.cross(u).r / (this.r * u.r) : 0;
+        return (!this.isZero() && !u.isZero()) ? this.copy().cross(u).r / (this.r * u.r) : 0;
     }
 
     /**
@@ -205,7 +256,7 @@ class Vector3 {
 
     /**
      * @brief clone a vector
-     * @return {Vector3} new instance of cloned vector
+     * @returns {Vector3} new instance of cloned vector
      */
     copy() {
         return new Vector3(this.x, this.y, this.z);
@@ -215,14 +266,14 @@ class Vector3 {
      * @brief equality between two vectors
      * @details distance based equality
      * @param u {Vector3} other vector
-     * @return {boolean} `true` if vectors are equal
+     * @returns {boolean} `true` if vectors are equal
      */
     isEqual(u) {
         return Math.abs(this.dist(u)) < Number.EPSILON;
     }
 
     /**
-     * @return {boolean} `true` if vector is filled with zeros
+     * @returns {boolean} `true` if vector is filled with zeros
      */
     isZero() {
         return this.r < Number.EPSILON;
@@ -235,9 +286,9 @@ class Vector3 {
     /**
      * @brief transform vector to array
      * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2
-     * @return {Array} value of the vector
+     * @returns {Array} value of the vector
      */
-    toArray() {
+    to1D() {
         return [this.x, this.y, this.z];
     }
 
@@ -296,26 +347,45 @@ class Vector3 {
     }
 
     /**
-     * @brief sums vectors in array
-     * @param vectors {Array} array of `Vector3`
-     * @returns {Vector3} value of the sum
+     * @brief radial vector of spherical basis
+     * @param u {Vector3} position of local basis from origin
+     * @returns {Vector3} value of the radial vector
      */
-    static sum(vectors) {
-        return vectors.reduce(function (prev, cur) {
-            return prev.copy().add(cur);
-        });
+    static er(u) {
+        return new Vector3(
+            Math.sin(u.phi) * Math.cos(u.theta),
+            Math.sin(u.phi) * Math.sin(u.theta),
+            Math.cos(u.phi)
+        );
     }
 
     /**
-     * @brief linear combination of vectors in array
-     * @param scalars {Array} array of numbers
-     * @param vectors {Array} array of `Vector3`
-     * @returns {Vector3} value of linear combination
+     * @brief prograde vector of spherical basis
+     * @details Prograde vector is perpendicular to the radial vector and oriented in the positive `theta` direction.
+     * Note that this vector also correspond to the prograde vector of cylindrical basis.
+     * @param u {Vector3} position of local basis from origin
+     * @returns {Vector3} value of the prograde vector
      */
-    static comb(scalars, vectors) {
-        return vectors.reduce(function (prev, cur, index) {
-            return prev.copy().mul(scalars[index - 1]).add(cur.copy().mul(scalars[index]));
-        });
+    static etheta(u) {
+        return new Vector3(
+            -Math.sin(u.theta),
+            Math.cos(u.theta),
+            0
+        );
+    }
+
+    /**
+     * @brief normal vector of spherical basis
+     * @details Normal vector is perpendicular to the radial vector and oriented in the positive `phi` direction.
+     * @param u {Vector3} position of local basis from origin
+     * @returns {Vector3} value of the normal vector
+     */
+    static ephi(u) {
+        return new Vector3(
+            Math.cos(u.phi) * Math.cos(u.theta),
+            Math.cos(u.phi) * Math.sin(u.theta),
+            -Math.sin(u.phi)
+        );
     }
 
     /**
@@ -327,10 +397,11 @@ class Vector3 {
      * each value and using lower bound approximation.
      *
      * @param vectors {Array} array of `Vector3` to process
-     * @param steps {Array} array of numbers representing steps between Vector3
+     * @param dt {Array|number=} array of numbers representing steps between Vector3
      * @returns {Array} array of `Vector` representing the value of the derivative
      */
-    static der(vectors, steps) {
+    static derivative(vectors, dt = 1) {
+        let steps = (typeof dt == "number") ? Array(vectors.length).fill(dt) : dt;
         let der = new Array(vectors.length - 1);
         for (let i = 1; i < vectors.length; i++) {
             der[i - 1] = vectors[i].copy().sub(vectors[i - 1]).div(steps[i - 1]);
@@ -338,15 +409,30 @@ class Vector3 {
         return der;
     }
 
-
     /**
      * @brief create a vector with given array
      * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2.
      * @param arr {Array} array containing cartesian coordinates
      * @returns {Vector3} new instance of vector
      */
-    static fromArray(arr) {
+    static from1D(arr) {
         return new Vector3(arr[0], arr[1], arr[2]);
+    }
+
+    /**
+     * @brief create a vector with given cylindrical coordinates
+     * @returns {Vector3} new instance of vector
+     */
+    static cylindrical(rxy, theta, z) {
+        return new Vector3().setRThetaZ(rxy, theta, z);
+    }
+
+    /**
+     * @brief create a vector with given spherical coordinates
+     * @returns {Vector3} new instance of vector
+     */
+    static spherical(r, theta, phi) {
+        return new Vector3().setRThetaPhi(r, theta, phi);
     }
 }
 

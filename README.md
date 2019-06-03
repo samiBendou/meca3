@@ -13,11 +13,15 @@ It represents **3D space** and provides a **solver** to compute **trajectory** o
 
 - **linear algebra** common features such as matrix and vectors
 
-- **geometrical transformations** such as translation or affine transform
+- **Geometrical transformations** such as translation or affine transform
 
-- **lightweight solver** to perform either step by step or global ODE solving
+- **Coordinates systems** representation such as spherical and cylindrical coordinates
 
-- **object oriented** syntax to perform mathematical operations
+- **Point's trajectory** representation, transformation and bufferization features for animation
+
+- **Lightweight solver** to perform either step by step or global 2nd order ODE solving with trajectory
+
+- **Object oriented** syntax to perform mathematical operations
 
 - **3D optimized implementation** of common algebraical operations to provide fast computation
 

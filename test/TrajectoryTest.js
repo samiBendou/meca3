@@ -7,15 +7,15 @@ describe("Trajectory Tests", function () {
     const Trajectory = require("../Trajectory.js");
 
     // Initialisation of trajectory
-    let step = 0.1;
+    let dt = 0.1;
     let om0 = PointPair.vect(Vector3.ex);
     let om1 = PointPair.vect(Vector3.ey);
-    let om2 = PointPair.vect(Vector3.ex.opp);
+    let om2 = PointPair.vect(Vector3.ex.opp());
     let om3 = om0.copy().translate(Vector3.ex);
     let om4 = om0.copy().translate(Vector3.ey);
 
-    let gamma0 = new Trajectory([om0, om1, om2], step);
-    let gamma1 = new Trajectory([om0, om3, om4], step);
+    let gamma0 = new Trajectory([om0, om1, om2], dt);
+    let gamma1 = new Trajectory([om0, om3, om4], dt);
 
     it("Length", function () {
         assert.approximately(gamma0.length, 2 * Math.SQRT2, Number.EPSILON);
@@ -23,34 +23,34 @@ describe("Trajectory Tests", function () {
     });
 
     it("Positions", function () {
-        let expectPos0 = Trajectory.discrete([om0.relative, om1.relative, om2.relative], step);
-        let expectPos1 = Trajectory.discrete([Vector3.ex, Vector3.ex, Vector3.ex], step);
+        let expectPos0 = Trajectory.discrete([om0.relative, om1.relative, om2.relative], dt);
+        let expectPos1 = Trajectory.discrete([Vector3.ex, Vector3.ex, Vector3.ex], dt);
 
         assert(gamma0.isEqual(expectPos0));
         assert(gamma1.isEqual(expectPos1));
     });
 
     it("Add", function () {
-        let pp = new PointPair(om1.origin.copy(), om1.vector.copy().opp);
-        assert(gamma0.add(pp).isEqual(new Trajectory([om0, om1, om2, pp], step)));
+        let pp = new PointPair(om1.origin.copy(), om1.vector.copy().opp());
+        assert(gamma0.add(pp).isEqual(new Trajectory([om0, om1, om2, pp], dt)));
 
-        gamma0 = new Trajectory([om0, om1, om2], step);
+        gamma0 = new Trajectory([om0, om1, om2], dt);
     });
 
     it("Origins", function () {
         let expectedOrg = [om0.origin, om3.origin, om4.origin];
         let originToSet = [Vector3.zeros, Vector3.zeros, Vector3.zeros];
 
-        assert(gamma1.origins.reduce(function (acc, cur, index) {
+        assert(gamma1.origin.reduce(function (acc, cur, index) {
             return acc && cur.isEqual(expectedOrg[index]);
         }, true));
 
-        gamma1.origins = originToSet;
-        assert(gamma1.origins.reduce(function (acc, cur, index) {
+        gamma1.origin = originToSet;
+        assert(gamma1.origin.reduce(function (acc, cur, index) {
             return acc && cur.isEqual(originToSet[index]);
         }, true));
 
-        gamma1 = new Trajectory([om0, om3, om4], step);
+        gamma1 = new Trajectory([om0, om3, om4], dt);
     });
 
     it("First/Last/Nexto", function () {
@@ -66,7 +66,7 @@ describe("Trajectory Tests", function () {
         assert(gamma0.last.isEqual(om0));
         assert(gamma0.nexto.isEqual(om4));
 
-        gamma0 = new Trajectory([om0, om1, om2], step);
+        gamma0 = new Trajectory([om0, om1, om2], dt);
     });
 
     it("At/Get", function () {
@@ -88,5 +88,5 @@ describe("Trajectory Tests", function () {
         assert(
             gamma0.isEqual(
                 Trajectory.discrete([om0.vector, om1.vector, om2.vector], 0.1, Vector3.zeros)));
-    })
+    });
 });

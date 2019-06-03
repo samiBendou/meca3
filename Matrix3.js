@@ -31,13 +31,18 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
  */
 class Matrix3 {
 
-    constructor(xx = 0, xy = 0, xz = 0,
-                yx = 0, yy = 0, yz = 0,
-                zx = 0, zy = 0, zz = 0) {
+    constructor(xx, xy, xz,
+                yx, yy, yz,
+                zx, zy, zz) {
 
-        this.x = new Vector3(xx, xy, xz);
-        this.y = new Vector3(yx, yy, yz);
-        this.z = new Vector3(zx, zy, zz);
+        this.x = new Vector3();
+        this.y = new Vector3();
+        this.z = new Vector3();
+
+        this.set(
+            xx, xy, xz,
+            yx, yy, yz,
+            zx, zy, zz);
     }
 
     /**
@@ -58,6 +63,20 @@ class Matrix3 {
     col(j) {
         let labels = ["x", "y", "z"];
         return new Vector3(this.x[labels[j]], this.y[labels[j]], this.z[labels[j]]);
+    }
+
+    /**
+     *
+     * @brief sets the components of the matrix
+     * @returns {Matrix3} reference to `this`
+     */
+    set(xx = 0, xy = 0, xz = 0,
+        yx = 0, yy = 0, yz = 0,
+        zx = 0, zy = 0, zz = 0) {
+        this.x.setXYZ(xx, xy, xz);
+        this.y.setXYZ(yx, yy, yz);
+        this.z.setXYZ(zx, zy, zz);
+        return this;
     }
 
     fill(s) {
@@ -81,10 +100,10 @@ class Matrix3 {
         return this;
     }
 
-    get opp() {
-        this.x.opp;
-        this.y.opp;
-        this.z.opp;
+    opp() {
+        this.x.opp();
+        this.y.opp();
+        this.z.opp();
         return this;
     }
 
@@ -104,61 +123,41 @@ class Matrix3 {
 
     /**
      * @brief transpose the matrix
-     * @returns {Matrix3} value of the transposed matrix
+     * @returns {Matrix3} reference to `this`
      */
-    get trans() {
-        let copy = this.copy();
-
-        copy.x.y = this.y.x;
-        copy.x.z = this.z.x;
-
-        copy.y.x = this.x.y;
-        copy.y.z = this.z.y;
-
-        copy.z.x = this.x.z;
-        copy.z.y = this.y.z;
-
-        return copy;
+    trans() {
+        this.set(
+            this.x.x, this.y.x, this.z.x,
+            this.x.y, this.y.y, this.z.y,
+            this.x.z, this.y.z, this.z.z
+        );
+        return this;
     }
 
     /**
      * @brief product between two matrix
      * @param m {Matrix3} matrix to multiply
-     * @returns {Matrix3} value of the product
+     * @returns {Matrix3} reference to `this`
      */
     prod(m) {
-        let mTrs = m.copy().trans;
-        let copy = this.copy();
-
-        copy.x.x = this.x.scal(mTrs.x);
-        copy.x.y = this.x.scal(mTrs.y);
-        copy.x.z = this.x.scal(mTrs.z);
-
-        copy.y.x = this.y.scal(mTrs.x);
-        copy.y.y = this.y.scal(mTrs.y);
-        copy.y.z = this.y.scal(mTrs.z);
-
-        copy.z.x = this.z.scal(mTrs.x);
-        copy.z.y = this.z.scal(mTrs.y);
-        copy.z.z = this.z.scal(mTrs.z);
-
-        return copy;
+        let mTrs = m.copy().trans();
+        this.set(
+            this.x.scal(mTrs.x), this.x.scal(mTrs.y), this.x.scal(mTrs.z),
+            this.y.scal(mTrs.x), this.y.scal(mTrs.y), this.y.scal(mTrs.z),
+            this.z.scal(mTrs.x), this.z.scal(mTrs.y), this.z.scal(mTrs.z)
+        );
+        return this;
     }
 
     /**
      * @brief product between matrix and vector
-     * @details Also called linear mapping between matrix and vector.
+     * @details `u` contains the result of the product. Also called linear mapping between matrix and vector.
      * @param u {Vector3} vector to multiply
-     * @returns {Vector3} value of linear mapping
+     * @returns {Vector3} reference to `u`
      */
     map(u) {
-        let copy = u.copy();
-
-        copy.x = this.x.scal(u);
-        copy.y = this.y.scal(u);
-        copy.z = this.z.scal(u);
-
-        return copy;
+        u.setXYZ(this.x.scal(u), this.y.scal(u), this.z.scal(u));
+        return u;
     }
 
     /**
@@ -173,20 +172,23 @@ class Matrix3 {
     /**
      * @brief inverse of a matrix
      * @details returns a `NaN` matrix when the determinant is zero.
-     * @returns {Matrix3} value of the inverse matrix
+     * @returns {Matrix3} reference to this
      */
-    get inv() {
-        return (new Matrix3(this.y.y * this.z.z - this.y.z * this.z.y,
+    inv() {
+        let det = this.det;
+        this.set(
+            this.y.y * this.z.z - this.y.z * this.z.y,
             this.x.z * this.z.y - this.x.y * this.z.z,
             this.x.y * this.y.z - this.x.z * this.y.y,
-
             this.y.z * this.z.x - this.y.x * this.z.z,
             this.x.x * this.z.z - this.x.z * this.z.x,
             this.x.z * this.y.x - this.x.x * this.y.z,
-
             this.y.x * this.z.y - this.y.y * this.z.x,
             this.x.y * this.z.x - this.x.x * this.z.y,
-            this.x.x * this.y.y - this.x.y * this.y.x)).div(this.det);
+            this.x.x * this.y.y - this.x.y * this.y.x
+        ).div(det);
+
+        return this;
     }
 
     copy() {
@@ -212,11 +214,19 @@ class Matrix3 {
     }
 
     /**
-     * @brief transform matrix to array
+     * @brief transform matrix to 2D array
      * @return {Array} bi-dimensional array containing rows of the matrix
      */
-    toArray() {
-        return [this.x.toArray(), this.y.toArray(), this.z.toArray()];
+    to2D() {
+        return [this.x.to1D(), this.y.to1D(), this.z.to1D()];
+    }
+
+    /**
+     * @brief transform matrix 1D to array
+     * @return {Array} array containing the components of the matrix ordered as rows
+     */
+    to1D() {
+        return this.x.to1D().concat(this.y.to1D()).concat(this.z.to1D());
     }
 
     static get zeros() {
@@ -259,18 +269,6 @@ class Matrix3 {
 
         can[labels[i]][labels[j]] = 1;
         return can;
-    }
-
-    static sum(matrices) {
-        return matrices.reduce(function (prev, cur) {
-            return prev.copy().add(cur);
-        });
-    }
-
-    static comb(scalars, matrices) {
-        return matrices.reduce(function (prev, cur, index) {
-            return prev.copy().mul(scalars[index - 1]).add(cur.copy().mul(scalars[index]));
-        });
     }
 
     /**
@@ -335,10 +333,10 @@ class Matrix3 {
         let p = Matrix3.tens(u); // projection on rotation axis
         let r = p.copy();
 
-        q.x = u.cross(Vector3.ex);
-        q.y = u.cross(Vector3.ey);
-        q.z = u.cross(Vector3.ez);
-        q = q.trans;
+        q.x = u.copy().cross(Vector3.ex);
+        q.y = u.copy().cross(Vector3.ey);
+        q.z = u.copy().cross(Vector3.ez);
+        q.trans();
 
         return function (theta) {
             return r.add(id.sub(p).mul(Math.cos(theta))).add(q.mul(Math.sin(theta)));
@@ -361,7 +359,7 @@ class Matrix3 {
      * @brief tensor product of two vectors
      * @details Tensor product is the matrix obtained from two vectors such that `m.i.j = u.i * v.j`.
      * @param u {Vector3} first vector to transform
-     * @param v {Vector3} second vector to transform
+     * @param v {Vector3=} second vector to transform
      * @returns {Matrix3} value of the tensor product
      */
     static tens(u, v) {
@@ -374,16 +372,29 @@ class Matrix3 {
     }
 
     /**
-     * @brief creates a matrix with given array
+     * @brief creates a matrix with given 2D array
      *  @details The order of the rows in matrix is the same as in `arr` array
      * @param arr {Array} bi-dimensional array containing rows of the matrix
      * @returns {Matrix3} new instance of matrix
      */
-    static fromArray(arr) {
+    static from2D(arr) {
         return new Matrix3(
             arr[0][0], arr[0][1], arr[0][2],
             arr[1][0], arr[1][1], arr[1][2],
             arr[2][0], arr[2][1], arr[2][2]);
+    }
+
+    /**
+     * @brief creates a matrix with given 1D array
+     * @details The order of the rows in matrix is the same as in `arr` array
+     * @param arr {Array} array containing the components of the matrix ordered as rows
+     * @returns {Matrix3} new instance of matrix
+     */
+    static from1D(arr) {
+        return new Matrix3(
+            arr[0], arr[1], arr[2],
+            arr[3], arr[4], arr[5],
+            arr[6], arr[7], arr[8]);
     }
 }
 
