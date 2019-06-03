@@ -57,6 +57,10 @@ class Vector3 {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+    set rxy(newRxy) {
+        this.setRThetaZ(newRxy, this.theta, this.z);
+    }
+
     /**
      * @brief sets cartesian coordinate of a vector
      * @property x {number} x cartesian coordinate
@@ -67,6 +71,18 @@ class Vector3 {
     setXYZ(x = 0, y = 0, z = 0) {
         this.x = x;
         this.y = y;
+        this.z = z;
+        return this;
+    }
+
+    /**
+     * @brief sets cylindrical coordinates
+     * @details Transforms cylindrical coordinates to cartesian coordinates.
+     * @returns {Vector3} reference to `this`
+     */
+    setRThetaZ(rxy, theta, z) {
+        this.x = rxy * Math.cos(theta);
+        this.y = rxy * Math.sin(theta);
         this.z = z;
         return this;
     }

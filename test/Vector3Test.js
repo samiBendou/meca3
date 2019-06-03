@@ -57,6 +57,12 @@ describe("Vector3 Tests", function () {
         u.phi = 0;
         assert(u.isEqual(new Vector3(0, 0, 2)));
 
+        u.x = 0;
+        u.y = 1;
+        u.z = 1;
+        u.rxy = 3;
+        assert(u.isEqual(new Vector3(0, 3, 1)));
+
         u = Vector3.ex;
     });
 
