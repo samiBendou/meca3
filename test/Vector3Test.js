@@ -74,7 +74,7 @@ describe("Vector3 Tests", function () {
 
     it("Derivative", function () {
         let expected = [new Vector3(-1, 1, 0), new Vector3(0, -1, 1)];
-        Vector3.der([u, v, w], [1, 1, 1]).forEach(function (vector, index) {
+        Vector3.derivative([u, v, w], [1, 1, 1]).forEach(function (vector, index) {
             assert(vector.isEqual(expected[index]));
         });
     });

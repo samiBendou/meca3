@@ -384,7 +384,7 @@ class Vector3 {
      * @param steps {Array} array of numbers representing steps between Vector3
      * @returns {Array} array of `Vector` representing the value of the derivative
      */
-    static der(vectors, steps) {
+    static derivative(vectors, steps) {
         let der = new Array(vectors.length - 1);
         for (let i = 1; i < vectors.length; i++) {
             der[i - 1] = vectors[i].copy().sub(vectors[i - 1]).div(steps[i - 1]);
