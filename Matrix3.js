@@ -214,11 +214,19 @@ class Matrix3 {
     }
 
     /**
-     * @brief transform matrix to array
+     * @brief transform matrix to 2D array
      * @return {Array} bi-dimensional array containing rows of the matrix
      */
-    toArray() {
-        return [this.x.toArray(), this.y.toArray(), this.z.toArray()];
+    to2D() {
+        return [this.x.to1D(), this.y.to1D(), this.z.to1D()];
+    }
+
+    /**
+     * @brief transform matrix 1D to array
+     * @return {Array}
+     */
+    to1D() {
+        return this.x.to1D().concat(this.y.to1D()).concat(this.z.to1D());
     }
 
     static get zeros() {
@@ -364,16 +372,29 @@ class Matrix3 {
     }
 
     /**
-     * @brief creates a matrix with given array
+     * @brief creates a matrix with given 2D array
      *  @details The order of the rows in matrix is the same as in `arr` array
      * @param arr {Array} bi-dimensional array containing rows of the matrix
      * @returns {Matrix3} new instance of matrix
      */
-    static fromArray(arr) {
+    static from2D(arr) {
         return new Matrix3(
             arr[0][0], arr[0][1], arr[0][2],
             arr[1][0], arr[1][1], arr[1][2],
             arr[2][0], arr[2][1], arr[2][2]);
+    }
+
+    /**
+     * @brief creates a matrix with given 1D array
+     *  @details The order of the rows in matrix is the same as in `arr` array
+     * @param arr {Array} array containing the components of the matrix ordered as rows
+     * @returns {Matrix3} new instance of matrix
+     */
+    static from1D(arr) {
+        return new Matrix3(
+            arr[0], arr[1], arr[2],
+            arr[3], arr[4], arr[5],
+            arr[6], arr[7], arr[8]);
     }
 }
 

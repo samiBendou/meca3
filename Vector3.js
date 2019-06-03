@@ -256,7 +256,7 @@ class Vector3 {
      * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2
      * @returns {Array} value of the vector
      */
-    toArray() {
+    to1D() {
         return [this.x, this.y, this.z];
     }
 
@@ -341,7 +341,7 @@ class Vector3 {
      * @param arr {Array} array containing cartesian coordinates
      * @returns {Vector3} new instance of vector
      */
-    static fromArray(arr) {
+    static from1D(arr) {
         return new Vector3(arr[0], arr[1], arr[2]);
     }
 }

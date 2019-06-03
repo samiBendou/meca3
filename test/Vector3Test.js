@@ -75,9 +75,9 @@ describe("Vector3 Tests", function () {
 
     it("Serialize", function () {
         let uExpected = [1, 0, 0];
-        u.toArray().forEach(function (s, index) {
+        u.to1D().forEach(function (s, index) {
             assert.equal(s, uExpected[index]);
         });
-        assert(Vector3.fromArray([1, 0, 0]).isEqual(u));
+        assert(Vector3.from1D([1, 0, 0]).isEqual(u));
     });
 });

@@ -84,16 +84,25 @@ describe("Matrix3 Tests", function () {
             [0, 1, 0],
             [0, 0, 1]
         ];
-        a.toArray().forEach(function (row, i) {
+
+        a.to1D().forEach(function (s, i) {
+            assert.equal(s, aExpected[Math.floor(i / 3)][i % 3]);
+        });
+
+        a.to2D().forEach(function (row, i) {
             row.forEach(function (s, j) {
                 assert.equal(s, aExpected[i][j]);
             });
         });
-        assert(Matrix3.fromArray(
+
+        assert(Matrix3.from1D(
+            [1, 0, 0, 0, 1, 0, 0, 0, 1]).isEqual(a));
+
+        assert(Matrix3.from2D(
             [
                 [1, 0, 0],
                 [0, 1, 0],
                 [0, 0, 1]
             ]).isEqual(a));
-    })
+    });
 });
