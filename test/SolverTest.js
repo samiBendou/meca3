@@ -11,18 +11,16 @@ describe("Solver Tests", function () {
         return Vector3.ez.mul(2);
     });
 
+    let oExpected = [
+        Vector3.zeros,
+        Vector3.ones.mul(0.5),
+        Vector3.ones.mul(0.5),
+        Vector3.zeros,
+        Vector3.ones.opp().mul(0.5),
+        Vector3.ones.opp().mul(0.5),
+    ];
+
     it("Solve", function () {
-        let count = 20;
-
-        let oExpected = [
-            Vector3.zeros,
-            Vector3.ones.mul(0.5),
-            Vector3.ones.mul(0.5),
-            Vector3.zeros,
-            Vector3.ones.opp().mul(0.5),
-            Vector3.ones.opp().mul(0.5),
-        ];
-
         let oSolved = oSolver.solve(Vector3.zeros, Vector3.ones, 200);
         let gSolved = gSolver.solve(Vector3.zeros, Vector3.zeros, 200);
 
@@ -36,33 +34,30 @@ describe("Solver Tests", function () {
     });
 
     it("Variable step", function () {
-        let oExpected = [
-            Vector3.zeros,
-            Vector3.ones.mul(0.5),
-            Vector3.ones.mul(0.5),
-            Vector3.zeros,
-            Vector3.ones.opp().mul(0.5),
-            Vector3.ones.opp().mul(0.5),
-        ];
-
         let oSolved = oSolver.solve(Vector3.zeros, Vector3.ones, 5, [1, 1, 1, 1]);
+        oSolved.forEach(function (u, index) {
+            assert(u.isEqual(oExpected[index % oExpected.length]));
+        });
+
+    });
+
+    it("Trajectory", function () {
+        let oSolved = oSolver.trajectory(Vector3.zeros, Vector3.ones, 200);
+        oSolved.pairs.forEach(function (pair, index) {
+            assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
+            assert(pair.origin.isEqual(Vector3.zeros));
+        });
+    });
+
+    it("Max duration solve", function () {
+        let oSolved = oSolver.solveMax(Vector3.zeros, Vector3.ones, 5, 1);
         oSolved.forEach(function (u, index) {
             assert(u.isEqual(oExpected[index % oExpected.length]));
         });
     });
 
-    it("Trajectory", function () {
-        let oExpected = [
-            Vector3.zeros,
-            Vector3.ones.mul(0.5),
-            Vector3.ones.mul(0.5),
-            Vector3.zeros,
-            Vector3.ones.opp().mul(0.5),
-            Vector3.ones.opp().mul(0.5),
-        ];
-
-        let oSolved = oSolver.trajectory(Vector3.zeros, Vector3.ones, 200);
-
+    it("Max duration trajectory", function () {
+        let oSolved = oSolver.trajectoryMax(Vector3.zeros, Vector3.ones, 5, 1);
         oSolved.pairs.forEach(function (pair, index) {
             assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
             assert(pair.origin.isEqual(Vector3.zeros));

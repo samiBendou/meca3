@@ -67,11 +67,12 @@ class Solver {
     }
 
     /**
-     * @brief solve ODE with `Vector3`
+     * @brief solve ODE with by giving number of iterations
+     * @details `dt` array must be of size `count - 1`.
      * @param u0 {Vector3} initial unknown
      * @param v0 {Vector3} initial derivative of unknown
      * @param count {number} number of steps to solve
-     * @param dt {Array|number} time steps between each iteration
+     * @param dt {Array|number=} time steps between each iteration
      * @returns {Array} array containing successive solutions of ODE as `Vector3`
      */
     solve(u0, v0, count, dt = []) {
@@ -88,16 +89,44 @@ class Solver {
     }
 
     /**
-     * @brief solve ODE with `PointPair`
+     * @brief solve ODE by giving duration
+     * @param u0 {Vector3} initial unknown
+     * @param v0 {Vector3} initial derivative of unknown
+     * @param tmax {number} total solving duration
+     * @param dt {number=} constant time step iterations
+     * @returns {Array} array containing successive solutions of ODE as `Vector3`
+     */
+    solveMax(u0, v0, tmax, dt) {
+        this.dt = dt || this.dt;
+        return this.solve(u0, v0, Math.floor(tmax / this.dt), this.dt);
+    }
+
+    /**
+     * @brief solve ODE with by giving number of iterations
      * @details The observer is considered as immobile.
      * @param u0 {Vector3} initial position of mobile
      * @param v0 {Vector3} initial speed of mobile
      * @param count {number} number of steps to solve
-     * @param origin {Vector3} observer's position
+     * @param dt {Array|number=} time steps between each iteration
+     * @param origin {Vector3=} observer's position
      * @returns {Trajectory} new instance of trajectory containing the solution
      */
-    trajectory(u0, v0, count, origin = Vector3.zeros) {
-        return Trajectory.discrete(this.solve(u0, v0, count), this.dt, origin);
+    trajectory(u0, v0, count, dt = [], origin = Vector3.zeros) {
+        return Trajectory.discrete(this.solve(u0, v0, count, dt), dt, origin);
+    }
+
+    /**
+     * @brief solve ODE with by giving duration
+     * @details The observer is considered as immobile.
+     * @param u0 {Vector3} initial position of mobile
+     * @param v0 {Vector3} initial speed of mobile
+     * @param tmax {number} total solving duration
+     * @param dt {number=} constant time step iterations
+     * @param origin {Vector3=} observer's position
+     * @returns {Trajectory} new instance of trajectory containing the solution
+     */
+    trajectoryMax(u0, v0, tmax, dt, origin = Vector3.zeros) {
+        return Trajectory.discrete(this.solveMax(u0, v0, tmax, dt), dt, origin);
     }
 }
 
