@@ -397,10 +397,11 @@ class Vector3 {
      * each value and using lower bound approximation.
      *
      * @param vectors {Array} array of `Vector3` to process
-     * @param steps {Array} array of numbers representing steps between Vector3
+     * @param dt {Array|number=} array of numbers representing steps between Vector3
      * @returns {Array} array of `Vector` representing the value of the derivative
      */
-    static derivative(vectors, steps) {
+    static derivative(vectors, dt = 1) {
+        let steps = (typeof dt == "number") ? Array(vectors.length).fill(dt) : dt;
         let der = new Array(vectors.length - 1);
         for (let i = 1; i < vectors.length; i++) {
             der[i - 1] = vectors[i].copy().sub(vectors[i - 1]).div(steps[i - 1]);

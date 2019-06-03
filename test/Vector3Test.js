@@ -91,6 +91,10 @@ describe("Vector3 Tests", function () {
         Vector3.derivative([u, v, w], [1, 1, 1]).forEach(function (vector, index) {
             assert(vector.isEqual(expected[index]));
         });
+
+        Vector3.derivative([u, v, w], 1).forEach(function (vector, index) {
+            assert(vector.isEqual(expected[index]));
+        });
     });
 
     it("Serialize", function () {
