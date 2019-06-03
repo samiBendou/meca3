@@ -392,7 +392,6 @@ class Vector3 {
         return der;
     }
 
-
     /**
      * @brief create a vector with given array
      * @details The transformation is performed such that `x` is at index 0, `y` at 1 and `z` at 2.
@@ -401,6 +400,22 @@ class Vector3 {
      */
     static from1D(arr) {
         return new Vector3(arr[0], arr[1], arr[2]);
+    }
+
+    /**
+     * @brief create a vector with given cylindrical coordinates
+     * @returns {Vector3} new instance of vector
+     */
+    static cylindrical(rxy, theta, z) {
+        return new Vector3().setRThetaZ(rxy, theta, z);
+    }
+
+    /**
+     * @brief create a vector with given spherical coordinates
+     * @returns {Vector3} new instance of vector
+     */
+    static spherical(r, theta, phi) {
+        return new Vector3().setRThetaPhi(r, theta, phi);
     }
 }
 

@@ -100,4 +100,14 @@ describe("Vector3 Tests", function () {
         assert(Vector3.ephi(Vector3.ey).isEqual(Vector3.ez.opp()));
         assert(Vector3.ephi(Vector3.ez).isEqual(Vector3.ex));
     });
+
+    it("Coordinates generators", function () {
+        assert(Vector3.cylindrical(1, 0, 0).isEqual(Vector3.ex));
+        assert(Vector3.cylindrical(1, Math.PI / 2, 0).isEqual(Vector3.ey));
+        assert(Vector3.cylindrical(0, 0, 1).isEqual(Vector3.ez));
+
+        assert(Vector3.spherical(1, 0, Math.PI / 2).isEqual(Vector3.ex));
+        assert(Vector3.spherical(1, Math.PI / 2, Math.PI / 2).isEqual(Vector3.ey));
+        assert(Vector3.spherical(1, 0, 0).isEqual(Vector3.ez));
+    });
 });
