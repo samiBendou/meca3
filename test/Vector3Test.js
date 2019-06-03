@@ -80,4 +80,18 @@ describe("Vector3 Tests", function () {
         });
         assert(Vector3.from1D([1, 0, 0]).isEqual(u));
     });
+
+    it("Spherical basis", function () {
+        assert(Vector3.er(Vector3.ex).isEqual(Vector3.ex));
+        assert(Vector3.er(Vector3.ey).isEqual(Vector3.ey));
+        assert(Vector3.er(Vector3.ez).isEqual(Vector3.ez));
+
+        assert(Vector3.etheta(Vector3.ex).isEqual(Vector3.ey));
+        assert(Vector3.etheta(Vector3.ey).isEqual(Vector3.ex.opp()));
+        assert(Vector3.etheta(Vector3.ez).isEqual(Vector3.ey));
+
+        assert(Vector3.ephi(Vector3.ex).isEqual(Vector3.ez.opp()));
+        assert(Vector3.ephi(Vector3.ey).isEqual(Vector3.ez.opp()));
+        assert(Vector3.ephi(Vector3.ez).isEqual(Vector3.ex));
+    });
 });

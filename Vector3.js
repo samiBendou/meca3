@@ -315,6 +315,48 @@ class Vector3 {
     }
 
     /**
+     * @brief radial vector of spherical basis
+     * @param u {Vector3} position of local basis from origin
+     * @returns {Vector3} value of the radial vector
+     */
+    static er(u) {
+        return new Vector3(
+            Math.sin(u.phi) * Math.cos(u.theta),
+            Math.sin(u.phi) * Math.sin(u.theta),
+            Math.cos(u.phi)
+        );
+    }
+
+    /**
+     * @brief prograde vector of spherical basis
+     * @details Prograde vector is perpendicular to the radial vector and oriented in the positive `theta` direction.
+     * Note that this vector also correspond to the prograde vector of cylindrical basis.
+     * @param u {Vector3} position of local basis from origin
+     * @returns {Vector3} value of the prograde vector
+     */
+    static etheta(u) {
+        return new Vector3(
+            -Math.sin(u.theta),
+            Math.cos(u.theta),
+            0
+        );
+    }
+
+    /**
+     * @brief normal vector of spherical basis
+     * @details Normal vector is perpendicular to the radial vector and oriented in the positive `phi` direction.
+     * @param u {Vector3} position of local basis from origin
+     * @returns {Vector3} value of the normal vector
+     */
+    static ephi(u) {
+        return new Vector3(
+            Math.cos(u.phi) * Math.cos(u.theta),
+            Math.cos(u.phi) * Math.sin(u.theta),
+            -Math.sin(u.phi)
+        );
+    }
+
+    /**
      * @brief derivative of an array of vector with given steps
      * @details Representing discrete derivative of the array of Vector3.
      * If the original array is of size `N`, than the derivative is of size `N - 1`.
