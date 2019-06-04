@@ -136,7 +136,7 @@ class BufferTrajectory extends Trajectory {
         } else if (this.dt.length > 0) {
             this.dt[this.addIndex] = this.dt[this.dt.length - 1];
         } else {
-            return this;
+            this.dt[this.addIndex] = 1;
         }
         this.pairs[this.addIndex] = pair;
         this.addIndex = (this.addIndex + 1) % this.size;

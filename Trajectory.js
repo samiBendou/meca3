@@ -195,9 +195,9 @@ class Trajectory {
         } else if (this.dt.length > 0) {
             this.dt.push(this.dt[this.dt.length - 1]);
         } else {
-            return this;
+            this.dt.push(1);
         }
-        this.pairs.push(pair.copy());
+        this.pairs.push(pair);
 
         return this;
     }
