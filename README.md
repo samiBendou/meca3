@@ -27,4 +27,4 @@ It represents **3D space** and provides a **solver** to compute **trajectory** o
 
 - **Complete documentation** that can be found on the [wiki](https://github.com/samiBendou/meca3/wiki/)
 
-Feel free to propose contributions to the project :satellite: : [guide](https://github.com/samiBendou/meca3/blob/master/CONTRIBUTING.md)
+Feel free to propose contributions to the project : [guide](https://github.com/samiBendou/meca3/blob/master/CONTRIBUTING.md) :satellite:
