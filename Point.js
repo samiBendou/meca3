@@ -44,77 +44,87 @@ class Point {
     }
 
     get x() {
+        return this.trajectory.last.relative.x;
     }
 
     set x(newX) {
+        this.trajectory.last.vector.x = newX + this.trajectory.last.origin.x;
     }
 
     get y() {
-        return;
+        return this.trajectory.last.relative.y;
     }
 
-    set y(newX) {
-
+    set y(newY) {
+        this.trajectory.last.vector.y = newY + this.trajectory.last.origin.y;
     }
 
     get z() {
-        return;
+        return this.trajectory.last.relative.z;
     }
 
-    set z(newX) {
-
+    set z(newZ) {
+        this.trajectory.last.vector.z = newZ + this.trajectory.last.origin.z;
     }
 
     get r() {
-        return;
+        return this.trajectory.last.relative.r;
     }
 
-    set r(newX) {
-
+    set r(newR) {
+        this.trajectory.last.vector.r = newR + this.trajectory.last.origin.r;
     }
 
     get rxy() {
-        return;
+        return this.trajectory.last.relative.rxy;
     }
 
-    set rxy(newX) {
-
+    set rxy(newRxy) {
+        this.trajectory.last.vector.rxy = newRxy + this.trajectory.last.origin.rxy;
     }
 
     get theta() {
-        return;
+        return this.trajectory.last.relative.theta;
     }
 
-    set theta(newX) {
-
+    set theta(newTheta) {
+        let relative = this.trajectory.last.relative;
+        relative.theta = newTheta;
+        this.trajectory.last.relative = relative;
     }
 
     get phi() {
-        return;
+        return this.trajectory.last.relative.phi;
     }
 
-    set phi(newX) {
-
+    set phi(newPhi) {
+        let relative = this.trajectory.last.relative;
+        relative.phi = newPhi;
+        this.trajectory.last.relative = relative;
     }
 
     get lat() {
-        return;
+        return this.trajectory.last.relative.lat;
     }
 
-    set lat(newX) {
-
+    set lat(newLat) {
+        let relative = this.trajectory.last.relative;
+        relative.lat = newLat;
+        this.trajectory.last.relative = relative;
     }
 
     get lon() {
-        return;
+        return this.trajectory.last.relative.lon;
     }
 
-    set lon(newX) {
-
+    set lon(newLon) {
+        let relative = this.trajectory.last.relative;
+        relative.lon = newLon;
+        this.trajectory.last.relative = relative;
     }
 
     get vx() {
-        return;
+
     }
 
     set vx(newX) {
@@ -122,7 +132,7 @@ class Point {
     }
 
     get vy() {
-        return;
+
     }
 
     set vy(newX) {
@@ -130,7 +140,7 @@ class Point {
     }
 
     get vz() {
-        return;
+
     }
 
     set vz(newX) {
@@ -138,7 +148,7 @@ class Point {
     }
 
     get vr() {
-        return;
+
     }
 
     set vr(newX) {
@@ -146,7 +156,7 @@ class Point {
     }
 
     get vrxy() {
-        return;
+
     }
 
     set vrxy(newX) {
@@ -154,7 +164,7 @@ class Point {
     }
 
     get vtheta() {
-        return;
+
     }
 
     set vtheta(newX) {
@@ -162,7 +172,7 @@ class Point {
     }
 
     get vphi() {
-        return;
+
     }
 
     set vphi(newX) {
@@ -176,16 +186,21 @@ class Point {
      * @returns {Point} reference to this
      */
     update(solver) {
-        return;
+        return this;
     }
 
     /**
      * @brief changes the frame of the point
      * @details The whole trajectory of the point is changed.
      * @param point {Point} point to set as frame
-     * @return {Point} reference to this
+     * @returns {Point} reference to this
      */
     reframe(point) {
-        return;
+        return this;
     }
 }
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Point;
+else
+    window.Point = Point;
