@@ -156,9 +156,9 @@ class Vector3 {
      * @returns {Vector3} reference to `this`
      */
     opp() {
-        this.x = -this.x;
-        this.y = -this.y;
-        this.z = -this.z;
+        this.x *= -1;
+        this.y *= -1;
+        this.z *= -1;
         return this;
     }
 
