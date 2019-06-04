@@ -18,29 +18,40 @@
  *
  * - Manipulate current relative position and speed in current frame
  *
- * @property x {Number} cartesian position
- * @property y {Number} cartesian position
- * @property z {Number} cartesian position
- * @property r {Number} spherical position
- * @property rxy {Number} cylindrical position
- * @property theta {Number} cylindrical and spherical position
- * @property phi {Number} spherical position
- * @property lat {Number} latitude position
- * @property lon {Number} longitude position
+ * @property mass {number} mass of the point
+ * @property trajectory {BufferTrajectory} trajectory of the point
+ * @property dt {number} current time step
+ * @property x {number} cartesian position
+ * @property y {number} cartesian position
+ * @property z {number} cartesian position
+ * @property r {number} spherical position
+ * @property rxy {number} cylindrical position
+ * @property theta {number} cylindrical and spherical position
+ * @property phi {number} spherical position
+ * @property lat {number} latitude position
+ * @property lon {number} longitude position
  *
- * @property vx {Number} cartesian speed
- * @property vy {Number} cartesian speed
- * @property vz {Number} cartesian speed
- * @property vr {Number} spherical speed
- * @property vrxy {Number} cylindrical speed
- * @property vtheta {Number} cylindrical and spherical speed
- * @property vphi {Number} spherical speed
+ * @property vx {number} cartesian speed
+ * @property vy {number} cartesian speed
+ * @property vz {number} cartesian speed
+ * @property vr {number} spherical speed
+ * @property vrxy {number} cylindrical speed
+ * @property vtheta {number} cylindrical and spherical speed
+ * @property vphi {number} spherical speed
  */
 
 class Point {
     constructor(mass, trajectory) {
         this.mass = mass;
         this.trajectory = trajectory;
+    }
+
+    get dt() {
+        return this.trajectory.dt[this.trajectory.addIndex - 1];
+    }
+
+    set dt(newDt) {
+        this.trajectory.dt[this.trajectory.addIndex - 1] = newDt;
     }
 
     get x() {
@@ -124,59 +135,31 @@ class Point {
     }
 
     get vx() {
-
-    }
-
-    set vx(newX) {
-
+        return (this.trajectory.last.relative.x - this.trajectory.nexto.relative.x) / this.dt;
     }
 
     get vy() {
-
-    }
-
-    set vy(newX) {
-
+        return (this.trajectory.last.relative.y - this.trajectory.nexto.relative.y) / this.dt;
     }
 
     get vz() {
-
-    }
-
-    set vz(newX) {
-
+        return (this.trajectory.last.relative.z - this.trajectory.nexto.relative.z) / this.dt;
     }
 
     get vr() {
-
-    }
-
-    set vr(newX) {
-
+        return (this.trajectory.last.relative.r - this.trajectory.nexto.relative.r) / this.dt;
     }
 
     get vrxy() {
-
-    }
-
-    set vrxy(newX) {
-
+        return (this.trajectory.last.relative.rxy - this.trajectory.nexto.relative.rxy) / this.dt;
     }
 
     get vtheta() {
-
-    }
-
-    set vtheta(newX) {
-
+        return (this.trajectory.last.relative.theta - this.trajectory.nexto.relative.theta) / this.dt;
     }
 
     get vphi() {
-
-    }
-
-    set vphi(newX) {
-
+        return (this.trajectory.last.relative.phi - this.trajectory.nexto.relative.phi) / this.dt;
     }
 
     /**
