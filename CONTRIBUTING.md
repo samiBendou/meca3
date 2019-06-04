@@ -1,3 +1,5 @@
+# Contribution guide
+
 ## Introduction
 
 First off, thank you for considering contributing to meca3 project. 
