@@ -133,8 +133,8 @@ class BufferTrajectory extends Trajectory {
     add(pair, dt) {
         if (dt !== undefined) {
             this.dt[this.addIndex] = dt;
-        } else if (this.dt.length > 0) {
-            this.dt[this.addIndex] = this.dt[this.dt.length - 1];
+        } else if (this.dt.length > 0 && this.addIndex > 0) {
+            this.dt[this.addIndex] = this.dt[this.addIndex - 1];
         } else {
             this.dt[this.addIndex] = 1;
         }
