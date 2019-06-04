@@ -45,10 +45,15 @@ describe("Vector3 Tests", function () {
         assert.approximately(u.rxy, 1, Number.EPSILON);
         assert.approximately(u.theta, 0, Number.EPSILON);
         assert.approximately(u.phi, Math.PI / 2, Number.EPSILON);
+
         assert.approximately(u.lat, 0, Number.EPSILON);
         assert.approximately(u.lon, 0, Number.EPSILON);
+        assert.approximately(w.lat, Math.PI / 2, Number.EPSILON);
         assert.approximately(v.lon, Math.PI / 2, Number.EPSILON);
         assert.approximately(v.copy().opp().lon, -Math.PI / 2, Number.EPSILON);
+
+        assert.approximately(Vector3.zeros.phi, 0, Number.EPSILON);
+        assert.approximately(Vector3.zeros.theta, 0, Number.EPSILON);
     });
 
     it("Set coordinates", function () {
