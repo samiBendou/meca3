@@ -20,7 +20,7 @@
  * @property z {number} z cartesian coordinate
  * @property r {number} r spherical coordinate
  * @property rxy {number} r cylindrical coordinate
- * @property theta {number} angle formed with `ex` in radians
+ * @property theta {number} counterclockwise angle formed with `ex` in radians
  * @property phi {number} angle formed with  `ez` in radians
  */
 class Vector3 {
