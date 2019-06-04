@@ -9,6 +9,7 @@ Following these guidelines helps to communicate that you respect the time of the
 In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
 
 meca3 is an open source project and contributions are really appreciated :sparkles:.
+
 Appropriate yourself the project : improving documentation, proposing new features, reporting bug. 
 Contribute a way that you can earn time or add something you which, feel free to propose your ideas ! :smiley:
 
