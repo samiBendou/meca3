@@ -1,3 +1,7 @@
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    Vector3 = require("./Vector3.js");
+BufferTrajectory = require("./BufferTrajectory.js");
+
 /**
  * @class Point
  * @author samiBendou
@@ -18,8 +22,8 @@
  *
  * - Manipulate current relative position and speed in current frame
  *
- * @property mass {number} mass of the point
  * @property trajectory {BufferTrajectory} trajectory of the point
+ * @property mass {number} mass of the point
  * @property position {Vector3} relative current position
  * @property speed {Vector3} relative current speed
  * @property du {Vector3} current position step (differential)
@@ -44,9 +48,9 @@
  */
 
 class Point {
-    constructor(mass, trajectory) {
-        this.mass = mass;
+    constructor(trajectory, mass) {
         this.trajectory = trajectory;
+        this.mass = mass || 0;
     }
 
     get position() {
@@ -198,11 +202,23 @@ class Point {
     /**
      * @brief changes the frame of the point
      * @details The whole trajectory of the point is changed.
-     * @param point {Point} point to set as frame
+     * @param p {Point} point to set as frame
      * @returns {Point} reference to this
      */
-    reframe(point) {
+    reframe(p) {
+        this.trajectory.origin = p.trajectory.absolute;
         return this;
+    }
+
+    /**
+     * @brief point located at zero
+     * @param mass {number=} mass of the point
+     * @param frame {Vector3=} absolute coordinates of the frame of the point
+     * @param size {number=} size of the trajectory buffer
+     * @returns {Point} new instance of point
+     */
+    static zeros(mass, frame = Vector3.zeros, size) {
+        return new Point(BufferTrajectory.zeros(frame, size), mass);
     }
 }
 
