@@ -154,11 +154,24 @@ class BufferTrajectory extends Trajectory {
         return new BufferTrajectory(pairs.length, new Trajectory(pairs, dt));
     }
 
-    static discrete(vectors, dt = 1, origin = Vector3.zeros) {
-        let pairs = vectors.map(function (u) {
-            return new PointPair(origin, u);
-        });
-        return BufferTrajectory.fromPairs(pairs, dt);
+    /**
+     * @brief trajectory from array of position vectors or point pairs
+     * @details If `positions` is given as `Array` of `Vector3` then the observer is considered as immobile.
+     * If `position` is given as `Array` of `PointPair`, then the observer is mobile and you don't have to specify
+     * the parameter `origin`.
+     * @param positions {Array} successive positions of the mobile
+     * @param dt {Array|number} time step between each position
+     * @param origin {Vector3} observer's position
+     * @returns {Trajectory} new instance of trajectory
+     */
+    static discrete(positions, dt = 1, origin = Vector3.zeros) {
+        let pairs = positions;
+        if (positions instanceof Vector3) {
+            pairs = positions.map(function (u) {
+                return new PointPair(origin, u);
+            });
+        }
+        return new BufferTrajectory(new Trajectory(pairs, dt));
     }
 }
 

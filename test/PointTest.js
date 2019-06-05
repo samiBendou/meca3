@@ -8,8 +8,8 @@ describe("Point Tests", function () {
     let p, q;
 
     function setUp() {
-        p = new Point(0, new BufferTrajectory(10));
-        q = new Point(0, new BufferTrajectory(10));
+        p = new Point(new BufferTrajectory(undefined, 10), 0);
+        q = new Point(new BufferTrajectory(undefined, 10), 0);
         p.trajectory.add(PointPair.vect(Vector3.ex.add(Vector3.ez)));
         q.trajectory.add(PointPair.zeros(Vector3.ones));
     }
@@ -75,6 +75,19 @@ describe("Point Tests", function () {
 
         p.position = Vector3.ey;
         assert(p.position.isEqual(Vector3.ey));
+    });
 
+    it("Rebase", function () {
+        setUp();
+        p.trajectory.add(PointPair.vect(Vector3.ex));
+        q.trajectory.add(PointPair.zeros(Vector3.ex));
+        p.reframe(q);
+
+        let expected = [Vector3.ones, Vector3.ex];
+        let result = p.trajectory.origin;
+
+        expected.forEach(function (u, index) {
+            assert(u.isEqual(result[index]));
+        });
     });
 });
