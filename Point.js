@@ -1,6 +1,9 @@
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     Vector3 = require("./Vector3.js");
-BufferTrajectory = require("./BufferTrajectory.js");
+    Solver = require("./Solver.js");
+    BufferTrajectory = require("./BufferTrajectory.js");
+}
+
 
 /**
  * @class Point
