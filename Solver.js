@@ -43,8 +43,9 @@ const methods = {
 };
 
 class Solver {
-
-    constructor(field, dt = 1, method = "EULER") {
+    constructor(field = function () {
+        return Vector3.zeros;
+    }, dt = 1, method = "EULER") {
         this.field = field;
         this.dt = dt;
         this.method = method;
