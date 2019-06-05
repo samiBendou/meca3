@@ -150,8 +150,8 @@ class BufferTrajectory extends Trajectory {
         return this;
     }
 
-    static fromPairs(pairs, dt) {
-        return new BufferTrajectory(pairs.length, new Trajectory(pairs, dt));
+    static zeros(u, size, dt) {
+        return new BufferTrajectory(Trajectory.zeros(u, size, dt));
     }
 
     /**

@@ -222,10 +222,22 @@ class Trajectory {
     }
 
     /**
+     * @brief generates an immobile trajectory
+     * @details Observer and mobile positions are equal
+     * @param u {Vector3}
+     * @param size {number} number of elements in trajectory
+     * @param dt {Array|number=} time step between each position
+     * @returns {Trajectory} new instance of trajectory
+     */
+    static zeros(u, size, dt) {
+        return new Trajectory(Array(size).fill(PointPair.zeros(u)), dt);
+    }
+
+    /**
      * @brief trajectory from array of position vectors
      * @details The observer is considered as immobile.
      * @param vectors {Array} successive positions of the mobile as `Vector3`
-     * @param dt {Array|number} time step between each position
+     * @param dt {Array|number=} time step between each position
      * @param origin {Vector3} observer's position
      * @returns {Trajectory} new instance of trajectory
      */
