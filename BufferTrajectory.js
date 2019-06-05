@@ -26,9 +26,9 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 class BufferTrajectory extends Trajectory {
 
-    constructor(size, trajectory) {
+    constructor(trajectory, size) {
         super(new Array(size), new Array(size));
-        this.size = size;
+        this.size = size || (trajectory === undefined ? 1 : trajectory.pairs.length);
         this.addIndex = 0;
         if (trajectory !== undefined) {
             this.bufferize(trajectory);

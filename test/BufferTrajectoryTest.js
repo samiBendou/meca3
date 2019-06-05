@@ -15,9 +15,9 @@ describe("BufferTrajectory Tests", function () {
 
     let gamma = new Trajectory([om0, om1, om2], dt);
 
-    let gamma0 = new BufferTrajectory(3, gamma);
-    let gamma1 = new BufferTrajectory(2, gamma);
-    let gamma2 = new BufferTrajectory(4, gamma);
+    let gamma0 = new BufferTrajectory(gamma, 3);
+    let gamma1 = new BufferTrajectory(gamma, 2);
+    let gamma2 = new BufferTrajectory(gamma, 4);
 
     it("Bufferize", function () {
         assert(gamma0.isEqual(gamma));
@@ -33,12 +33,12 @@ describe("BufferTrajectory Tests", function () {
     it("Add", function () {
         gamma1.add(om2);
         assert(gamma1.isEqual(new Trajectory([om2, om2], dt)));
-        gamma1 = new BufferTrajectory(2, gamma);
+        gamma1 = new BufferTrajectory(gamma, 2);
 
         gamma2.add(om2);
         gamma2.add(om1);
         assert(gamma2.isEqual(new Trajectory([om1, om1, om2, om2], dt)));
-        gamma2 = new BufferTrajectory(4, gamma);
+        gamma2 = new BufferTrajectory(gamma, 4);
     });
 
     it("First/Last/Nexto", function () {
@@ -56,8 +56,8 @@ describe("BufferTrajectory Tests", function () {
         assert(gamma1.last.isEqual(om0));
         assert(gamma2.nexto.isEqual(org));
 
-        gamma1 = new BufferTrajectory(2, gamma);
-        gamma2 = new BufferTrajectory(4, gamma);
+        gamma1 = new BufferTrajectory(gamma, 2);
+        gamma2 = new BufferTrajectory(gamma, 4);
     });
 
     it("At/Get", function() {
