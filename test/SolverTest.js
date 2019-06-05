@@ -5,10 +5,10 @@ describe("Solver Tests", function () {
     const Solver = require("../Solver.js");
     const BufferTrajectory = require("../BufferTrajectory.js");
 
-    let oSolver = new Solver(function(u, t) {
+    let oSolver = new Solver(function (u) {
         return u.copy().opp();
     });
-    let gSolver = new Solver(function (u, t) {
+    let gSolver = new Solver(function () {
         return Vector3.ez.mul(2);
     });
 
