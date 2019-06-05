@@ -20,7 +20,10 @@
  *
  * @property mass {number} mass of the point
  * @property trajectory {BufferTrajectory} trajectory of the point
- * @property dt {number} current time step
+ * @property position {Vector3} relative current position
+ * @property speed {Vector3} relative current speed
+ * @property du {Vector3} current position step (differential)
+ * @property dt {number} current time step (differential)
  * @property x {number} cartesian position
  * @property y {number} cartesian position
  * @property z {number} cartesian position
@@ -44,6 +47,26 @@ class Point {
     constructor(mass, trajectory) {
         this.mass = mass;
         this.trajectory = trajectory;
+    }
+
+    get position() {
+        return this.trajectory.last.relative;
+    }
+
+    set position(newPosition) {
+        this.trajectory.last.relative = newPosition;
+    }
+
+    get speed() {
+        return this.du.div(this.dt);
+    }
+
+    get du() {
+        return this.trajectory.last.relative.sub(this.trajectory.nexto.relative);
+    }
+
+    set du(newDu) {
+        this.trajectory.last.relative = this.trajectory.nexto.relative.add(newDu);
     }
 
     get dt() {

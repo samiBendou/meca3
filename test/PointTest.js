@@ -1,6 +1,7 @@
 const assert = require("chai").assert;
 
 describe("Point Tests", function () {
+    const Vector3 = require("../Vector3.js");
     const BufferTrajectory = require("../BufferTrajectory.js");
     const Point = require("../Point.js");
 
@@ -33,6 +34,8 @@ describe("Point Tests", function () {
         assert.equal(q.phi, 0);
         assert.equal(q.lat, Math.PI / 2);
         assert.equal(q.lon, 0);
+
+        assert(p.position.isEqual(Vector3.ex.add(Vector3.ez)));
     });
 
     it("Get speed", function () {
@@ -51,6 +54,8 @@ describe("Point Tests", function () {
         assert.equal(q.vr, 0);
         assert.equal(q.vtheta, 0);
         assert.equal(q.vphi, 0);
+
+        assert(p.speed.isEqual(new Vector3(0, 0, -1)));
     });
 
     it("Set position", function () {
@@ -67,6 +72,9 @@ describe("Point Tests", function () {
 
         p.phi = Math.PI / 2;
         assert.equal(p.theta, Math.PI / 2);
+
+        p.position = Vector3.ey;
+        assert(p.position.isEqual(Vector3.ey));
 
     });
 });
