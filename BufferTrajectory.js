@@ -160,13 +160,13 @@ class BufferTrajectory extends Trajectory {
      * If `position` is given as `Array` of `PointPair`, then the observer is mobile and you don't have to specify
      * the parameter `origin`.
      * @param positions {Array} successive positions of the mobile
-     * @param dt {Array|number} time step between each position
-     * @param origin {Vector3} observer's position
+     * @param dt {Array|number=} time step between each position
+     * @param origin {Vector3=} observer's position
      * @returns {Trajectory} new instance of trajectory
      */
     static discrete(positions, dt = 1, origin = Vector3.zeros) {
         let pairs = positions;
-        if (positions instanceof Vector3) {
+        if (positions[0] instanceof Vector3) {
             pairs = positions.map(function (u) {
                 return new PointPair(origin, u);
             });
