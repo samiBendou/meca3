@@ -8,9 +8,9 @@ describe("Point Tests", function () {
     let p, q;
 
     function setUp() {
-        p = new Point(new BufferTrajectory(undefined, 10), 0);
-        q = new Point(new BufferTrajectory(undefined, 10), 0);
-        p.trajectory.add(PointPair.vect(Vector3.ex.add(Vector3.ez)));
+        p = Point.zeros(0, Vector3.zeros, 10);
+        q = Point.zeros(0, Vector3.zeros, 2);
+        p.trajectory.add(PointPair.vect(new Vector3(1, 0, 1)));
         q.trajectory.add(PointPair.zeros(Vector3.ones));
     }
 
