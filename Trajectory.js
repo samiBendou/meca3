@@ -176,7 +176,7 @@ class Trajectory {
     duration(i) {
         i = i === undefined ? this.dt.length : i;
         return Number(this.dt.slice(0, i).reduce(function (prev, curr) {
-            return prev += curr
+            return prev + curr
         }, 0));
     }
 
