@@ -123,20 +123,20 @@ class BufferTrajectory extends Trajectory {
 
     duration(i) {
         if(i === undefined) {
-            return this.dt.reduce(function (prev, curr) {
-                return prev += curr
+            return this.dt.reduce(function (acc, dt) {
+                return acc + dt;
             }, 0);
         } else if (i + this.addIndex < this.size) {
-            return this.dt.slice(this.addIndex, i + this.addIndex).reduce(function (prev, curr) {
-                return prev += curr
+            return this.dt.slice(this.addIndex, i + this.addIndex).reduce(function (acc, dt) {
+                return acc + dt;
             }, 0);
         } else {
             let end = (i + this.addIndex) % this.size;
-            let sum0 = this.dt.slice(0, end).reduce(function (prev, curr) {
-                return prev += curr
+            let sum0 = this.dt.slice(0, end).reduce(function (acc, dt) {
+                return acc + dt;
             }, 0);
-            return sum0 + this.dt.slice(this.addIndex, this.size).reduce(function (prev, curr) {
-                return prev += curr
+            return sum0 + this.dt.slice(this.addIndex, this.size).reduce(function (acc, dt) {
+                return acc + dt;
             }, 0);
         }
     }
