@@ -29,6 +29,8 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  * @property mass {number} mass of the point
  * @property position {Vector3} relative current position
  * @property speed {Vector3} relative current speed
+ * @property solver {Solver} solver used to generate the trajectory
+ *
  * @property du {Vector3} current position step (differential)
  * @property dt {number} current time step (differential)
  * @property x {number} cartesian position
@@ -51,9 +53,10 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  */
 
 class Point {
-    constructor(trajectory, mass) {
+    constructor(trajectory, mass = 0, solver = new Solver()) {
         this.trajectory = trajectory;
-        this.mass = mass || 0;
+        this.mass = mass;
+        this.solver = solver;
     }
 
     get position() {
@@ -77,11 +80,7 @@ class Point {
     }
 
     get dt() {
-        return this.trajectory.dt[this.trajectory.addIndex - 1];
-    }
-
-    set dt(newDt) {
-        this.trajectory.dt[this.trajectory.addIndex - 1] = newDt;
+        return this.trajectory.dt[this.trajectory.lastStepIndex];
     }
 
     get x() {
@@ -195,10 +194,13 @@ class Point {
     /**
      * @brief updates the position of the point
      * @details Solves a step of the ODE of the solver and update position.
-     * @param solver {Solver} solver to use to calculate next position
+     * @param dt {number=} time step for this iteration
+     * @param origin {Vector3=} origin to set for the solution
+     * @param method {Solver.methods=} method to use for this step
      * @returns {Point} reference to this
      */
-    update(solver) {
+    update(dt, origin, method) {
+        this.solver.buffer(this.trajectory, dt, origin, method);
         return this;
     }
 
@@ -213,6 +215,10 @@ class Point {
         return this;
     }
 
+    copy() {
+        return new Point(this.trajectory.copy(), this.mass, this.solver);
+    }
+
     /**
      * @brief point located at zero
      * @param mass {number=} mass of the point
@@ -220,7 +226,7 @@ class Point {
      * @param size {number=} size of the trajectory buffer
      * @returns {Point} new instance of point
      */
-    static zeros(mass, frame = Vector3.zeros, size) {
+    static zeros(mass, frame = Vector3.zeros, size = 2) {
         return new Point(BufferTrajectory.zeros(frame, size), mass);
     }
 }

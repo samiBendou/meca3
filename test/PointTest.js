@@ -90,4 +90,10 @@ describe("Point Tests", function () {
             assert(u.isEqual(result[index]));
         });
     });
+
+    it("Update", function () {
+        setUp();
+        p.update();
+        assert(p.position.isEqual(new Vector3(2, 0, 2)));
+    });
 });

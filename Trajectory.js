@@ -232,6 +232,16 @@ class Trajectory {
         return str;
     }
 
+    copy() {
+        let pairs = this.pairs.slice().map(function (pair) {
+            return pair.copy();
+        });
+
+        let dt = this.dt.slice();
+
+        return new Trajectory(pairs, dt);
+    }
+
     /**
      * @brief generates an immobile trajectory
      * @details Observer and mobile positions are equal

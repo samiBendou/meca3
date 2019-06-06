@@ -5,11 +5,20 @@ describe("Point Tests", function () {
     const Field = require("../Field.js");
 
     let points;
-    let field;
+    let field, ofield;
 
     function setUp() {
         points = [Point.zeros(10), Point.zeros(20), Point.zeros(30)];
+        opoints = [Point.zeros(10), Point.zeros(20), Point.zeros(30)];
+        let makeField = function (points) {
+            return function (u) {
+                return points.reduce(function (acc, point) {
+                    return acc.add(point.trajectory.last.vector.copy().sub(u).sub(Vector3.ones).div(points.length));
+                }, Vector3.zeros);
+            }
+        };
         field = new Field(points);
+        ofield = new Field(opoints, new Solver(makeField(opoints)));
     }
 
     it("Rebase", function () {
@@ -21,6 +30,19 @@ describe("Point Tests", function () {
                 assert(u.isEqual(origin[index]));
             });
             assert(p.trajectory.origin);
+        });
+    });
+
+    it("Update", function () {
+        setUp();
+        field.update();
+        field.points.forEach(function (point) {
+            assert(point.position.isZero());
+        });
+
+        ofield.update();
+        ofield.points.forEach(function (point) {
+            assert(point.position.isEqual(Vector3.ones.opp()));
         });
     });
 });

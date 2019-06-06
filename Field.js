@@ -12,7 +12,7 @@
  *
  * - Represent all the points in the same frame
  *
- * @property points {Array} array of `Point` objects composing the system
+ * @property points {Array} non empty array of `Point` objects composing the system
  * @property solver {Solver} solver used to represent the field
  * @property frame {Point} point used as frame of other points
  * @property bcenter {Point} barycenter of the points
@@ -20,16 +20,36 @@
 class Field {
     constructor(points, solver, frame) {
         this.points = points;
-        this.solver = solver;
         this.frame = frame || points[0];
+        this.setSolvers(solver || new Solver());
+    }
+
+    get solver() {
+        return this.points[0].solver;
+    }
+
+    set solver(newSolver) {
+        this.setSolvers(newSolver);
+    }
+
+    setSolvers(solver) {
+        this.points.forEach(function (point) {
+            point.solver = solver;
+        });
     }
 
     /**
      * @brief updates the position of all the points
      * @details Solves a step of the ODE of the solver and update position.
+     * @param dt {number=} time step for this iteration
+     * @param origin {Vector3=} origin to set for the solution
+     * @param method {Solver.methods=} method to use for this step
      * @returns {Field} reference to this
      */
-    update() {
+    update(dt, origin, method) {
+        this.points = this.points.map(function (point) {
+            return point.copy().update(dt, origin, method);
+        });
         return this;
     }
 

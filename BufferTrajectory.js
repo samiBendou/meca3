@@ -178,7 +178,13 @@ class BufferTrajectory extends Trajectory {
         return this;
     }
 
-    static zeros(u, size, dt) {
+    copy() {
+        let copy = new BufferTrajectory(super.copy(), this.size);
+        copy.addIndex = this.addIndex;
+        return copy;
+    }
+
+    static zeros(u, size = 2, dt = 1) {
         return new BufferTrajectory(Trajectory.zeros(u, size, dt));
     }
 
