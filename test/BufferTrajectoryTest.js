@@ -86,11 +86,22 @@ describe("BufferTrajectory Tests", function () {
     });
 
     it("Time", function(){
-        assert.equal(gamma0.t(0), 0);
-        assert.equal(gamma0.t(0.5), 0.05);
-        assert.equal(gamma0.t(1), 0.1);
-        assert.equal(gamma0.t(2.5), 0.25);
-        assert.approximately(gamma0.t(3), 0.3, Number.EPSILON);
+        setUp();
+        assert.approximately(gamma1.duration(0), 0, Number.EPSILON);
+        assert.approximately(gamma1.duration(1), 0.1, Number.EPSILON);
+
+        assert.approximately(gamma0.t(0), 0, Number.EPSILON);
+        assert.approximately(gamma0.t(0.25), 0.05, Number.EPSILON);
+        assert.approximately(gamma0.t(0.5), 0.1, Number.EPSILON);
+        assert.approximately(gamma0.t(0.75), 0.15, Number.EPSILON);
+        assert.approximately(gamma0.t(1), 0.2, Number.EPSILON);
+
+        assert.approximately(gamma1.duration(0), 0, Number.EPSILON);
+        assert.approximately(gamma1.duration(1), 0.1, Number.EPSILON);
+
+        assert.approximately(gamma1.t(0), 0, Number.EPSILON);
+        assert.approximately(gamma1.t(0.5), 0.05, Number.EPSILON);
+        assert.approximately(gamma1.t(1), 0.1, Number.EPSILON);
 
         assert.approximately(gamma2.duration(0), 0, Number.EPSILON);
         assert.approximately(gamma2.duration(1), 0, Number.EPSILON);

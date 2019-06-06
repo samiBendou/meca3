@@ -14,8 +14,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  *
  * You can also specify the time step between each successive positions.
  *
- * Will we use the notion of _curvilinear abscissa_ defined as real number `s` which can evolve between `0` and `N` where
- * `N` is the number of `PointPair` composing the trajectory.
+ * Will we use the notion of _curvilinear abscissa_ defined as real number `s` which can evolve between `0` and `1`
  *
  * #### Features
  *
@@ -36,7 +35,7 @@ class Trajectory {
 
     constructor(pairs = [], dt = 1) {
         this.pairs = pairs;
-        this.dt = (typeof dt == "number") ? Array(pairs.length).fill(dt) : dt;
+        this.dt = (typeof dt == "number") ? Array(pairs.length - 1).fill(dt) : dt;
     }
 
     get first() {
@@ -58,6 +57,7 @@ class Trajectory {
     get nexto() {
         return this.pairs[this.pairs.length - 2];
     }
+
 
     set nexto(newLast) {
         this.pairs[this.pairs.length - 2] = newLast;
@@ -129,10 +129,11 @@ class Trajectory {
      * @returns {PointPair} value of position at curvilinear abscissa
      */
     at(s) {
-        let s0 = Math.floor(s), s1 = (s0 + 1);
+        let scale = s * (this.pairs.length - 1);
+        let s0 = Math.floor(scale), s1 = (s0 + 1);
         let x0 = this.get(s0).copy(), x1 = this.get(s1).copy();
-        return new PointPair(x1.origin.sub(x0.origin).mul(s - s0).add(x0.origin),
-            x1.vector.sub(x0.vector).mul(s - s0).add(x0.vector));
+        return new PointPair(x1.origin.sub(x0.origin).mul(scale - s0).add(x0.origin),
+            x1.vector.sub(x0.vector).mul(scale - s0).add(x0.vector));
     }
 
     /**
@@ -142,9 +143,19 @@ class Trajectory {
      * @returns {number} value of duration at curvilinear abscissa
      */
     t(s) {
-        let s0 = Math.floor(s);
+        let scale = s * (this.pairs.length - 1);
+        let s0 = Math.floor(scale);
         let t = this.duration(s0);
-        return s0 < this.dt.length ? t + (s - s0) * this.dt[s0] : t;
+        return s0 < this.dt.length ? t + (scale - s0) * this.dt[s0] : t;
+    }
+
+    /**
+     * @brief time step at curvilinear abscissa
+     * @param s {number} curvilinear abscissa
+     * @return {number} value of the time step
+     */
+    step(s) {
+        return this.dt[Math.floor(s * (this.dt.length - 1))];
     }
 
     /**
@@ -192,7 +203,7 @@ class Trajectory {
     add(pair, dt) {
         if (dt !== undefined) {
             this.dt.push(dt);
-        } else if (this.dt.length > 0) {
+        } else if (this.dt.length > 1) {
             this.dt.push(this.dt[this.dt.length - 1]);
         } else {
             this.dt.push(1);
