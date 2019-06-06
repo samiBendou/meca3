@@ -39,8 +39,8 @@ describe("Solver Tests", function () {
         let trajectory = BufferTrajectory.discrete([u0, u1]);
         oSolver.buffer(trajectory, 1);
 
-        trajectory.pairs.forEach(function (pair, index) {
-            assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
+        trajectory.pairs.forEach(function (pair) {
+            assert(pair.vector.isEqual(Vector3.scal(0.5)));
         });
     });
 
