@@ -25,7 +25,6 @@ describe("PointPair Tests", function () {
     });
 
     it("Affine", function() {
-        console.log(om.toString());
         let affOM = om.copy().affine(Matrix3.rotZ(Math.PI / 4), Vector3.ones);
         assert.approximately(affOM.length, om.length, Number.EPSILON);
         assert.approximately(affOM.origin.y, affOM.vector.y, Number.EPSILON);
