@@ -82,7 +82,7 @@ class Solver {
     buffer(trajectory, dt, origin, method) {
         let next = this.step(trajectory.last.vector, trajectory.nexto.vector, trajectory.duration(), dt, method);
         let index = trajectory.addIndex > 0 ? trajectory.addIndex - 1 : trajectory.size - 1;
-        trajectory.add(new PointPair(next, origin || trajectory.pairs[index].origin), this.dt);
+        trajectory.add(new PointPair(origin || trajectory.pairs[index].origin, next), this.dt);
         return trajectory;
     }
 
