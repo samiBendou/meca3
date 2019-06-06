@@ -62,11 +62,11 @@ class Vector3 {
     }
 
     get lat() {
-        return this.phi - Math.PI / 2;
+        return Math.PI / 2 - this.phi;
     }
 
     set lat(newLat) {
-        this.setRThetaPhi(this.r, this.theta, newLat + Math.PI / 2);
+        this.setRThetaPhi(this.r, this.theta, Math.PI / 2 - newLat);
     }
 
     get lon() {

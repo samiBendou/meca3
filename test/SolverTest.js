@@ -5,10 +5,10 @@ describe("Solver Tests", function () {
     const Solver = require("../Solver.js");
     const BufferTrajectory = require("../BufferTrajectory.js");
 
-    let oSolver = new Solver(function(u, t) {
+    let oSolver = new Solver(function (u) {
         return u.copy().opp();
     });
-    let gSolver = new Solver(function (u, t) {
+    let gSolver = new Solver(function () {
         return Vector3.ez.mul(2);
     });
 
@@ -39,8 +39,8 @@ describe("Solver Tests", function () {
         let trajectory = BufferTrajectory.discrete([u0, u1]);
         oSolver.buffer(trajectory, 1);
 
-        trajectory.pairs.forEach(function (pair, index) {
-            assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
+        trajectory.pairs.forEach(function (pair) {
+            assert(pair.vector.isEqual(Vector3.scal(0.5)));
         });
     });
 

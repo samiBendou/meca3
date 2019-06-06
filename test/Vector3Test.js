@@ -3,37 +3,47 @@ const assert = require("chai").assert;
 describe("Vector3 Tests", function () {
     const Vector3 = require("../Vector3.js");
 
-    let u = Vector3.ex;
-    let v = Vector3.ey;
-    let w = Vector3.ez;
+    let u, v, w;
+
+    function setUp() {
+        u = Vector3.ex;
+        v = Vector3.ey;
+        w = Vector3.ez;
+    }
 
     it("Add", function () {
+        setUp();
         assert(u.copy().add(u).isEqual(new Vector3(2, 0, 0)));
         assert(u.copy().add(v).isEqual(new Vector3(1, 1, 0)));
     });
 
     it("Opposite", function () {
+        setUp();
         assert(u.copy().opp().isEqual(new Vector3(-1, 0, 0)));
         assert(v.copy().opp().isEqual(new Vector3(0, -1, 0)));
     });
 
     it("Multiply", function () {
+        setUp();
         assert(u.copy().mul(5).isEqual(new Vector3(5, 0, 0)));
         assert(v.copy().mul(-5).isEqual(new Vector3(0, -5, 0)));
     });
 
     it("Dot Product", function () {
+        setUp();
         assert.approximately(u.scal(u), 1, Number.EPSILON);
         assert.approximately(u.scal(v), 0, Number.EPSILON);
     });
 
     it("Angle", function () {
+        setUp();
         assert.approximately(u.angle(v), Math.PI / 2, Number.EPSILON);
         assert.approximately(u.angle(w), Math.PI / 2, Number.EPSILON);
         assert.approximately(u.angle(u), 0.0, Number.EPSILON);
     });
 
     it("Cross Product", function () {
+        setUp();
         assert(u.copy().cross(v).isEqual(new Vector3(0, 0, 1)));
         assert(v.copy().cross(w).isEqual(new Vector3(1, 0, 0)));
         assert(w.copy().cross(u).isEqual(new Vector3(0, 1, 0)));
@@ -41,17 +51,24 @@ describe("Vector3 Tests", function () {
     });
 
     it("Get coordinates", function () {
+        setUp();
         assert.approximately(u.r, 1, Number.EPSILON);
         assert.approximately(u.rxy, 1, Number.EPSILON);
         assert.approximately(u.theta, 0, Number.EPSILON);
         assert.approximately(u.phi, Math.PI / 2, Number.EPSILON);
+
         assert.approximately(u.lat, 0, Number.EPSILON);
         assert.approximately(u.lon, 0, Number.EPSILON);
+        assert.approximately(w.lat, Math.PI / 2, Number.EPSILON);
         assert.approximately(v.lon, Math.PI / 2, Number.EPSILON);
         assert.approximately(v.copy().opp().lon, -Math.PI / 2, Number.EPSILON);
+
+        assert.approximately(Vector3.zeros.phi, 0, Number.EPSILON);
+        assert.approximately(Vector3.zeros.theta, 0, Number.EPSILON);
     });
 
     it("Set coordinates", function () {
+        setUp();
         u.r = 2;
         assert(u.isEqual(new Vector3(2, 0, 0)));
 
@@ -76,17 +93,17 @@ describe("Vector3 Tests", function () {
 
         u.lon = -Math.PI / 2;
         assert(u.isEqual(new Vector3(0, -1, 0)));
-
-        u = Vector3.ex;
     });
 
     it("Equality", function () {
+        setUp();
         assert.isFalse(u.isEqual(v));
         assert.isTrue(u.isEqual(u));
         assert.isFalse(u.isEqual(u.copy().mul(1 + Number.EPSILON)));
     });
 
     it("Derivative", function () {
+        setUp();
         let expected = [new Vector3(-1, 1, 0), new Vector3(0, -1, 1)];
         Vector3.derivative([u, v, w], [1, 1, 1]).forEach(function (vector, index) {
             assert(vector.isEqual(expected[index]));
@@ -98,6 +115,7 @@ describe("Vector3 Tests", function () {
     });
 
     it("Serialize", function () {
+        setUp();
         let uExpected = [1, 0, 0];
         u.to1D().forEach(function (s, index) {
             assert.equal(s, uExpected[index]);

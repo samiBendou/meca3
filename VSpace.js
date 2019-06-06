@@ -1,6 +1,8 @@
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     Vector3 = require("./Vector3.js");
-Matrix3 = require("./Matrix3.js");
+    Matrix3 = require("./Matrix3.js");
+}
+
 
 /**
  * @class VSpace

@@ -73,15 +73,16 @@ describe("Trajectory Tests", function () {
         assert(gamma0.get(0).isEqual(om0));
         assert(gamma0.at(0).isEqual(om0));
         assert(gamma0.get(1).isEqual(om1));
-        assert(gamma0.at(0.5).vector.isEqual(Vector3.ex.add(Vector3.ey).mul(0.5)));
+        assert(gamma0.at(0.5).vector.isEqual(Vector3.ey));
     });
 
     it("Time", function () {
+        assert.equal(gamma0.duration(0), 0);
+        assert.equal(gamma0.duration(1), 0.1);
+
         assert.equal(gamma0.t(0), 0);
-        assert.equal(gamma0.t(0.5), 0.05);
-        assert.equal(gamma0.t(1), 0.1);
-        assert.equal(gamma0.t(2.5), 0.25);
-        assert.approximately(gamma0.t(3), 0.3, Number.EPSILON);
+        assert.equal(gamma0.t(0.5), 0.1);
+        assert.equal(gamma0.t(1), 0.2);
     });
 
     it("Origin", function () {

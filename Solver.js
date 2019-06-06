@@ -1,6 +1,7 @@
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     Vector3 = require("./Vector3.js");
     Trajectory = require("./Trajectory.js");
+    BufferTrajectory = require("./BufferTrajectory.js");
 }
 
 /**
@@ -43,8 +44,9 @@ const methods = {
 };
 
 class Solver {
-
-    constructor(field, dt = 1, method = "EULER") {
+    constructor(field = function () {
+        return Vector3.zeros;
+    }, dt = 1, method = "EULER") {
         this.field = field;
         this.dt = dt;
         this.method = method;
@@ -80,7 +82,7 @@ class Solver {
     buffer(trajectory, dt, origin, method) {
         let next = this.step(trajectory.last.vector, trajectory.nexto.vector, trajectory.duration(), dt, method);
         let index = trajectory.addIndex > 0 ? trajectory.addIndex - 1 : trajectory.size - 1;
-        trajectory.add(new PointPair(next, origin || trajectory.pairs[index].origin), this.dt);
+        trajectory.add(new PointPair(origin || trajectory.pairs[index].origin, next), this.dt);
         return trajectory;
     }
 

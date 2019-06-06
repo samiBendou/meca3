@@ -1,3 +1,10 @@
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    Vector3 = require("./Vector3.js");
+    Solver = require("./Solver.js");
+    BufferTrajectory = require("./BufferTrajectory.js");
+}
+
+
 /**
  * @class Point
  * @author samiBendou
@@ -18,174 +25,213 @@
  *
  * - Manipulate current relative position and speed in current frame
  *
- * @property x {Number} cartesian position
- * @property y {Number} cartesian position
- * @property z {Number} cartesian position
- * @property r {Number} spherical position
- * @property rxy {Number} cylindrical position
- * @property theta {Number} cylindrical and spherical position
- * @property phi {Number} spherical position
- * @property lat {Number} latitude position
- * @property lon {Number} longitude position
+ * @property trajectory {BufferTrajectory} trajectory of the point
+ * @property mass {number} mass of the point
+ * @property position {Vector3} relative current position
+ * @property speed {Vector3} relative current speed
+ * @property solver {Solver} solver used to generate the trajectory
  *
- * @property vx {Number} cartesian speed
- * @property vy {Number} cartesian speed
- * @property vz {Number} cartesian speed
- * @property vr {Number} spherical speed
- * @property vrxy {Number} cylindrical speed
- * @property vtheta {Number} cylindrical and spherical speed
- * @property vphi {Number} spherical speed
+ * @property du {Vector3} current position step (differential)
+ * @property dt {number} current time step (differential)
+ * @property x {number} cartesian position
+ * @property y {number} cartesian position
+ * @property z {number} cartesian position
+ * @property r {number} spherical position
+ * @property rxy {number} cylindrical position
+ * @property theta {number} cylindrical and spherical position
+ * @property phi {number} spherical position
+ * @property lat {number} latitude position
+ * @property lon {number} longitude position
+ *
+ * @property vx {number} cartesian speed
+ * @property vy {number} cartesian speed
+ * @property vz {number} cartesian speed
+ * @property vr {number} spherical speed
+ * @property vrxy {number} cylindrical speed
+ * @property vtheta {number} cylindrical and spherical speed
+ * @property vphi {number} spherical speed
  */
 
 class Point {
-    constructor(mass, trajectory) {
-        this.mass = mass;
+    constructor(trajectory, mass = 0, solver = new Solver()) {
         this.trajectory = trajectory;
+        this.mass = mass;
+        this.solver = solver;
+    }
+
+    get position() {
+        return this.trajectory.last.relative;
+    }
+
+    set position(newPosition) {
+        this.trajectory.last.relative = newPosition;
+    }
+
+    get speed() {
+        return this.du.div(this.dt);
+    }
+
+    get du() {
+        return this.trajectory.last.relative.sub(this.trajectory.nexto.relative);
+    }
+
+    set du(newDu) {
+        this.trajectory.last.relative = this.trajectory.nexto.relative.add(newDu);
+    }
+
+    get dt() {
+        return this.trajectory.dt[this.trajectory.lastStepIndex];
     }
 
     get x() {
+        return this.trajectory.last.relative.x;
     }
 
     set x(newX) {
+        this.trajectory.last.vector.x = newX + this.trajectory.last.origin.x;
     }
 
     get y() {
-        return;
+        return this.trajectory.last.relative.y;
     }
 
-    set y(newX) {
-
+    set y(newY) {
+        this.trajectory.last.vector.y = newY + this.trajectory.last.origin.y;
     }
 
     get z() {
-        return;
+        return this.trajectory.last.relative.z;
     }
 
-    set z(newX) {
-
+    set z(newZ) {
+        this.trajectory.last.vector.z = newZ + this.trajectory.last.origin.z;
     }
 
     get r() {
-        return;
+        return this.trajectory.last.relative.r;
     }
 
-    set r(newX) {
-
+    set r(newR) {
+        this.trajectory.last.vector.r = newR + this.trajectory.last.origin.r;
     }
 
     get rxy() {
-        return;
+        return this.trajectory.last.relative.rxy;
     }
 
-    set rxy(newX) {
-
+    set rxy(newRxy) {
+        this.trajectory.last.vector.rxy = newRxy + this.trajectory.last.origin.rxy;
     }
 
     get theta() {
-        return;
+        return this.trajectory.last.relative.theta;
     }
 
-    set theta(newX) {
-
+    set theta(newTheta) {
+        let relative = this.trajectory.last.relative;
+        relative.theta = newTheta;
+        this.trajectory.last.relative = relative;
     }
 
     get phi() {
-        return;
+        return this.trajectory.last.relative.phi;
     }
 
-    set phi(newX) {
-
+    set phi(newPhi) {
+        let relative = this.trajectory.last.relative;
+        relative.phi = newPhi;
+        this.trajectory.last.relative = relative;
     }
 
     get lat() {
-        return;
+        return this.trajectory.last.relative.lat;
     }
 
-    set lat(newX) {
-
+    set lat(newLat) {
+        let relative = this.trajectory.last.relative;
+        relative.lat = newLat;
+        this.trajectory.last.relative = relative;
     }
 
     get lon() {
-        return;
+        return this.trajectory.last.relative.lon;
     }
 
-    set lon(newX) {
-
+    set lon(newLon) {
+        let relative = this.trajectory.last.relative;
+        relative.lon = newLon;
+        this.trajectory.last.relative = relative;
     }
 
     get vx() {
-        return;
-    }
-
-    set vx(newX) {
-
+        return (this.trajectory.last.relative.x - this.trajectory.nexto.relative.x) / this.dt;
     }
 
     get vy() {
-        return;
-    }
-
-    set vy(newX) {
-
+        return (this.trajectory.last.relative.y - this.trajectory.nexto.relative.y) / this.dt;
     }
 
     get vz() {
-        return;
-    }
-
-    set vz(newX) {
-
+        return (this.trajectory.last.relative.z - this.trajectory.nexto.relative.z) / this.dt;
     }
 
     get vr() {
-        return;
-    }
-
-    set vr(newX) {
-
+        return (this.trajectory.last.relative.r - this.trajectory.nexto.relative.r) / this.dt;
     }
 
     get vrxy() {
-        return;
-    }
-
-    set vrxy(newX) {
-
+        return (this.trajectory.last.relative.rxy - this.trajectory.nexto.relative.rxy) / this.dt;
     }
 
     get vtheta() {
-        return;
-    }
-
-    set vtheta(newX) {
-
+        return (this.trajectory.last.relative.theta - this.trajectory.nexto.relative.theta) / this.dt;
     }
 
     get vphi() {
-        return;
-    }
-
-    set vphi(newX) {
-
+        return (this.trajectory.last.relative.phi - this.trajectory.nexto.relative.phi) / this.dt;
     }
 
     /**
      * @brief updates the position of the point
      * @details Solves a step of the ODE of the solver and update position.
-     * @param solver {Solver} solver to use to calculate next position
+     * @param dt {number=} time step for this iteration
+     * @param origin {Vector3=} origin to set for the solution
+     * @param method {Solver.methods=} method to use for this step
      * @returns {Point} reference to this
      */
-    update(solver) {
-        return;
+    update(dt, origin, method) {
+        this.solver.buffer(this.trajectory, dt, origin, method);
+        return this;
     }
 
     /**
      * @brief changes the frame of the point
      * @details The whole trajectory of the point is changed.
-     * @param point {Point} point to set as frame
-     * @return {Point} reference to this
+     * @param p {Point} point to set as frame
+     * @returns {Point} reference to this
      */
-    reframe(point) {
-        return;
+    reframe(p) {
+        this.trajectory.origin = p.trajectory.absolute;
+        return this;
+    }
+
+    copy() {
+        return new Point(this.trajectory.copy(), this.mass, this.solver);
+    }
+
+    /**
+     * @brief point located at zero
+     * @param mass {number=} mass of the point
+     * @param frame {Vector3=} absolute coordinates of the frame of the point
+     * @param size {number=} size of the trajectory buffer
+     * @returns {Point} new instance of point
+     */
+    static zeros(mass, frame = Vector3.zeros, size = 2) {
+        return new Point(BufferTrajectory.zeros(frame, size), mass);
     }
 }
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Point;
+else
+    window.Point = Point;
