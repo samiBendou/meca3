@@ -4,7 +4,7 @@ describe("Matrix3 Tests", function () {
     const Vector3 = require("../Vector3.js");
     const Matrix3 = require("../Matrix3.js");
 
-    let a, b, c;
+    let a, b, c, cInv;
 
     function setUp() {
         a = Matrix3.eye;
@@ -19,6 +19,12 @@ describe("Matrix3 Tests", function () {
             2, -1, 0,
             -1, 2, -1,
             0, -1, 2
+        );
+
+        cInv = new Matrix3(
+            0.75, 0.50, 0.25,
+            0.50, 1.00, 0.50,
+            0.25, 0.50, 0.75
         );
     }
 
@@ -54,11 +60,7 @@ describe("Matrix3 Tests", function () {
     it("Inverse", function () {
         setUp();
         assert(a.inv().isEqual(a));
-        assert(c.inv().isEqual(new Matrix3(
-            0.75, 0.50, 0.25,
-            0.50, 1.00, 0.50,
-            0.25, 0.50, 0.75
-        )));
+        assert(c.inv().isEqual(cInv));
         assert(c.prod(c.copy().inv()).isEqual(a));
     });
 
@@ -67,6 +69,7 @@ describe("Matrix3 Tests", function () {
         assert(a.pow(2).isEqual(a));
         assert(b.pow(0).isEqual(a));
         assert(a.mul(2).pow(4).isEqual(Matrix3.eye.mul(16)));
+        assert(c.pow(-1).isEqual(cInv));
         assert(Matrix3.ones.pow(3).isEqual(Matrix3.ones.mul(9)));
     });
 
