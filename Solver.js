@@ -75,10 +75,9 @@ class Solver {
      * @param method {string=} method to use for this step
      * @returns {BufferTrajectory} reference to `trajectory`
      */
-    buffer(trajectory, dt, origin, method = Solver.methods.default) {
+    buffer(trajectory, dt = this.dt1, origin = trajectory.pairs[trajectory.lastIndex].origin, method = this.method) {
         let next = this.step(trajectory.last.vector, trajectory.nexto.vector, trajectory.duration(), dt, method);
-        let index = trajectory.addIndex > 0 ? trajectory.addIndex - 1 : trajectory.size - 1;
-        trajectory.add(new PointPair(origin || trajectory.pairs[index].origin, next), this.dt0);
+        trajectory.add(new PointPair(origin, next), this.dt0);
         return trajectory;
     }
 
@@ -88,12 +87,12 @@ class Solver {
      * `this.dt0` is modified after the operation.
      * @param u0 {Vector3} initial unknown
      * @param v0 {Vector3} initial derivative of unknown
-     * @param dt {number=} initial time step
+     * @param dt0 {number=} initial time step
      * @returns {Vector3} solution right after initial instant
      */
-    initialTransform(u0, v0, dt = this.dt0) {
-        let u1 = v0.copy().mul(this.dt0).add(u0);
-        return u1.add(this.field(u1, 0).mul(this.dt0 * this.dt0 / 2));
+    initialTransform(u0, v0, dt0 = this.dt0) {
+        let u1 = v0.copy().mul(dt0).add(u0);
+        return u1.add(this.field(u1, 0).mul(dt0 * dt0 / 2));
     }
 
     /**
@@ -106,7 +105,7 @@ class Solver {
      * @param method {string=} solving method to use
      * @returns {Array} array containing successive solutions of ODE as `Vector3`
      */
-    solve(u0, v0, count, dt = [], method) {
+    solve(u0, v0, count, dt = [], method = Solver.methods.default) {
         let u = new Array(count);
 
         this.dt0 = typeof dt === "number" ? dt : this.dt0;
@@ -128,7 +127,7 @@ class Solver {
      * @param method {string=} solving method to use
      * @returns {Array} array containing successive solutions of ODE as `Vector3`
      */
-    solveMax(u0, v0, tmax, dt = this.dt0, method = Solver.methods.default) {
+    solveMax(u0, v0, tmax, dt = 1, method = Solver.methods.default) {
         return this.solve(u0, v0, Math.floor(tmax / this.dt0), this.dt0, method);
     }
 
@@ -158,7 +157,7 @@ class Solver {
      * @param method {string=} solving method to use
      * @returns {Trajectory} new instance of trajectory containing the solution
      */
-    trajectoryMax(u0, v0, tmax, dt, origin = Vector3.zeros, method = Solver.methods.default) {
+    trajectoryMax(u0, v0, tmax, dt = 1, origin = Vector3.zeros, method = Solver.methods.default) {
         return Trajectory.discrete(this.solveMax(u0, v0, tmax, dt, method), dt, origin);
     }
 }
