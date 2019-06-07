@@ -97,7 +97,7 @@ class Solver {
 
     /**
      * @brief solve ODE with by giving number of iterations
-     * @details `dt0` array must be of size `count - 1`.
+     * @details `dt0` array must be of _size `count - 1`.
      * @param u0 {Vector3} initial unknown
      * @param v0 {Vector3} initial derivative of unknown
      * @param count {number} number of steps to solve

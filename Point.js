@@ -223,7 +223,7 @@ class Point {
      * @brief point located at zero
      * @param mass {number=} mass of the point
      * @param frame {Vector3=} absolute coordinates of the frame of the point
-     * @param size {number=} size of the trajectory buffer
+     * @param size {number=} _size of the trajectory buffer
      * @returns {Point} new instance of point
      */
     static zeros(mass, frame = Vector3.zeros, size = 2) {

@@ -57,7 +57,10 @@ describe("BufferTrajectory Tests", function () {
         setUp();
         gamma1.size++;
         gamma1.add(om0);
-        assert(gamma1.isEqual(new Trajectory([om0, om2], dt)));
+        assert(gamma1.isEqual(new Trajectory([om1, om2, om0], dt)), gamma1.toString());
+
+        gamma1.add(om0);
+        assert(gamma1.isEqual(new Trajectory([om0, om2, om0], dt)), gamma1.toString());
     });
 
     it("Clear", function () {

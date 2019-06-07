@@ -1,14 +1,14 @@
 /**
  * @class BufferTrajectory
  * @author samiBendou
- * @brief fixed size trajectory
+ * @brief fixed _size trajectory
  * @details `BufferTrajectory` class inherit from `Trajectory` class.
  *
  * Construct a `BufferTrajectory` by giving the _size_ of the buffer and a base `Trajectory` object.
  *
  * #### Features
  *
- * - **Fixed size** array to represent trajectory
+ * - **Fixed _size** array to represent trajectory
  *
  * - **Insertion by replacement** when buffer is full
  *
@@ -28,11 +28,20 @@ class BufferTrajectory extends Trajectory {
 
     constructor(trajectory, size) {
         super();
-        this.size = size || (trajectory !== undefined ? trajectory.pairs.length : 2);
+        this._size = size || (trajectory !== undefined ? trajectory.pairs.length : 2);
         this.addIndex = 0;
         this.clear();
         if (trajectory !== undefined)
             this.bufferize(trajectory);
+    }
+
+    get size() {
+        return this._size;
+    }
+
+    set size(newSize) {
+        this.addIndex = this.addIndex || newSize - 1;
+        this._size = newSize;
     }
 
     get first() {
@@ -77,18 +86,18 @@ class BufferTrajectory extends Trajectory {
     /**
      * @brief initialize a buffer trajectory with a `Trajectory
      * @details This method behaves as follows :
-     * - If buffer's size is greater then trajectory size, then the whole
+     * - If buffer's _size is greater then trajectory _size, then the whole
      * trajectory is added at the beginning of the buffer and the rest is filled with zeros.
      *
-     * - If buffer's size is smaller then trajectory size, then the trajectory is
+     * - If buffer's _size is smaller then trajectory _size, then the trajectory is
      * truncated and only the last elements of the trajectory are added.
      *
      * @param trajectory {Trajectory} trajectory to bufferize
      * @return {BufferTrajectory} reference to `this`
      */
     bufferize(trajectory) {
-        let delta = (trajectory.pairs.length - this.size);
-        let end = delta >= 0 ? this.size : trajectory.pairs.length;
+        let delta = (trajectory.pairs.length - this._size);
+        let end = delta >= 0 ? this._size : trajectory.pairs.length;
 
         this.pairs = this.pairs.map((pair, index) =>
             index < end ? trajectory.pairs[delta >= 0 ? (index + delta) : index].copy() : PointPair.zeros()
@@ -102,28 +111,28 @@ class BufferTrajectory extends Trajectory {
     }
 
     t(s) {
-        let scale = s * (this.size - 1);
-        let s0 = Math.floor((scale + this.addIndex)) % this.size;
+        let scale = s * (this._size - 1);
+        let s0 = Math.floor((scale + this.addIndex)) % this._size;
         let t = this.duration(Math.floor(scale));
         return s0 < this.dt.length ? t + (scale - Math.floor(scale)) * this.dt[Math.max(s0 - 1, 0)] : t;
     }
 
-    duration(i = this.size) {
+    duration(i = this._size) {
         let adder = (acc, dt) => acc + dt;
         let end = i + this.addIndex;
-        let sum = this.dt.slice(this.addIndex, Math.min(this.size, end)).reduce(adder, 0);
-        return sum + (end > this.size ? this.dt.slice(0, end % this.size).reduce(adder, 0) : 0);
+        let sum = this.dt.slice(this.addIndex, Math.min(this._size, end)).reduce(adder, 0);
+        return sum + (end > this._size ? this.dt.slice(0, end % this._size).reduce(adder, 0) : 0);
     }
 
     get(i) {
-        return this.pairs[(i + this.addIndex) % this.size];
+        return this.pairs[(i + this.addIndex) % this._size];
     }
 
     /**
      * @brief add a new point pair to the trajectory
      * @details `addIndex` is incremented each time a point is added.
      *
-     * When `addIndex` is greater than the size of the buffer, it is set to zero.
+     * When `addIndex` is greater than the _size of the buffer, it is set to zero.
      *
      * The value contained at `addIndex` is replaced when adding new points.
      *
@@ -134,19 +143,19 @@ class BufferTrajectory extends Trajectory {
     add(pair, dt) {
         this.pairs[this.addIndex] = pair;
         this.dt[this.addStepIndex] = dt || this.dt[this.lastStepIndex] || 1;
-        this.addIndex = (this.addIndex + 1) % this.size;
+        this.addIndex = (this.addIndex + 1) % this._size;
         return this;
     }
 
     clear() {
-        this.pairs = new Array(this.size).fill(PointPair.zeros());
-        this.dt = new Array(this.size - 1).fill(1);
+        this.pairs = new Array(this._size).fill(PointPair.zeros());
+        this.dt = new Array(this._size - 1).fill(1);
         this.addIndex = 0;
         return this;
     }
 
     copy() {
-        let copy = new BufferTrajectory(super.copy(), this.size);
+        let copy = new BufferTrajectory(super.copy(), this._size);
         copy.addIndex = this.addIndex;
         return copy;
     }
