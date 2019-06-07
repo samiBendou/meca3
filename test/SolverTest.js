@@ -12,14 +12,14 @@ describe("Solver Tests", function () {
     let dt = 0.1;
 
     function setUp() {
-        freq = 1 / 10;
+        freq = 1 / 15;
         pulse = freq * 2 * Math.PI;
         amp = Vector3.ones;
 
-        k = 1;
+        k = 9.81;
 
         tol = 0.01;
-        count = Math.floor(1 / (freq * dt));
+        count = Math.floor(5 / (freq * dt));
 
         osolver = new Solver((u) => u.oppc().mul(pulse ** 2), dt); // harmonic oscillator d2u/dt2 = -u
         gsolver = new Solver(() => new Vector3(0, 0, k), dt); // constant gravity d2u/dt2 = k
