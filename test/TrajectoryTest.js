@@ -9,7 +9,7 @@ describe("Trajectory Tests", function () {
 
     let dt;
     let om0, om1, om2, om3, om4;
-    let gamma0, gamma1;
+    let gamma0, gamma1, gamma2;
 
     function setUp() {
         dt = 0.1;
@@ -21,6 +21,7 @@ describe("Trajectory Tests", function () {
 
         gamma0 = new Trajectory([om0, om1, om2], dt);
         gamma1 = new Trajectory([om0, om3, om4], dt);
+        gamma2 = new Trajectory([om0]);
     }
 
     it("Length", function () {
@@ -39,6 +40,14 @@ describe("Trajectory Tests", function () {
         setUp();
         let pp = new PointPair(om1.origin.copy(), om1.vector.copy().opp());
         assert(gamma0.add(pp).isEqual(new Trajectory([om0, om1, om2, pp], dt)));
+        assert(gamma2.add(om1).isEqual(new Trajectory([om0, om1], 1)));
+    });
+
+    it("Clear", function () {
+        setUp();
+        gamma0.clear();
+        assert.equal(gamma0.pairs.length, 0);
+        assert.equal(gamma0.dt.length, 0);
     });
 
     it("Origins", function () {

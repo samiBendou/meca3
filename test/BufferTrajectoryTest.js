@@ -30,6 +30,10 @@ describe("BufferTrajectory Tests", function () {
         assert(gamma0.isEqual(gamma));
         assert(gamma1.isEqual(new Trajectory([om1, om2], dt)));
         assert(gamma2.isEqual(new Trajectory([om0, om1, om2, PointPair.zeros()], dt)));
+
+        assert.equal(gamma0.dt.length, 2);
+        assert.equal(gamma1.dt.length, 1);
+        assert.equal(gamma2.dt.length, 3);
     });
 
     it("At", function () {
@@ -42,12 +46,24 @@ describe("BufferTrajectory Tests", function () {
         setUp();
         gamma1.add(om2);
         assert(gamma1.isEqual(new Trajectory([om2, om2], dt)));
-        gamma1 = new BufferTrajectory(gamma, 2);
 
         gamma2.add(om2);
         gamma2.add(om1);
         assert(gamma2.isEqual(new Trajectory([om1, om1, om2, om2], dt)));
         gamma2 = new BufferTrajectory(gamma, 4);
+    });
+
+    it("Resize", function () {
+        setUp();
+        gamma1.size++;
+        gamma1.add(om0);
+        assert(gamma1.isEqual(new Trajectory([om0, om2], dt)));
+    });
+
+    it("Clear", function () {
+        setUp();
+        gamma0.clear();
+        assert.equal(gamma0.addIndex, 0);
     });
 
     it("First/Last/Nexto", function () {
