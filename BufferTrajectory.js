@@ -1,14 +1,14 @@
 /**
  * @class BufferTrajectory
  * @author samiBendou
- * @brief fixed _size trajectory
+ * @brief fixed size trajectory
  * @details `BufferTrajectory` class inherit from `Trajectory` class.
  *
- * Construct a `BufferTrajectory` by giving the _size_ of the buffer and a base `Trajectory` object.
+ * Construct a `BufferTrajectory` by giving the size of the buffer and a base `Trajectory` object.
  *
  * #### Features
  *
- * - **Fixed _size** array to represent trajectory
+ * - **Fixed size** array to represent trajectory
  *
  * - **Insertion by replacement** when buffer is full
  *
@@ -86,10 +86,10 @@ class BufferTrajectory extends Trajectory {
     /**
      * @brief initialize a buffer trajectory with a `Trajectory
      * @details This method behaves as follows :
-     * - If buffer's _size is greater then trajectory _size, then the whole
+     * - If buffer's size is greater then trajectory size, then the whole
      * trajectory is added at the beginning of the buffer and the rest is filled with zeros.
      *
-     * - If buffer's _size is smaller then trajectory _size, then the trajectory is
+     * - If buffer's size is smaller then trajectory size, then the trajectory is
      * truncated and only the last elements of the trajectory are added.
      *
      * @param trajectory {Trajectory} trajectory to bufferize
@@ -132,7 +132,7 @@ class BufferTrajectory extends Trajectory {
      * @brief add a new point pair to the trajectory
      * @details `addIndex` is incremented each time a point is added.
      *
-     * When `addIndex` is greater than the _size of the buffer, it is set to zero.
+     * When `addIndex` is greater than the size of the buffer, it is set to zero.
      *
      * The value contained at `addIndex` is replaced when adding new points.
      *

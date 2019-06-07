@@ -165,7 +165,7 @@ class Trajectory {
     }
 
     isEqual(trajectory) {
-        if (trajectory.pairs._size !== this.pairs._size)
+        if (trajectory.pairs.length !== this.pairs.length)
             return false;
         return this.pairs.reduce((acc, pair, index) => acc && pair.isEqual(trajectory.pairs[index]), true);
     }
