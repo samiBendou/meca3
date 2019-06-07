@@ -8,17 +8,17 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  * @class Solver
  * @author samiBendou
  * @brief second order differential equations solver
- * @details `Solver` class allows to solve equations with the form  **d2u/dt2 = f(u, t)**.
+ * @details `Solver` class allows to solve equations with the form  **d2u/dt2 = f(u, v, t)**.
  *
  * We introduce the following definition :
  * - **u** is the _unknown vector_ function
- * - **v = du/dt** is the _derivative_ of **u**
+ * - **v = du/dt0** is the _derivative_ of **u**
  * - **d2u/dt2** denotes the _second order derivative_ of **u**
  * - **f(u, t)** is a _smooth function_ depending only on coordinates of **u** and time **t**
  *
  * Only explicit Euler's method is available for the moment.
  *
- * Construct a solver by giving a solving step **dt** as `number `and a function **f** as `function`.
+ * Construct a solver by giving a solving step **dt0** as `number `and a function **f** as `function`.
  *
  * #### Features
  *
@@ -28,43 +28,39 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  *
  * @property {function(Vector3): Vector3} **f** function as Javascript function that takes as parameter a `Vector3` and
  * returns a `Vector3`.
- * @property dt {number} current step between solution samples
+ * @property dt1 {number} current step between solution samples
+ * @property dt0 {number} previous step between solution samples
  * @property method {Solver.methods} current step between solution samples
  */
 
 const methods = {
-    EULER: function (field, cur, prev, t, dt) {
-        return cur.copy().mul(2).sub(prev).add(field(cur, t).mul(dt * dt));
+    EULER: function (f, u1, u0, t, dt0, dt1 = dt0) {
+        return u1.copy().mul(2).sub(u0).add(f(u1, t).mul(dt0 * dt1));
     },
-    /*
-    RK4: function(field, cur, prev, t, dt) {
-        return;
-    }
-    */
+    default: "EULER"
 };
 
 class Solver {
-    constructor(field = function () {
-        return Vector3.zeros;
-    }, dt = 1, method = "EULER") {
+    constructor(field = () => Vector3.zeros, dt = 1, method = Solver.methods.default) {
         this.field = field;
-        this.dt = dt;
+        this.dt0 = dt;
+        this.dt1 = dt;
         this.method = method;
     }
 
     /**
      * @brief compute one solution step
-     * @param cur {Vector3} current value of unknown vector
-     * @param prev {Vector3} previous value of unknown vector
+     * @param u1 {Vector3} current value of unknown vector
+     * @param u0 {Vector3} previous value of unknown vector
      * @param t {number} duration since initial instant
      * @param dt {number=} time step for this iteration
-     * @param method {Solver.methods=} method to use for this step
+     * @param method {string=} method to use for this step
      * @returns {Vector3} value of next solution from ODE
      */
-    step(cur, prev, t, dt, method) {
-        this.method = method || this.method;
-        this.dt = dt || this.dt;
-        return Solver.methods[this.method](this.field, cur, prev, t, this.dt);
+    step(u1, u0, t, dt = this.dt1, method = this.method) {
+        this.dt0 = this.dt1;
+        this.dt1 = dt;
+        return Solver.methods[this.method](this.field, u1, u0, t, this.dt0, this.dt1);
     }
 
     /**
@@ -76,49 +72,48 @@ class Solver {
      * @param trajectory {BufferTrajectory} buffer to store the computed iteration
      * @param dt {number=} time step for this iteration
      * @param origin {Vector3=} origin to set for the solution
-     * @param method {Solver.methods=} method to use for this step
+     * @param method {string=} method to use for this step
      * @returns {BufferTrajectory} reference to `trajectory`
      */
-    buffer(trajectory, dt, origin, method) {
+    buffer(trajectory, dt, origin, method = Solver.methods.default) {
         let next = this.step(trajectory.last.vector, trajectory.nexto.vector, trajectory.duration(), dt, method);
         let index = trajectory.addIndex > 0 ? trajectory.addIndex - 1 : trajectory.size - 1;
-        trajectory.add(new PointPair(origin || trajectory.pairs[index].origin, next), this.dt);
+        trajectory.add(new PointPair(origin || trajectory.pairs[index].origin, next), this.dt0);
         return trajectory;
     }
 
     /**
      * @brief transform speed and position initial conditions
      * @details Transforms the **u0**, **v0** initial condition into a **u0**, **u1** initial condition.
-     * `this.dt` is modified after the operation.
+     * `this.dt0` is modified after the operation.
      * @param u0 {Vector3} initial unknown
      * @param v0 {Vector3} initial derivative of unknown
      * @param dt {number=} initial time step
      * @returns {Vector3} solution right after initial instant
      */
-    initialTransform(u0, v0, dt) {
-        this.dt = dt || this.dt;
-        let u1 = v0.copy().mul(this.dt).add(u0);
-        return u1.add(this.field(u1, 0).mul(this.dt * this.dt / 2));
+    initialTransform(u0, v0, dt = this.dt0) {
+        let u1 = v0.copy().mul(this.dt0).add(u0);
+        return u1.add(this.field(u1, 0).mul(this.dt0 * this.dt0 / 2));
     }
 
     /**
      * @brief solve ODE with by giving number of iterations
-     * @details `dt` array must be of size `count - 1`.
+     * @details `dt0` array must be of size `count - 1`.
      * @param u0 {Vector3} initial unknown
      * @param v0 {Vector3} initial derivative of unknown
      * @param count {number} number of steps to solve
      * @param dt {Array|number=} time steps between each iteration
-     * @param method {Solver.methods=} solving method to use
+     * @param method {string=} solving method to use
      * @returns {Array} array containing successive solutions of ODE as `Vector3`
      */
     solve(u0, v0, count, dt = [], method) {
         let u = new Array(count);
 
-        this.dt = typeof dt === "number" ? dt : this.dt;
+        this.dt0 = typeof dt === "number" ? dt : this.dt0;
         u[0] = u0.copy();
         u[1] = this.initialTransform(u0, v0, dt[0]);
         for (let i = 2; i < count; i++) {
-            u[i] = this.step(u[i - 1], u[i - 2], i * this.dt, dt[i - 1], method);
+            u[i] = this.step(u[i - 1], u[i - 2], i * this.dt0, dt[i - 1], method);
         }
 
         return u;
@@ -130,12 +125,11 @@ class Solver {
      * @param v0 {Vector3} initial derivative of unknown
      * @param tmax {number} total solving duration
      * @param dt {number=} constant time step iterations
-     * @param method {Solver.methods=} solving method to use
+     * @param method {string=} solving method to use
      * @returns {Array} array containing successive solutions of ODE as `Vector3`
      */
-    solveMax(u0, v0, tmax, dt, method) {
-        this.dt = dt || this.dt;
-        return this.solve(u0, v0, Math.floor(tmax / this.dt), this.dt, method);
+    solveMax(u0, v0, tmax, dt = this.dt0, method = Solver.methods.default) {
+        return this.solve(u0, v0, Math.floor(tmax / this.dt0), this.dt0, method);
     }
 
     /**
@@ -146,10 +140,10 @@ class Solver {
      * @param count {number} number of steps to solve
      * @param dt {Array|number=} time steps between each iteration
      * @param origin {Vector3=} observer's position
-     * @param method {Solver.methods=} solving method to use
+     * @param method {string=} solving method to use
      * @returns {Trajectory} new instance of trajectory containing the solution
      */
-    trajectory(u0, v0, count, dt = [], origin = Vector3.zeros, method) {
+    trajectory(u0, v0, count, dt = [], origin = Vector3.zeros, method = Solver.methods.default) {
         return Trajectory.discrete(this.solve(u0, v0, count, dt, method), dt, origin);
     }
 
@@ -161,10 +155,10 @@ class Solver {
      * @param tmax {number} total solving duration
      * @param dt {number=} constant time step iterations
      * @param origin {Vector3=} observer's position
-     * @param method {Solver.methods=} solving method to use
+     * @param method {string=} solving method to use
      * @returns {Trajectory} new instance of trajectory containing the solution
      */
-    trajectoryMax(u0, v0, tmax, dt, origin = Vector3.zeros, method) {
+    trajectoryMax(u0, v0, tmax, dt, origin = Vector3.zeros, method = Solver.methods.default) {
         return Trajectory.discrete(this.solveMax(u0, v0, tmax, dt, method), dt, origin);
     }
 }

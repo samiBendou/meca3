@@ -94,7 +94,7 @@ class PointPair {
     }
 
     copy() {
-        return new PointPair(this.origin.copy(), this.vector.copy());
+        return new PointPair(this.origin, this.vector);
     }
 
     /**

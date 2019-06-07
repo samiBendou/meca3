@@ -27,13 +27,12 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 class BufferTrajectory extends Trajectory {
 
     constructor(trajectory, size) {
-        size = size || (trajectory === undefined ? 2 : trajectory.pairs.length);
-        super((new Array(size)).fill(PointPair.zeros()), new Array(size - 1).fill(1));
-        this.size = size;
+        super();
+        this.size = size || (trajectory !== undefined ? trajectory.pairs.length : 2);
         this.addIndex = 0;
-        if (trajectory !== undefined) {
+        this.clear();
+        if (trajectory !== undefined)
             this.bufferize(trajectory);
-        }
     }
 
     get first() {
@@ -52,8 +51,7 @@ class BufferTrajectory extends Trajectory {
     }
 
     get nexto() {
-        let index = this.addIndex > 1 ? this.addIndex - 2 : this.pairs.length - 2 + this.addIndex;
-        return this.pairs[index] || PointPair.zeros();
+        return this.pairs[this.nextoIndex] || PointPair.zeros();
     }
 
     set nexto(newNexto) {
@@ -92,19 +90,14 @@ class BufferTrajectory extends Trajectory {
         let delta = (trajectory.pairs.length - this.size);
         let end = delta >= 0 ? this.size : trajectory.pairs.length;
 
-        this.pairs[0] = trajectory.pairs[delta >= 0 ? delta : 0].copy();
-        for (let i = 1; i < end; i++) {
-            let index = delta >= 0 ? (i + delta) : i;
-            this.pairs[i] = trajectory.pairs[index].copy();
-            this.dt[i - 1] = trajectory.dt[index - 1];
-        }
-
-        for (let i = end; i < this.size; i++) {
-            this.pairs[i] = PointPair.zeros();
-            this.dt[i - 1] = 0;
-        }
-
+        this.pairs = this.pairs.map((pair, index) =>
+            index < end ? trajectory.pairs[delta >= 0 ? (index + delta) : index].copy() : PointPair.zeros()
+        );
+        this.dt = this.dt.map((dt, index) =>
+            index < end ? trajectory.dt[delta >= 0 ? (index + delta) : index] : trajectory.dt[0]
+        );
         this.addIndex = delta >= 0 ? 0 : trajectory.pairs.length;
+
         return this;
     }
 
@@ -115,22 +108,11 @@ class BufferTrajectory extends Trajectory {
         return s0 < this.dt.length ? t + (scale - Math.floor(scale)) * this.dt[Math.max(s0 - 1, 0)] : t;
     }
 
-    step(s) {
-        let scale = s * (this.size - 1);
-        let s0 = Math.floor((scale + this.addIndex)) % this.size;
-        return this.dt[Math.max(s0 - 1, 0)];
-    }
-
-    duration(i) {
+    duration(i = this.size) {
         let adder = (acc, dt) => acc + dt;
-        if(i === undefined) {
-            return this.dt.reduce(adder, 0);
-        } else if (i + this.addIndex < this.size) {
-            return this.dt.slice(this.addIndex, i + this.addIndex).reduce(adder, 0);
-        } else {
-            let end = (i + this.addIndex) % this.size;
-            return this.dt.slice(0, end).reduce(adder, 0) + this.dt.slice(this.addIndex, this.size).reduce(adder, 0);
-        }
+        let end = i + this.addIndex;
+        let sum = this.dt.slice(this.addIndex, Math.min(this.size, end)).reduce(adder, 0);
+        return sum + (end > this.size ? this.dt.slice(0, end % this.size).reduce(adder, 0) : 0);
     }
 
     get(i) {
@@ -150,23 +132,16 @@ class BufferTrajectory extends Trajectory {
      * @returns {Trajectory} reference to `this`
      */
     add(pair, dt) {
-        let index = this.addStepIndex;
-        if (dt !== undefined) {
-            this.dt[index] = dt;
-        } else if (this.dt.length > 1) {
-            this.dt[index] = this.dt[this.lastStepIndex];
-        } else {
-            this.dt[index] = 1;
-        }
-
         this.pairs[this.addIndex] = pair;
+        this.dt[this.addStepIndex] = dt || this.dt[this.lastStepIndex] || 1;
         this.addIndex = (this.addIndex + 1) % this.size;
         return this;
     }
 
     clear() {
-        this.pairs = new Array(this.size);
-        this.dt = new Array(this.dt);
+        this.pairs = new Array(this.size).fill(PointPair.zeros());
+        this.dt = new Array(this.size - 1).fill(1);
+        this.addIndex = 0;
         return this;
     }
 
@@ -192,9 +167,9 @@ class BufferTrajectory extends Trajectory {
      */
     static discrete(positions, dt = 1, origin = Vector3.zeros) {
         let pairs = positions;
-        if (positions[0] instanceof Vector3) {
+        if (positions[0] instanceof Vector3)
             pairs = positions.map((u) => new PointPair(origin, u));
-        }
+
         return new BufferTrajectory(new Trajectory(pairs, dt));
     }
 }

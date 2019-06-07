@@ -34,7 +34,7 @@ describe("Matrix3 Tests", function () {
     it("Matrix Product", function () {
         setUp();
         assert(a.prod(a).isEqual(a));
-        assert(b.prod(a.copy().mul(2)).isEqual(b.copy().mul(2)));
+        assert(b.copy().prod(a.copy().mul(2)).isEqual(b.mul(2)));
     });
 
     it("Linear mapping", function () {
@@ -59,7 +59,7 @@ describe("Matrix3 Tests", function () {
             0.50, 1.00, 0.50,
             0.25, 0.50, 0.75
         )));
-        assert(c.prod(c.inv()).isEqual(a));
+        assert(c.prod(c.copy().inv()).isEqual(a));
     });
 
     it("Get elements", function () {

@@ -192,13 +192,7 @@ class Matrix3 {
     }
 
     copy() {
-        let copy = new Matrix3();
-
-        copy.x = this.x.copy();
-        copy.y = this.y.copy();
-        copy.z = this.z.copy();
-
-        return copy;
+        return new Matrix3(...this.to1D());
     }
 
     isEqual(m) {
@@ -226,7 +220,7 @@ class Matrix3 {
      * @return {Array} array containing the components of the matrix ordered as rows
      */
     to1D() {
-        return this.x.to1D().concat(this.y.to1D()).concat(this.z.to1D());
+        return [...this.x.to1D(), ...this.y.to1D(), ...this.z.to1D()];
     }
 
     static get zeros() {

@@ -35,7 +35,7 @@ class Trajectory {
 
     constructor(pairs = [], dt = 1) {
         this.pairs = pairs;
-        this.dt = (typeof dt == "number") ? Array(pairs.length - 1).fill(dt) : dt;
+        this.dt = (typeof dt == "number") ? Array(Math.max(pairs.length - 1, 0)).fill(dt) : dt;
     }
 
     get first() {
@@ -146,15 +146,6 @@ class Trajectory {
     }
 
     /**
-     * @brief time step at curvilinear abscissa
-     * @param s {number} curvilinear abscissa
-     * @return {number} value of the time step
-     */
-    step(s) {
-        return this.dt[Math.floor(s * (this.dt.length - 1))];
-    }
-
-    /**
      * @brief position at integer index
      * @param i {number} number of samples to count
      * @returns {PointPair} position at index `i`
@@ -169,15 +160,13 @@ class Trajectory {
      * @param i {number=} number of samples to count
      * @returns {number} value of duration at index `i`
      */
-    duration(i) {
-        i = i === undefined ? this.dt.length : i;
+    duration(i = this.dt.length) {
         return +(this.dt.slice(0, i).reduce((acc, dt) => acc + dt, 0));
     }
 
     isEqual(trajectory) {
-        if (trajectory.pairs.size !== this.pairs.size) {
+        if (trajectory.pairs.size !== this.pairs.size)
             return false;
-        }
         return this.pairs.reduce((acc, pair, index) => acc && pair.isEqual(trajectory.pairs[index]), true);
     }
 
@@ -193,15 +182,8 @@ class Trajectory {
      * @returns {Trajectory} reference to `this`
      */
     add(pair, dt) {
-        if (dt !== undefined) {
-            this.dt.push(dt);
-        } else if (this.dt.length > 1) {
-            this.dt.push(this.dt[this.dt.length - 1]);
-        } else {
-            this.dt.push(1);
-        }
+        this.dt.push(dt || this.dt[this.dt.length - 1] || 1);
         this.pairs.push(pair);
-
         return this;
     }
 
