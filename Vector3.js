@@ -127,6 +127,10 @@ class Vector3 {
         return this;
     }
 
+    fillc(s) {
+        return this.copy().fill(s);
+    }
+
     /**
      * @brief addition between two vectors
      * @param u {Vector3} vector to add
@@ -137,6 +141,10 @@ class Vector3 {
         this.y += u.y;
         this.z += u.z;
         return this;
+    }
+
+    addc(u) {
+        return this.copy().add(u);
     }
 
     /**
@@ -151,6 +159,10 @@ class Vector3 {
         return this;
     }
 
+    subc(u) {
+        return this.copy().sub(u);
+    }
+
     /**
      * @brief opposite of the vector
      * @returns {Vector3} reference to `this`
@@ -160,6 +172,10 @@ class Vector3 {
         this.y *= -1;
         this.z *= -1;
         return this;
+    }
+
+    oppc() {
+        return this.copy().opp();
     }
 
     /**
@@ -174,6 +190,10 @@ class Vector3 {
         return this;
     }
 
+    mulc(s) {
+        return this.copy().mul(s);
+    }
+
     /**
      * @brief scalar division of the vector
      * @param s {number} scalar to divide
@@ -184,6 +204,10 @@ class Vector3 {
         this.y /= s;
         this.z /= s;
         return this;
+    }
+
+    divc(s) {
+        return this.copy().div(s);
     }
 
     /**
@@ -207,6 +231,10 @@ class Vector3 {
             this.x * u.y - this.y * u.x
         );
         return this;
+    }
+
+    crossc(u) {
+        return this.copy().cross(u);
     }
 
     /**

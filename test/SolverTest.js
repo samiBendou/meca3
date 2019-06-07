@@ -8,7 +8,7 @@ describe("Solver Tests", function () {
     let osolver, gsolver;
 
     function setUp() {
-        osolver = new Solver((u) => u.copy().opp()); // harmonic oscillator d2u/dt2 = -u
+        osolver = new Solver((u) => u.oppc()); // harmonic oscillator d2u/dt2 = -u
         gsolver = new Solver(() => new Vector3(0, 0, 2)); // constant gravity d2u/dt2 = k
     }
 

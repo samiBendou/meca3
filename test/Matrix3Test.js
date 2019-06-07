@@ -30,7 +30,7 @@ describe("Matrix3 Tests", function () {
 
     it("Transpose", function () {
         setUp();
-        assert(b.trans().isEqual(new Matrix3(
+        assert(b.transc().isEqual(new Matrix3(
             1, 1, 1,
             2, 2, 2,
             3, 3, 3
@@ -40,14 +40,14 @@ describe("Matrix3 Tests", function () {
     it("Matrix Product", function () {
         setUp();
         assert(a.prod(a).isEqual(a));
-        assert(b.copy().prod(a.copy().mul(2)).isEqual(b.mul(2)));
+        assert(b.prodc(a.mulc(2)).isEqual(b.mul(2)));
     });
 
     it("Linear mapping", function () {
         setUp();
         let u = Vector3.ones;
         assert(a.map(u).isEqual(u));
-        assert(b.map(u).isEqual(new Vector3(6, 6, 6)));
+        assert(b.mapc(u).isEqual(new Vector3(6, 6, 6)));
     });
 
     it("Determinant", function () {
@@ -61,16 +61,17 @@ describe("Matrix3 Tests", function () {
         setUp();
         assert(a.inv().isEqual(a));
         assert(c.inv().isEqual(cInv));
-        assert(c.prod(c.copy().inv()).isEqual(a));
+        assert(c.prod(c.invc()).isEqual(a));
     });
 
     it("Exponentiation", function () {
         setUp();
         assert(a.pow(2).isEqual(a));
         assert(b.pow(0).isEqual(a));
+        assert(c.pow(1).isEqual(c));
         assert(a.mul(2).pow(4).isEqual(Matrix3.eye.mul(16)));
         assert(c.pow(-1).isEqual(cInv));
-        assert(Matrix3.ones.pow(3).isEqual(Matrix3.ones.mul(9)));
+        assert(Matrix3.ones.powc(3).isEqual(Matrix3.ones.mul(9)));
     });
 
     it("Get elements", function () {

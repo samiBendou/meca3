@@ -35,7 +35,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 const methods = {
     EULER: function (f, u1, u0, t, dt0, dt1 = dt0) {
-        return u1.copy().mul(2).sub(u0).add(f(u1, t).mul(dt0 * dt1));
+        return u1.mulc(2).sub(u0).add(f(u1, t).mul(dt0 * dt1));
     },
     default: "EULER"
 };
@@ -91,7 +91,7 @@ class Solver {
      * @returns {Vector3} solution right after initial instant
      */
     initialTransform(u0, v0, dt0 = this.dt0) {
-        let u1 = v0.copy().mul(dt0).add(u0);
+        let u1 = v0.mulc(dt0).add(u0);
         return u1.add(this.field(u1, 0).mul(dt0 * dt0 / 2));
     }
 

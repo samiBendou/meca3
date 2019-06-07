@@ -39,11 +39,11 @@ class PointPair {
     }
 
     get relative() {
-        return this.vector.copy().sub(this.origin);
+        return this.vector.subc(this.origin);
     }
 
     set relative(rel) {
-        this.vector = rel.copy().add(this.origin);
+        this.vector = rel.addc(this.origin);
     }
 
     /**

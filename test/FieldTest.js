@@ -13,7 +13,7 @@ describe("Point Tests", function () {
         let makeField = function (points) {
             return function (u) {
                 return points.reduce(function (acc, point) {
-                    return acc.add(point.trajectory.last.vector.copy().sub(u).sub(Vector3.ones).div(points.length));
+                    return acc.add(point.trajectory.last.vector.subc(u).sub(Vector3.ones).div(points.length));
                 }, Vector3.zeros);
             }
         };

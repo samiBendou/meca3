@@ -38,7 +38,7 @@ describe("Trajectory Tests", function () {
 
     it("Add", function () {
         setUp();
-        let pp = new PointPair(om1.origin.copy(), om1.vector.copy().opp());
+        let pp = new PointPair(om1.origin.copy(), om1.vector.oppc());
         assert(gamma0.add(pp).isEqual(new Trajectory([om0, om1, om2, pp], dt)));
         assert(gamma2.add(om1).isEqual(new Trajectory([om0, om1], 1)));
     });

@@ -30,7 +30,7 @@ class VSpace {
      */
     static comb(scalars, vectors) {
         let initializer = VSpace.initializer(vectors[0]);
-        return vectors.reduce((acc, u, index) => acc.add(u.copy().mul(scalars[index])), initializer);
+        return vectors.reduce((acc, u, index) => acc.add(u.mulc(scalars[index])), initializer);
     }
 
     static initializer(vector) {

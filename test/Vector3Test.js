@@ -11,22 +11,29 @@ describe("Vector3 Tests", function () {
         w = Vector3.ez;
     }
 
+    it("Fill", function () {
+        setUp();
+        assert(u.fillc(3).isEqual(new Vector3(3, 3, 3)));
+    });
+
     it("Add", function () {
         setUp();
-        assert(u.copy().add(u).isEqual(new Vector3(2, 0, 0)));
-        assert(u.copy().add(v).isEqual(new Vector3(1, 1, 0)));
+        assert(u.addc(u).isEqual(new Vector3(2, 0, 0)));
+        assert(u.addc(v).isEqual(new Vector3(1, 1, 0)));
+        assert(u.subc(u).isEqual(new Vector3(0, 0, 0)));
     });
 
     it("Opposite", function () {
         setUp();
-        assert(u.copy().opp().isEqual(new Vector3(-1, 0, 0)));
-        assert(v.copy().opp().isEqual(new Vector3(0, -1, 0)));
+        assert(u.oppc().isEqual(new Vector3(-1, 0, 0)));
+        assert(v.oppc().isEqual(new Vector3(0, -1, 0)));
     });
 
     it("Multiply", function () {
         setUp();
-        assert(u.copy().mul(5).isEqual(new Vector3(5, 0, 0)));
-        assert(v.copy().mul(-5).isEqual(new Vector3(0, -5, 0)));
+        assert(u.mulc(5).isEqual(new Vector3(5, 0, 0)));
+        assert(v.mulc(-5).isEqual(new Vector3(0, -5, 0)));
+        assert(v.divc(2).isEqual(new Vector3(0, 0.5, 0)));
     });
 
     it("Dot Product", function () {
@@ -44,10 +51,10 @@ describe("Vector3 Tests", function () {
 
     it("Cross Product", function () {
         setUp();
-        assert(u.copy().cross(v).isEqual(new Vector3(0, 0, 1)));
-        assert(v.copy().cross(w).isEqual(new Vector3(1, 0, 0)));
-        assert(w.copy().cross(u).isEqual(new Vector3(0, 1, 0)));
-        assert(u.copy().cross(u).isEqual(new Vector3(0, 0, 0)));
+        assert(u.crossc(v).isEqual(new Vector3(0, 0, 1)));
+        assert(v.crossc(w).isEqual(new Vector3(1, 0, 0)));
+        assert(w.crossc(u).isEqual(new Vector3(0, 1, 0)));
+        assert(u.crossc(u).isEqual(new Vector3(0, 0, 0)));
     });
 
     it("Get coordinates", function () {

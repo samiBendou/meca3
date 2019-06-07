@@ -34,15 +34,9 @@ class Matrix3 {
     constructor(xx, xy, xz,
                 yx, yy, yz,
                 zx, zy, zz) {
-
-        this.x = new Vector3();
-        this.y = new Vector3();
-        this.z = new Vector3();
-
-        this.set(
-            xx, xy, xz,
-            yx, yy, yz,
-            zx, zy, zz);
+        this.x = new Vector3(xx, xy, xz);
+        this.y = new Vector3(yx, yy, yz);
+        this.z = new Vector3(zx, zy, zz);
     }
 
     /**
@@ -86,11 +80,19 @@ class Matrix3 {
         return this;
     }
 
+    fillc(s) {
+        return this.copy().fill(s);
+    }
+
     add(m) {
         this.x.add(m.x);
         this.y.add(m.y);
         this.z.add(m.z);
         return this;
+    }
+
+    addc(m) {
+        return this.copy().add(m);
     }
 
     sub(m) {
@@ -100,11 +102,19 @@ class Matrix3 {
         return this;
     }
 
+    subc(m) {
+        return this.copy().sub(m);
+    }
+
     opp() {
         this.x.opp();
         this.y.opp();
         this.z.opp();
         return this;
+    }
+
+    oppc() {
+        return this.copy().opp();
     }
 
     mul(s) {
@@ -114,11 +124,19 @@ class Matrix3 {
         return this;
     }
 
+    mulc(s) {
+        return this.copy().mul(s);
+    }
+
     div(s) {
         this.x.div(s);
         this.y.div(s);
         this.z.div(s);
         return this;
+    }
+
+    divc(s) {
+        return this.copy().div(s);
     }
 
     /**
@@ -132,6 +150,10 @@ class Matrix3 {
             this.x.z, this.y.z, this.z.z
         );
         return this;
+    }
+
+    transc() {
+        return this.copy().trans();
     }
 
     /**
@@ -149,6 +171,10 @@ class Matrix3 {
         return this;
     }
 
+    prodc(m) {
+        return this.copy().prod(m);
+    }
+
     /**
      * @brief product between matrix and vector
      * @details `u` contains the result of the product. Also called linear mapping between matrix and vector.
@@ -158,6 +184,10 @@ class Matrix3 {
     map(u) {
         u.setXYZ(this.x.scal(u), this.y.scal(u), this.z.scal(u));
         return u;
+    }
+
+    mapc(u) {
+        return this.map(u.copy());
     }
 
     /**
@@ -191,6 +221,10 @@ class Matrix3 {
         return this;
     }
 
+    invc() {
+        return this.copy().inv();
+    }
+
     rpow(exp) {
         if (exp > 1) {
             let copy = this.copy();
@@ -216,6 +250,10 @@ class Matrix3 {
             this.set(...Matrix3.eye.to1D());
         this.rpow(Math.abs(exp));
         return this;
+    }
+
+    powc(exp) {
+        return this.copy().pow(exp);
     }
 
     copy() {
