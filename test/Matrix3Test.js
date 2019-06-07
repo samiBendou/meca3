@@ -62,6 +62,14 @@ describe("Matrix3 Tests", function () {
         assert(c.prod(c.copy().inv()).isEqual(a));
     });
 
+    it("Exponentiation", function () {
+        setUp();
+        assert(a.pow(2).isEqual(a));
+        assert(b.pow(0).isEqual(a));
+        assert(a.mul(2).pow(4).isEqual(Matrix3.eye.mul(16)));
+        assert(Matrix3.ones.pow(3).isEqual(Matrix3.ones.mul(9)));
+    });
+
     it("Get elements", function () {
         setUp();
         let assertRow = new Vector3(1, 2, 3);

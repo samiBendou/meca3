@@ -191,6 +191,33 @@ class Matrix3 {
         return this;
     }
 
+    rpow(exp) {
+        if (exp > 1) {
+            let copy = this.copy();
+            this.prod(copy);
+            if (exp % 2 === 0) {
+                this.rpow(exp / 2);
+            } else if (exp % 2 === 1) {
+                this.rpow((exp - 1) / 2);
+                this.prod(copy);
+            }
+        }
+    }
+
+    /**
+     * @brief exponentiation of a matrix
+     * @param exp {number} integer exponent
+     * @return {Matrix3} reference to this
+     */
+    pow(exp) {
+        if (exp < 0)
+            this.inv();
+        if (exp === 0)
+            this.set(...Matrix3.eye.to1D());
+        this.rpow(Math.abs(exp));
+        return this;
+    }
+
     copy() {
         return new Matrix3(...this.to1D());
     }
