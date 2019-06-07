@@ -175,10 +175,7 @@ class BufferTrajectory extends Trajectory {
      * @returns {Trajectory} new instance of trajectory
      */
     static discrete(positions, dt = 1, origin = Vector3.zeros) {
-        let pairs = positions;
-        if (positions[0] instanceof Vector3)
-            pairs = positions.map((u) => new PointPair(origin, u));
-
+        let pairs = positions[0] instanceof Vector3 ? positions.map((u) => new PointPair(origin, u)) : positions;
         return new BufferTrajectory(new Trajectory(pairs, dt));
     }
 }
