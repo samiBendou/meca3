@@ -64,6 +64,18 @@ class Field {
         });
         return this;
     }
+
+    get barycenter() {
+        let mass = this.points.reduce((acc, point) => acc + point.mass, 0);
+        return this.points.reduce((acc, point) => acc.add(point.position.mul(point.mass)), Vector3.zeros).div(mass);
+    }
+
+    set barycenter(newCenter) {
+        let center = this.barycenter;
+        this.points.forEach((point) => {
+            point.position = point.position.sub(center).add(newCenter)
+        });
+    }
 }
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')

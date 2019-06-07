@@ -4,8 +4,8 @@ describe("Point Tests", function () {
     const Point = require("../Point.js");
     const Field = require("../Field.js");
 
-    let points;
-    let field, ofield, opoints;
+    let points, opoints;
+    let field, ofield;
 
     function setUp() {
         points = [Point.zeros(10), Point.zeros(20), Point.zeros(30)];
@@ -45,4 +45,19 @@ describe("Point Tests", function () {
             assert(point.position.isEqual(Vector3.ones.opp()))
         });
     });
+
+    it("Barycenter", function () {
+        setUp();
+        assert(field.barycenter.isEqual(Vector3.zeros));
+
+        ofield.update();
+        assert(ofield.barycenter.isEqual(Vector3.ones.opp()), `${ofield.barycenter}`);
+
+        ofield.barycenter = Vector3.zeros;
+        assert(ofield.barycenter.isEqual(Vector3.zeros), `${ofield.barycenter}`);
+
+        ofield.points.forEach((point) => {
+            assert(point.position.isEqual(Vector3.zeros));
+        });
+    })
 });
