@@ -25,13 +25,13 @@ describe("Solver Tests", function () {
         let oSolved = oSolver.solve(Vector3.zeros, Vector3.ones, 200);
         let gSolved = gSolver.solve(Vector3.zeros, Vector3.zeros, 200);
 
-        oSolved.forEach(function(u, index){
-            assert(u.isEqual(oExpected[index % oExpected.length]));
+        oSolved.forEach((u, index) => {
+            assert(u.isEqual(oExpected[index % oExpected.length]))
         });
 
-        gSolved.forEach(function (u, index) {
-            assert(u.isEqual(Vector3.ez.mul(index * index)));
-        })
+        gSolved.forEach((u, index) => {
+            assert(u.isEqual(Vector3.ez.mul(index * index)))
+        });
     });
 
     it("Buffer step", function () {
@@ -39,22 +39,21 @@ describe("Solver Tests", function () {
         let trajectory = BufferTrajectory.discrete([u0, u1]);
         oSolver.buffer(trajectory, 1);
 
-        trajectory.pairs.forEach(function (pair) {
-            assert(pair.vector.isEqual(Vector3.scal(0.5)));
+        trajectory.pairs.forEach((pair) => {
+            assert(pair.vector.isEqual(Vector3.scal(0.5)))
         });
     });
 
     it("Variable step", function () {
         let oSolved = oSolver.solve(Vector3.zeros, Vector3.ones, 5, [1, 1, 1, 1]);
-        oSolved.forEach(function (u, index) {
-            assert(u.isEqual(oExpected[index % oExpected.length]));
+        oSolved.forEach((u, index) => {
+            assert(u.isEqual(oExpected[index % oExpected.length]))
         });
-
     });
 
     it("Trajectory", function () {
         let oSolved = oSolver.trajectory(Vector3.zeros, Vector3.ones, 200);
-        oSolved.pairs.forEach(function (pair, index) {
+        oSolved.pairs.forEach((pair, index) => {
             assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
             assert(pair.origin.isEqual(Vector3.zeros));
         });
@@ -62,14 +61,14 @@ describe("Solver Tests", function () {
 
     it("Max duration solve", function () {
         let oSolved = oSolver.solveMax(Vector3.zeros, Vector3.ones, 5, 1);
-        oSolved.forEach(function (u, index) {
+        oSolved.forEach((u, index) => {
             assert(u.isEqual(oExpected[index % oExpected.length]));
         });
     });
 
     it("Max duration trajectory", function () {
         let oSolved = oSolver.trajectoryMax(Vector3.zeros, Vector3.ones, 5, 1);
-        oSolved.pairs.forEach(function (pair, index) {
+        oSolved.pairs.forEach((pair, index) => {
             assert(pair.vector.isEqual(oExpected[index % oExpected.length]));
             assert(pair.origin.isEqual(Vector3.zeros));
         });

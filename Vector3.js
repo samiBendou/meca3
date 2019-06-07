@@ -280,7 +280,7 @@ class Vector3 {
     }
 
     toString() {
-        return "(" + this.x.toFixed(2) + " " + this.y.toFixed(2) + " " + this.z.toFixed(2) + ")";
+        return `(${this.x.toFixed(2)} ${this.y.toFixed(2)} ${this.z.toFixed(2)})`;
     }
 
     /**
@@ -403,8 +403,8 @@ class Vector3 {
     static derivative(vectors, dt = 1) {
         let steps = (typeof dt == "number") ? Array(vectors.length).fill(dt) : dt;
         let der = new Array(vectors.length - 1);
-        for (let i = 1; i < vectors.length; i++) {
-            der[i - 1] = vectors[i].copy().sub(vectors[i - 1]).div(steps[i - 1]);
+        for (let i = 0; i < vectors.length - 1; i++) {
+            der[i] = vectors[i + 1].copy().sub(vectors[i]).div(steps[i]);
         }
         return der;
     }

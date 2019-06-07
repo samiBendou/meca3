@@ -105,11 +105,11 @@ describe("Vector3 Tests", function () {
     it("Derivative", function () {
         setUp();
         let expected = [new Vector3(-1, 1, 0), new Vector3(0, -1, 1)];
-        Vector3.derivative([u, v, w], [1, 1, 1]).forEach(function (vector, index) {
+        Vector3.derivative([u, v, w], [1, 1, 1]).forEach((vector, index) => {
             assert(vector.isEqual(expected[index]));
         });
 
-        Vector3.derivative([u, v, w], 1).forEach(function (vector, index) {
+        Vector3.derivative([u, v, w], 1).forEach((vector, index) => {
             assert(vector.isEqual(expected[index]));
         });
     });
@@ -117,10 +117,12 @@ describe("Vector3 Tests", function () {
     it("Serialize", function () {
         setUp();
         let uExpected = [1, 0, 0];
-        u.to1D().forEach(function (s, index) {
-            assert.equal(s, uExpected[index]);
+        u.to1D().forEach((s, index) => {
+            assert.equal(s, uExpected[index])
         });
         assert(Vector3.from1D([1, 0, 0]).isEqual(u));
+
+        assert.equal(u.toString(), "(1.00 0.00 0.00)");
     });
 
     it("Spherical basis", function () {

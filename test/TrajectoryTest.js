@@ -41,14 +41,10 @@ describe("Trajectory Tests", function () {
         let expectedOrg = [om0.origin, om3.origin, om4.origin];
         let originToSet = [Vector3.zeros, Vector3.zeros, Vector3.zeros];
 
-        assert(gamma1.origin.reduce(function (acc, cur, index) {
-            return acc && cur.isEqual(expectedOrg[index]);
-        }, true));
+        assert(gamma1.origin.reduce((acc, cur, index) => acc && cur.isEqual(expectedOrg[index]), true));
 
         gamma1.origin = originToSet;
-        assert(gamma1.origin.reduce(function (acc, cur, index) {
-            return acc && cur.isEqual(originToSet[index]);
-        }, true));
+        assert(gamma1.origin.reduce((acc, cur, index) => acc && cur.isEqual(originToSet[index]), true));
 
         gamma1 = new Trajectory([om0, om3, om4], dt);
     });

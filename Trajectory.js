@@ -72,52 +72,48 @@ class Trajectory {
     }
 
     get origin() {
-        return this.pairs.map(function (pair) {
-            return pair.origin;
-        });
+        return this.pairs.map((pair) => pair.origin);
     }
 
     set origin(origins) {
-        this.pairs.forEach(function (pair, index) {
-            pair.origin = origins[index];
+        this.pairs.forEach((pair, index) => {
+            pair.origin = origins[index]
         });
     }
 
     get absolute() {
-        return this.pairs.map(function (pair) {
-            return pair.vector;
-        });
+        return this.pairs.map((pair) => pair.vector);
     }
 
     set absolute(absolute) {
-        this.pairs.forEach(function (pair, index) {
-            pair.vector = absolute[index];
+        this.pairs.forEach((pair, index) => {
+            pair.vector = absolute[index]
         });
     }
 
     translate(vector) {
-        this.pairs.forEach(function (pair) {
+        this.pairs.forEach((pair) => {
             pair.translate(vector)
         });
         return this;
     }
 
     homothetic(scalar) {
-        this.pairs.forEach(function (pair) {
+        this.pairs.forEach((pair) => {
             pair.homothetic(scalar)
         });
         return this;
     }
 
     transform(matrix) {
-        this.pairs.forEach(function (pair) {
+        this.pairs.forEach((pair) => {
             pair.transform(matrix)
         });
         return this;
     }
 
     affine(matrix, vector) {
-        this.pairs.forEach(function (pair) {
+        this.pairs.forEach((pair) => {
             pair.affine(matrix, vector)
         });
         return this;
@@ -175,18 +171,14 @@ class Trajectory {
      */
     duration(i) {
         i = i === undefined ? this.dt.length : i;
-        return Number(this.dt.slice(0, i).reduce(function (prev, curr) {
-            return prev + curr
-        }, 0));
+        return Number(this.dt.slice(0, i).reduce((acc, dt) => acc + dt, 0));
     }
 
     isEqual(trajectory) {
         if (trajectory.pairs.size !== this.pairs.size) {
             return false;
         }
-        return this.pairs.reduce(function (acc, cur, index) {
-            return acc && cur.isEqual(trajectory.pairs[index]);
-        }, true);
+        return this.pairs.reduce((acc, pair, index) => acc && pair.isEqual(trajectory.pairs[index]), true);
     }
 
     isZero() {
@@ -225,21 +217,11 @@ class Trajectory {
     }
 
     toString() {
-        let str = "";
-        this.pairs.forEach(function (pair) {
-            str += pair.toString() + "\n";
-        });
-        return str;
+        return this.pairs.reduce((acc, pair, index) => acc + `(${index}) ${pair.toString()}\n`, "");
     }
 
     copy() {
-        let pairs = this.pairs.slice().map(function (pair) {
-            return pair.copy();
-        });
-
-        let dt = this.dt.slice();
-
-        return new Trajectory(pairs, dt);
+        return new Trajectory(this.pairs.slice().map((pair) => pair.copy()), this.dt.slice());
     }
 
     /**
@@ -263,10 +245,7 @@ class Trajectory {
      * @returns {Trajectory} new instance of trajectory
      */
     static discrete(vectors, dt = 1, origin = Vector3.zeros) {
-        let pairs = vectors.map(function (u) {
-            return new PointPair(origin, u);
-        });
-        return new Trajectory(pairs, dt);
+        return new Trajectory(vectors.map((u) => new PointPair(origin, u)), dt);
     }
 }
 

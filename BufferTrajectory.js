@@ -122,22 +122,14 @@ class BufferTrajectory extends Trajectory {
     }
 
     duration(i) {
+        let adder = (acc, dt) => acc + dt;
         if(i === undefined) {
-            return this.dt.reduce(function (acc, dt) {
-                return acc + dt;
-            }, 0);
+            return this.dt.reduce(adder, 0);
         } else if (i + this.addIndex < this.size) {
-            return this.dt.slice(this.addIndex, i + this.addIndex).reduce(function (acc, dt) {
-                return acc + dt;
-            }, 0);
+            return this.dt.slice(this.addIndex, i + this.addIndex).reduce(adder, 0);
         } else {
             let end = (i + this.addIndex) % this.size;
-            let sum0 = this.dt.slice(0, end).reduce(function (acc, dt) {
-                return acc + dt;
-            }, 0);
-            return sum0 + this.dt.slice(this.addIndex, this.size).reduce(function (acc, dt) {
-                return acc + dt;
-            }, 0);
+            return this.dt.slice(0, end).reduce(adder, 0) + this.dt.slice(this.addIndex, this.size).reduce(adder, 0);
         }
     }
 
@@ -201,9 +193,7 @@ class BufferTrajectory extends Trajectory {
     static discrete(positions, dt = 1, origin = Vector3.zeros) {
         let pairs = positions;
         if (positions[0] instanceof Vector3) {
-            pairs = positions.map(function (u) {
-                return new PointPair(origin, u);
-            });
+            pairs = positions.map((u) => new PointPair(origin, u));
         }
         return new BufferTrajectory(new Trajectory(pairs, dt));
     }

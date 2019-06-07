@@ -24,9 +24,9 @@ describe("Point Tests", function () {
     it("Rebase", function () {
         setUp();
         field.reframe(points[1]);
-        field.points.forEach(function (p) {
+        field.points.forEach((p) => {
             let origin = p.trajectory.origin;
-            points[1].trajectory.origin.forEach(function (u, index) {
+            points[1].trajectory.origin.forEach((u, index) => {
                 assert(u.isEqual(origin[index]));
             });
             assert(p.trajectory.origin);
@@ -36,13 +36,13 @@ describe("Point Tests", function () {
     it("Update", function () {
         setUp();
         field.update();
-        field.points.forEach(function (point) {
-            assert(point.position.isZero());
+        field.points.forEach((point) => {
+            assert(point.position.isZero())
         });
 
         ofield.update();
-        ofield.points.forEach(function (point) {
-            assert(point.position.isEqual(Vector3.ones.opp()));
+        ofield.points.forEach((point) => {
+            assert(point.position.isEqual(Vector3.ones.opp()))
         });
     });
 });

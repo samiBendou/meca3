@@ -2,7 +2,6 @@ const assert = require("chai").assert;
 
 describe("Point Tests", function () {
     const Vector3 = require("../Vector3.js");
-    const BufferTrajectory = require("../BufferTrajectory.js");
     const Point = require("../Point.js");
 
     let p, q;
@@ -86,8 +85,8 @@ describe("Point Tests", function () {
         let expected = [Vector3.ones, Vector3.ex];
         let result = p.trajectory.origin;
 
-        expected.forEach(function (u, index) {
-            assert(u.isEqual(result[index]));
+        expected.forEach((u, index) => {
+            assert(u.isEqual(result[index]))
         });
     });
 

@@ -33,8 +33,8 @@ class Field {
     }
 
     setSolvers(solver) {
-        this.points.forEach(function (point) {
-            point.solver = solver;
+        this.points.forEach((point) => {
+            point.solver = solver
         });
     }
 
@@ -47,9 +47,7 @@ class Field {
      * @returns {Field} reference to this
      */
     update(dt, origin, method) {
-        this.points = this.points.map(function (point) {
-            return point.copy().update(dt, origin, method);
-        });
+        this.points = this.points.map((point) => point.copy().update(dt, origin, method));
         return this;
     }
 
@@ -61,8 +59,8 @@ class Field {
      */
     reframe(p) {
         p = p || Point.zeros();
-        this.points.forEach(function (q) {
-            q.reframe(p);
+        this.points.forEach((q) => {
+            q.reframe(p)
         });
         return this;
     }

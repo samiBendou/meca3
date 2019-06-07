@@ -85,18 +85,17 @@ describe("Matrix3 Tests", function () {
             [0, 0, 1]
         ];
 
-        a.to1D().forEach(function (s, i) {
-            assert.equal(s, aExpected[Math.floor(i / 3)][i % 3]);
+        a.to1D().forEach((s, i) => {
+            assert.equal(s, aExpected[Math.floor(i / 3)][i % 3])
         });
 
-        a.to2D().forEach(function (row, i) {
-            row.forEach(function (s, j) {
-                assert.equal(s, aExpected[i][j]);
-            });
+        a.to2D().forEach((row, i) => {
+            row.forEach((s, j) => {
+                assert.equal(s, aExpected[i][j])
+            })
         });
 
-        assert(Matrix3.from1D(
-            [1, 0, 0, 0, 1, 0, 0, 0, 1]).isEqual(a));
+        assert(Matrix3.from1D([1, 0, 0, 0, 1, 0, 0, 0, 1]).isEqual(a));
 
         assert(Matrix3.from2D(
             [
@@ -105,4 +104,6 @@ describe("Matrix3 Tests", function () {
                 [0, 0, 1]
             ]).isEqual(a));
     });
+
+    assert.equal(a.toString(), "(1.00 0.00 0.00)\n(0.00 1.00 0.00)\n(0.00 0.00 1.00)");
 });

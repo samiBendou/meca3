@@ -210,7 +210,7 @@ class Matrix3 {
     }
 
     toString() {
-        return this.x.toString() + "\n" + this.y.toString() + "\n" + this.z.toString();
+        return `${this.x.toString()}\n${this.y.toString()}\n${this.z.toString()}`;
     }
 
     /**
@@ -278,9 +278,7 @@ class Matrix3 {
      * @returns {Matrix3} value of the product
      */
     static prod(matrices) {
-        return matrices.reduce(function (prev, cur) {
-            return prev.copy().prod(cur);
-        });
+        return matrices.reduce((acc, m) => acc.prod(m), Matrix3.eye);
     }
 
     /**

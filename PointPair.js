@@ -112,7 +112,7 @@ class PointPair {
     }
 
     toString() {
-        return "O" + this.origin.toString() + ", " + "M" + this.vector.toString();
+        return `origin ${this.origin.toString()}\t vector ${this.vector.toString()}`;
     }
 
     /**

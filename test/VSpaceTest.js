@@ -16,6 +16,7 @@ describe("Vector3 Tests", function () {
             1, 7, 1,
             1, 1, 7
         )));
+        assert(vectors[0].isEqual(Vector3.ex));
     });
 
     it("Comb", function () {
@@ -25,5 +26,6 @@ describe("Vector3 Tests", function () {
             2, 18, 2,
             2, 2, 18
         )));
+        assert(vectors[0].isEqual(Vector3.ex));
     });
 });

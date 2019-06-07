@@ -18,12 +18,8 @@ class VSpace {
      * @returns {Vector3|Matrix3} value of the sum
      */
     static sum(vectors) {
-        if (vectors.length === 0)
-            return undefined;
-
-        return vectors.reduce(function (prev, cur) {
-            return prev.copy().add(cur);
-        });
+        let initializer = VSpace.initializer(vectors[0]);
+        return vectors.reduce((acc, u) => acc.add(u), initializer);
     }
 
     /**
@@ -33,13 +29,12 @@ class VSpace {
      * @returns {Vector3|Matrix3} value of linear combination
      */
     static comb(scalars, vectors) {
-        if (vectors.length === 0 || scalars.length === 0)
-            return undefined;
+        let initializer = VSpace.initializer(vectors[0]);
+        return vectors.reduce((acc, u, index) => acc.add(u.copy().mul(scalars[index])), initializer);
+    }
 
-        let initializer = vectors[0].constructor.name === "Vector3" ? Vector3.zeros : Matrix3.zeros;
-        return vectors.reduce(function (acc, cur, index) {
-            return acc.add(cur.copy().mul(scalars[index]));
-        }, initializer);
+    static initializer(vector) {
+        return vector.constructor.name === "Vector3" ? Vector3.zeros : Matrix3.zeros;
     }
 }
 
