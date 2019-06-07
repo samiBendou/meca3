@@ -278,6 +278,24 @@ class Matrix3 {
     }
 
     /**
+     * @brief diagonal matrix
+     * @return {Matrix3} value of diagonal matrix
+     */
+    static diag(xx, yy, zz) {
+        return new Matrix3(xx, 0, 0, 0, yy, 0, 0, 0, zz);
+    }
+
+    /**
+     * @brief symmetric matrix
+     * @details Fill the matrix by giving diagonal values. Use this method to generate a tri-diagonal matrix
+     * by forgiving the parameter `xz`.
+     * @return {Matrix3} value of diagonal matrix
+     */
+    static symetric(xx, yy, zz, xy, yz, xz = 0) {
+        return new Matrix3(xx, xy, xz, xy, yy, yz, xz, yz, zz);
+    }
+
+    /**
      * @brief canonical matrix
      * @details Matrix with `0` everywhere except in `i`, `j` position where there is a `1`.
      * @param i {number} row index of `1`

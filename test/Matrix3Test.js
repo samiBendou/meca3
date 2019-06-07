@@ -100,6 +100,12 @@ describe("Matrix3 Tests", function () {
         assert(Matrix3.rotZ(angle).isEqual(rotZ(angle)));
     });
 
+    it("Generators", function () {
+        setUp();
+        assert(Matrix3.diag(1, 1, 1).isEqual(a));
+        assert(Matrix3.symetric(2, 2, 2, -1, -1).isEqual(c));
+    });
+
     it("Serialize", function () {
         setUp();
         let aExpected = [
