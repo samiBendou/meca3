@@ -4,22 +4,27 @@ describe("Matrix3 Tests", function () {
     const Vector3 = require("../Vector3.js");
     const Matrix3 = require("../Matrix3.js");
 
-    let a = Matrix3.eye;
+    let a, b, c;
 
-    let b = new Matrix3(
-        1, 2, 3,
-        1, 2, 3,
-        1, 2, 3
-    );
+    function setUp() {
+        a = Matrix3.eye;
 
-    let c = new Matrix3(
-        2, -1, 0,
-        -1, 2, -1,
-        0, -1, 2
-    );
+        b = new Matrix3(
+            1, 2, 3,
+            1, 2, 3,
+            1, 2, 3
+        );
+
+        c = new Matrix3(
+            2, -1, 0,
+            -1, 2, -1,
+            0, -1, 2
+        );
+    }
 
     it("Transpose", function () {
-        assert(b.copy().trans().isEqual(new Matrix3(
+        setUp();
+        assert(b.trans().isEqual(new Matrix3(
             1, 1, 1,
             2, 2, 2,
             3, 3, 3
@@ -27,33 +32,38 @@ describe("Matrix3 Tests", function () {
     });
 
     it("Matrix Product", function () {
-        assert(a.copy().prod(a).isEqual(a));
-        assert(b.copy().prod(a.copy().mul(2)).isEqual(b.copy().mul(2)));
+        setUp();
+        assert(a.prod(a).isEqual(a));
+        assert(b.prod(a.copy().mul(2)).isEqual(b.copy().mul(2)));
     });
 
     it("Linear mapping", function () {
+        setUp();
         let u = Vector3.ones;
         assert(a.map(u).isEqual(u));
         assert(b.map(u).isEqual(new Vector3(6, 6, 6)));
     });
 
     it("Determinant", function () {
+        setUp();
         assert(Math.abs(a.det - 1) < Number.EPSILON);
         assert(Math.abs(b.det) < Number.EPSILON);
         assert(Math.abs(c.det - 4) < Number.EPSILON);
     });
 
     it("Inverse", function () {
-        assert(a.copy().inv().isEqual(a));
-        assert(c.copy().inv().isEqual(new Matrix3(
+        setUp();
+        assert(a.inv().isEqual(a));
+        assert(c.inv().isEqual(new Matrix3(
             0.75, 0.50, 0.25,
             0.50, 1.00, 0.50,
             0.25, 0.50, 0.75
         )));
-        assert(c.copy().prod(c.copy().inv()).isEqual(a));
+        assert(c.prod(c.inv()).isEqual(a));
     });
 
     it("Get elements", function () {
+        setUp();
         let assertRow = new Vector3(1, 2, 3);
         assert(b.row(0).isEqual(assertRow));
         assert(b.row(2).isEqual(assertRow));
@@ -63,6 +73,7 @@ describe("Matrix3 Tests", function () {
     });
 
     it("Rotates", function () {
+        setUp();
         const angle = Math.PI / 2;
 
         const rotX = Matrix3.makeRot(Vector3.ex);
@@ -79,6 +90,7 @@ describe("Matrix3 Tests", function () {
     });
 
     it("Serialize", function () {
+        setUp();
         let aExpected = [
             [1, 0, 0],
             [0, 1, 0],
@@ -88,7 +100,6 @@ describe("Matrix3 Tests", function () {
         a.to1D().forEach((s, i) => {
             assert.equal(s, aExpected[Math.floor(i / 3)][i % 3])
         });
-
         a.to2D().forEach((row, i) => {
             row.forEach((s, j) => {
                 assert.equal(s, aExpected[i][j])
@@ -96,14 +107,8 @@ describe("Matrix3 Tests", function () {
         });
 
         assert(Matrix3.from1D([1, 0, 0, 0, 1, 0, 0, 0, 1]).isEqual(a));
+        assert(Matrix3.from2D(aExpected).isEqual(a));
 
-        assert(Matrix3.from2D(
-            [
-                [1, 0, 0],
-                [0, 1, 0],
-                [0, 0, 1]
-            ]).isEqual(a));
+        assert.equal(a.toString(), "(1.00 0.00 0.00)\n(0.00 1.00 0.00)\n(0.00 0.00 1.00)");
     });
-
-    assert.equal(a.toString(), "(1.00 0.00 0.00)\n(0.00 1.00 0.00)\n(0.00 0.00 1.00)");
 });
