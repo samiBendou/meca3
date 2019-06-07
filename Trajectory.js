@@ -171,7 +171,7 @@ class Trajectory {
      */
     duration(i) {
         i = i === undefined ? this.dt.length : i;
-        return Number(this.dt.slice(0, i).reduce((acc, dt) => acc + dt, 0));
+        return +(this.dt.slice(0, i).reduce((acc, dt) => acc + dt, 0));
     }
 
     isEqual(trajectory) {

@@ -53,10 +53,12 @@ describe("BufferTrajectory Tests", function () {
     it("First/Last/Nexto", function () {
         setUp();
         assert(gamma1.first.isEqual(om1));
+        assert(gamma1.nexto.isEqual(om1));
         assert(gamma1.last.isEqual(om2));
 
-        assert(gamma2.last.isEqual(om2));
+        assert(gamma2.first.isEqual(PointPair.zeros()));
         assert(gamma2.nexto.isEqual(om1));
+        assert(gamma2.last.isEqual(om2));
 
         gamma1.first = om1;
         gamma1.last = om0;
@@ -65,9 +67,6 @@ describe("BufferTrajectory Tests", function () {
         assert(gamma1.first.isEqual(om1));
         assert(gamma1.last.isEqual(om0));
         assert(gamma2.nexto.isEqual(org));
-
-        gamma1 = new BufferTrajectory(gamma, 2);
-        gamma2 = new BufferTrajectory(gamma, 4);
     });
 
     it("At/Get", function() {

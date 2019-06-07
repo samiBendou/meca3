@@ -5,7 +5,7 @@ describe("Point Tests", function () {
     const Field = require("../Field.js");
 
     let points;
-    let field, ofield;
+    let field, ofield, opoints;
 
     function setUp() {
         points = [Point.zeros(10), Point.zeros(20), Point.zeros(30)];
@@ -17,8 +17,8 @@ describe("Point Tests", function () {
                 }, Vector3.zeros);
             }
         };
-        field = new Field(points);
-        ofield = new Field(opoints, new Solver(makeField(opoints)));
+        field = new Field(points); // zero field
+        ofield = new Field(opoints, new Solver(makeField(opoints))); // dependent harmonic oscillator
     }
 
     it("Rebase", function () {
