@@ -76,6 +76,15 @@ describe("Point Tests", function () {
         assert(p.position.isEqual(Vector3.ey));
     });
 
+    it("Initialization", function () {
+        setUp();
+        p.init(Vector3.ones);
+        assert(p.trajectory.nexto.relative.isEqual(Vector3.ones));
+        p.update();
+        assert(p.position.isEqual(Vector3.ones));
+        assert(p.trajectory.nexto.relative.isEqual(Vector3.ones));
+    });
+
     it("Rebase", function () {
         setUp();
         p.trajectory.add(PointPair.vect(Vector3.ex));

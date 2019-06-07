@@ -71,6 +71,10 @@ class Point {
         return this.du.div(this.dt);
     }
 
+    set speed(newSpeed) {
+        this.init(this.position, newSpeed);
+    }
+
     get du() {
         return this.trajectory.last.relative.sub(this.trajectory.nexto.relative);
     }
@@ -189,6 +193,21 @@ class Point {
 
     get vphi() {
         return (this.trajectory.last.relative.phi - this.trajectory.nexto.relative.phi) / this.dt;
+    }
+
+    /**
+     * @brief initialize the point with position and speed
+     * @param u0 {Vector3=} initial position
+     * @param v0 {Vector3=} initial speed
+     * @param dt0 {number=} initial time step
+     * @param field {function=} field used with the solver
+     * @return {Point} reference to this
+     */
+    init(u0 = Vector3.zeros, v0 = Vector3.zeros, dt0 = this.solver.dt0, field = this.solver.field) {
+        this.trajectory.nexto.relative = v0.mulc(-dt0).add(u0);
+        this.trajectory.last.relative = u0;
+        this.trajectory.dt[this.trajectory.lastStepIndex] = dt0;
+        return this;
     }
 
     /**
