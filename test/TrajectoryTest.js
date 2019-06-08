@@ -100,4 +100,41 @@ describe("Trajectory Tests", function () {
             gamma0.isEqual(
                 Trajectory.discrete([om0.vector, om1.vector, om2.vector], 0.1, Vector3.zeros)));
     });
+
+    it("Generate linear", function () {
+        let gamma2 = Trajectory.linear(3);
+        let expect2 = Trajectory.discrete([Vector3.zeros, Vector3.ex, Vector3.ex.mul(2)]);
+        assert(gamma2.isEqual(expect2), `\n${gamma2}!=\n${expect2}`);
+    });
+
+    it("Generate circle", function () {
+        let gamma2 = Trajectory.circular(0.25);
+        let expect2 = Trajectory.discrete([Vector3.ex, Vector3.ey, Vector3.ex.opp(), Vector3.ey.opp()]);
+        assert(gamma2.isEqual(expect2), `\n${gamma2}!=\n${expect2}`);
+
+        let gamma3 = Trajectory.circular(0.25, 1, Vector3.ex);
+        let expect3 = Trajectory.discrete([Vector3.ey, Vector3.ez, Vector3.ey.opp(), Vector3.ez.opp()]);
+        assert(gamma3.isEqual(expect3), `\n${gamma3}!=\n${expect3}`);
+
+        let gamma4 = Trajectory.circular(0.25, 1, Vector3.ey);
+        let expect4 = Trajectory.discrete([Vector3.ex.opp(), Vector3.ez, Vector3.ex, Vector3.ez.opp()]);
+        assert(gamma4.isEqual(expect4), `\n${gamma4}!=\n${expect4}`);
+    });
+
+    it("Generate ellipse", function () {
+        let tol = 1.3 * Number.EPSILON;
+        let gamma2 = Trajectory.elliptic(0.25, 1.5);
+        let expect2 = [Vector3.ex.mul(1.5), Vector3.ey, Vector3.ex.mul(-1.5), Vector3.ey.opp()];
+        gamma2.relative.forEach((u, index) => {
+            assert.approximately(u.dist(expect2[index]), 0, tol, `\n${gamma2}!=\n${expect2}\n index=${index}`);
+        })
+    });
+
+    it("Generate hyperbola", function () {
+        let tol = 1e-10;
+        let gamma2 = Trajectory.hyperbolic(0.25);
+        gamma2.relative.forEach((u, index) => {
+            assert.approximately(u.x ** 2 - u.y ** 2, 1, tol, `\n${u}\n index=${index}`);
+        });
+    });
 });

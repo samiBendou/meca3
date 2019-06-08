@@ -29,7 +29,8 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  * @property nexto {PointPair} position of the mobile next to last
  * @property length {number} total length of the trajectory
  * @property origins {Array} array of `Vector3` containing all the successive observer positions
- * @property absolute {Array} array of `Vector3` containing all the successive mobile positions
+ * @property absolute {Array} array of `Vector3` containing all the successive mobile absolute positions
+ * @property relative {Array} array of `Vector3` containing all the successive mobile relative positions
  */
 class Trajectory {
 
@@ -88,6 +89,16 @@ class Trajectory {
     set absolute(absolute) {
         this.pairs.forEach((pair, index) => {
             pair.vector = absolute[index]
+        });
+    }
+
+    get relative() {
+        return this.pairs.map((pair) => pair.relative);
+    }
+
+    set relative(relative) {
+        this.pairs.forEach((pair, index) => {
+            pair.relative = relative[index]
         });
     }
 
@@ -221,13 +232,101 @@ class Trajectory {
     /**
      * @brief trajectory from array of position vectors
      * @details The observer is considered as immobile.
-     * @param vectors {Array} successive positions of the mobile as `Vector3`
+     * @param vectors {Array} successive absolute positions of the mobile as `Vector3`
      * @param dt {Array|number=} time step between each position
      * @param origin {Vector3} observer's position
      * @returns {Trajectory} new instance of trajectory
      */
     static discrete(vectors, dt = 1, origin = Vector3.zeros) {
         return new Trajectory(vectors.map((u) => new PointPair(origin, u)), dt);
+    }
+
+    /**
+     * @brief linear trajectory
+     * @details Computes a linear trajectory starting from the given `origin` with director coefficient `v`.
+     * The observer is considered as immobile
+     * @param count {Number} number of samples
+     * @param dt {number=} sampling step
+     * @param v {Vector3} director coefficient
+     * @param origin {Vector3} observer's position
+     * @return {Trajectory} value of linear trajectory
+     */
+    static linear(count, dt = 1, v = Vector3.ex, origin = Vector3.zeros) {
+        let vectors = new Array(count);
+        for (let i = 0; i < count; i++) {
+            vectors[i] = v.mulc(dt * i).add(origin);
+        }
+        return Trajectory.discrete(vectors, dt, origin);
+    }
+
+    /**
+     * @brief trajectory with given polar metric
+     * @details The polar metric is set by giving `cos` and `sin` function. An appropriated rotation `Matrix3` is
+     * then created.
+     *
+     * The trajectory is computed by performing successive infinitesimal rotations of a unit vector around the given `axis`.
+     * Then the positions are scaled and translate so the norm of the unit vector is multiplied by `a` and the trajectory
+     * has the right origin..
+     * @param dt {number=} sampling step
+     * @param cos {function(number):number=} `x` polar metric of the rotation
+     * @param sin {function(number):number=} `y` polar metric of the rotation
+     * @param axis {Vector3} axis of rotation
+     * @param origin {Vector3} origin of the circle
+     * @return {Trajectory} value of circular trajectory
+     */
+    static rotational(dt = 1, cos = Math.cos, sin = Math.sin, axis = Vector3.ez, origin = Vector3.zeros) {
+        let vectors = [];
+        let ez = Vector3.ez;
+        let rot = Matrix3.makeRot(axis, cos, sin);
+        let position = axis.isEqual(ez) ? Vector3.ex : ez.crossc(axis).div(ez.sin(axis) * axis.r);
+
+        for (let theta = 0; theta < 2 * Math.PI; theta += 2 * Math.PI * dt) {
+            vectors.push(rot(theta).mapc(position).add(origin));
+        }
+        return Trajectory.discrete(vectors, dt, origin);
+    }
+
+    /**
+     * @brief elliptic trajectory
+     * @details The observer is considered as immobile
+     * @param dt {number=} sampling step
+     * @param a {number} major axis
+     * @param b {number} minor axis
+     * @param axis {Vector3} axis of rotation
+     * @param origin {Vector3} origin of the circle
+     * @return {Trajectory} value of circular trajectory
+     */
+    static elliptic(dt = 1, a = 1, b = 1, axis = Vector3.ez, origin = Vector3.zeros) {
+        let cos = (theta) => a * Math.cos(theta), sin = (theta) => b * Math.sin(theta);
+        return Trajectory.rotational(dt, cos, sin, axis, origin);
+    }
+
+    /**
+     * @brief circular trajectory
+     * @details The observer is considered as immobile
+     * @param dt {number=} sampling step
+     * @param radius {number} radius of the circle
+     * @param axis {Vector3} axis of rotation
+     * @param origin {Vector3} origin of the circle
+     * @return {Trajectory} value of circular trajectory
+     */
+    static circular(dt = 1, radius = 1, axis = Vector3.ez, origin = Vector3.zeros) {
+        return Trajectory.elliptic(dt, radius, radius, axis, origin);
+    }
+
+    /**
+     * @brief hyperbolic trajectory
+     * @details The observer is considered as immobile
+     * @param dt {number=} sampling step
+     * @param a {number} major axis
+     * @param b {number} minor axis
+     * @param axis {Vector3} axis of rotation
+     * @param origin {Vector3} origin of the circle
+     * @return {Trajectory} value of circular trajectory
+     */
+    static hyperbolic(dt = 1, a = 1, b = 1, axis = Vector3.ez, origin = Vector3.zeros) {
+        let cos = (theta) => a * Math.cosh(theta), sin = (theta) => b * Math.sinh(theta);
+        return Trajectory.rotational(dt, cos, sin, axis, origin);
     }
 }
 

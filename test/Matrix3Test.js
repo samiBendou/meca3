@@ -84,7 +84,7 @@ describe("Matrix3 Tests", function () {
         assert(a.col(2).isEqual(Vector3.ez));
     });
 
-    it("Rotates", function () {
+    it("Rotation", function () {
         setUp();
         const angle = Math.PI / 2;
 
@@ -92,19 +92,80 @@ describe("Matrix3 Tests", function () {
         const rotY = Matrix3.makeRot(Vector3.ey);
         const rotZ = Matrix3.makeRot(Vector3.ez);
 
-        assert(Matrix3.rotX(Math.PI / 2).map(Vector3.ey).isEqual(Vector3.ez));
-        assert(Matrix3.rotY(Math.PI / 2).map(Vector3.ez).isEqual(Vector3.ex));
-        assert(Matrix3.rotZ(Math.PI / 2).map(Vector3.ex).isEqual(Vector3.ey));
+        const resX = Matrix3.rotX(Math.PI / 2).map(Vector3.ey);
+        const resY = Matrix3.rotY(Math.PI / 2).map(Vector3.ez);
+        const resZ = Matrix3.rotZ(Math.PI / 2).map(Vector3.ex);
 
-        assert(Matrix3.rotX(angle).isEqual(rotX(angle)));
-        assert(Matrix3.rotY(angle).isEqual(rotY(angle)));
-        assert(Matrix3.rotZ(angle).isEqual(rotZ(angle)));
+        const expectedX = Matrix3.rotX(angle);
+        const expectedY = Matrix3.rotY(angle);
+        const expectedZ = Matrix3.rotZ(angle);
+
+        assert(expectedX.isEqual(rotX(angle)), `\n${expectedX}\n!=\n${rotX(angle)}`);
+        assert(expectedY.isEqual(rotY(angle)), `\n${expectedY}\n!=\n${rotY(angle)}`);
+        assert(expectedZ.isEqual(rotZ(angle)), `\n${expectedZ}\n!=\n${rotZ(angle)}`);
+
+        assert(resX.isEqual(Vector3.ez), `\n${resX}\n!=\n${Vector3.ez}`);
+        assert(resY.isEqual(Vector3.ex), `\n${resY}\n!=\n${Vector3.ex}`);
+        assert(resZ.isEqual(Vector3.ey), `\n${resZ}\n!=\n${Vector3.ey}`);
+    });
+
+    it("Elliptic rotation", function () {
+        setUp();
+        const angle = Math.PI / 2;
+        const a = 2, b = 1;
+        const cos = (theta) => Math.cos(theta);
+        const sin = (theta) => b / a * Math.sin(theta);
+
+        const rotX = Matrix3.makeRot(Vector3.ex, cos, sin);
+        const rotY = Matrix3.makeRot(Vector3.ey, cos, sin);
+        const rotZ = Matrix3.makeRot(Vector3.ez, cos, sin);
+
+        const resX = Matrix3.rotX(Math.PI / 2, cos, sin).map(Vector3.ey.mul(a));
+        const resY = Matrix3.rotY(Math.PI / 2, cos, sin).map(Vector3.ez.mul(a));
+        const resZ = Matrix3.rotZ(Math.PI / 2, cos, sin).map(Vector3.ex.mul(a));
+
+        const expectedX = Matrix3.rotX(angle, cos, sin);
+        const expectedY = Matrix3.rotY(angle, cos, sin);
+        const expectedZ = Matrix3.rotZ(angle, cos, sin);
+
+        assert(expectedX.isEqual(rotX(angle)), `\n${expectedX}\n!=\n${rotX(angle)}`);
+        assert(expectedY.isEqual(rotY(angle)), `\n${expectedY}\n!=\n${rotY(angle)}`);
+        assert(expectedZ.isEqual(rotZ(angle)), `\n${expectedZ}\n!=\n${rotZ(angle)}`);
+
+        assert(resX.isEqual(Vector3.ez), `\n${resX}\n!=\n${Vector3.ez.mul(b)}`);
+        assert(resY.isEqual(Vector3.ex), `\n${resY}\n!=\n${Vector3.ex.mul(b)}`);
+        assert(resZ.isEqual(Vector3.ey), `\n${resZ}\n!=\n${Vector3.ey.mul(b)}`);
+    });
+
+    it("Hyperbolic rotation", function () {
+        setUp();
+        const angle = Math.PI / 2;
+
+        const rotX = Matrix3.makeRot(Vector3.ex, Math.cosh, Math.sinh);
+        const rotY = Matrix3.makeRot(Vector3.ey, Math.cosh, Math.sinh);
+        const rotZ = Matrix3.makeRot(Vector3.ez, Math.cosh, Math.sinh);
+
+        const resX = Matrix3.rotX(angle, Math.cosh, Math.sinh).map(Vector3.ey);
+        const resY = Matrix3.rotY(angle, Math.cosh, Math.sinh).map(Vector3.ez);
+        const resZ = Matrix3.rotZ(angle, Math.cosh, Math.sinh).map(Vector3.ex);
+
+        const expectedX = Matrix3.rotX(angle, Math.cosh, Math.sinh);
+        const expectedY = Matrix3.rotY(angle, Math.cosh, Math.sinh);
+        const expectedZ = Matrix3.rotZ(angle, Math.cosh, Math.sinh);
+
+        assert(expectedX.isEqual(rotX(angle)), `\n${expectedX}\n!=\n${rotX(angle)}`);
+        assert(expectedY.isEqual(rotY(angle)), `\n${expectedY}\n!=\n${rotY(angle)}`);
+        assert(expectedZ.isEqual(rotZ(angle)), `\n${expectedZ}\n!=\n${rotZ(angle)}`);
+
+        assert.equal(resX.y ** 2 - resX.z ** 2, 1, `\nresX : ${resX}`);
+        assert.equal(resY.z ** 2 - resY.x ** 2, 1, `\nresY : ${resY}`);
+        assert.equal(resZ.x ** 2 - resZ.y ** 2, 1, `\nresZ : ${resZ}`);
     });
 
     it("Generators", function () {
         setUp();
         assert(Matrix3.diag(1, 1, 1).isEqual(a));
-        assert(Matrix3.symetric(2, 2, 2, -1, -1).isEqual(c));
+        assert(Matrix3.sym(2, 2, 2, -1, -1).isEqual(c));
     });
 
     it("Serialize", function () {

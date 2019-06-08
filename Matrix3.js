@@ -324,12 +324,12 @@ class Matrix3 {
     }
 
     /**
-     * @brief symmetric matrix
+     * @brief sym matrix
      * @details Fill the matrix by giving diagonal values. Use this method to generate a tri-diagonal matrix
      * by forgiving the parameter `xz`.
      * @return {Matrix3} value of diagonal matrix
      */
-    static symetric(xx, yy, zz, xy, yz, xz = 0) {
+    static sym(xx, yy, zz, xy, yz, xz = 0) {
         return new Matrix3(xx, xy, xz, xy, yy, yz, xz, yz, zz);
     }
 
@@ -361,61 +361,70 @@ class Matrix3 {
     /**
      * @brief rotation matrix of axis (`0`, `ex`)
      * @details Anticlockwise rotation.
+     * @param cos {function(number):number=} `x` metric of the rotation
+     * @param sin {function(number):number=} `y` metric of the rotation
      * @param theta {number} angle of rotation
      * @returns {Matrix3} value of rotation matrix for specified angle
      */
-    static rotX(theta) {
-        return new Matrix3(1, 0, 0,
-            0, Math.cos(theta), -Math.sin(theta),
-            0, Math.sin(theta), Math.cos(theta));
+    static rotX(theta, cos = Math.cos, sin = Math.sin) {
+        return new Matrix3(
+            1, 0, 0,
+            0, cos(theta), -sin(theta),
+            0, sin(theta), cos(theta)
+        );
     }
 
     /**
      * @brief rotation matrix of axis (`0`, `ey`)
      * @details Anticlockwise rotation.
+     * @param cos {function(number):number=} `x` metric of the rotation
+     * @param sin {function(number):number=} `y` metric of the rotation
      * @param theta {number} angle of rotation
      * @returns {Matrix3} value of rotation matrix for specified angle
      */
-    static rotY(theta) {
-        return new Matrix3(Math.cos(theta), 0, Math.sin(theta),
+    static rotY(theta, cos = Math.cos, sin = Math.sin) {
+        return new Matrix3(
+            cos(theta), 0, sin(theta),
             0, 1, 0,
-            -Math.sin(theta), 0, Math.cos(theta));
+            -sin(theta), 0, cos(theta)
+        );
     }
 
     /**
      * @brief rotation matrix of axis (`0`, `ez`)
      * @details Anticlockwise rotation.
+     * @param cos {function(number):number=} `x` metric of the rotation
+     * @param sin {function(number):number=} `y` metric of the rotation
      * @param theta {number} angle of rotation
      * @returns {Matrix3} value of rotation matrix for specified angle
      */
-    static rotZ(theta) {
-        return new Matrix3(Math.cos(theta), -Math.sin(theta), 0,
-            Math.sin(theta), Math.cos(theta), 0,
-            0, 0, 1);
+    static rotZ(theta, cos = Math.cos, sin = Math.sin) {
+        return new Matrix3(
+            cos(theta), -sin(theta), 0,
+            sin(theta), cos(theta), 0,
+            0, 0, 1
+        );
     }
 
     /**
      * @brief rotation matrix with around axis
      * @details Anticlockwise rotation.
+     * - Use `a * cosh` as `cos` and `b * sinh` as `sin` to perform a hyperbolic rotation.
+     * - Use `a * cos` as `cos` and `b * sin` as `sin` to perform a rotation around an ellipse
+     * @param u {Vector3} axis of rotation
+     * @param cos {function(number):number=} `x` polar metric of the rotation
+     * @param sin {function(number):number=} `y` polar metric of the rotation
      * @returns {function(number):Matrix3} function that generates rotation `Matrix3` for given angle
      */
-    static makeRot(axis) {
-        //R = P + cos(theta) * (I - P) + sin(theta) * Q
-
-        let id = Matrix3.eye; // antisymmetric representation of u
-        let q = Matrix3.zeros;
-        let u = axis.copy().div(axis.r); // normalized axis
-        let p = Matrix3.tens(u); // projection on rotation axis
-        let r = p.copy();
-
-        q.x = u.copy().cross(Vector3.ex);
-        q.y = u.copy().cross(Vector3.ey);
-        q.z = u.copy().cross(Vector3.ez);
-        q.trans();
-
-        return function (theta) {
-            return r.add(id.sub(p).mul(Math.cos(theta))).add(q.mul(Math.sin(theta)));
-        };
+    static makeRot(u, cos = Math.cos, sin = Math.sin) {
+        return (theta) => {
+            let k = 1 - cos(theta), c = cos(theta), s = sin(theta);
+            return new Matrix3(
+                k * u.x ** 2 + c, k * u.x * u.y - u.z * s, k * u.x * u.z + u.y * s,
+                k * u.x * u.y + u.z * s, k * u.y ** 2 + c, k * u.y * u.z - u.x * s,
+                k * u.x * u.z - u.y * s, k * u.y * u.z + u.x * s, k * u.z ** 2 + c
+            );
+        }
     }
 
     /**
@@ -425,9 +434,7 @@ class Matrix3 {
      * @returns {function(Vector3): Vector3} function that computes affine transform for given `Vector3`
      */
     static makeAffine(m, v) {
-        return function (u) {
-            return m.map(u).add(v)
-        };
+        return (u) => m.map(u).add(v);
     }
 
     /**
