@@ -188,6 +188,6 @@ describe("Matrix3 Tests", function () {
         assert(Matrix3.from1D([1, 0, 0, 0, 1, 0, 0, 0, 1]).isEqual(a));
         assert(Matrix3.from2D(aExpected).isEqual(a));
 
-        assert.equal(a.toString(), "(1.00 0.00 0.00)\n(0.00 1.00 0.00)\n(0.00 0.00 1.00)");
+        assert.equal(a.toString(), "(1.00e+0 0.00e+0 0.00e+0)\n(0.00e+0 1.00e+0 0.00e+0)\n(0.00e+0 0.00e+0 1.00e+0)");
     });
 });

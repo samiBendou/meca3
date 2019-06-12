@@ -129,7 +129,7 @@ describe("Vector3 Tests", function () {
         });
         assert(Vector3.from1D([1, 0, 0]).isEqual(u));
 
-        assert.equal(u.toString(), "(1.00 0.00 0.00)");
+        assert.equal(u.toString(), "(1.00e+0 0.00e+0 0.00e+0)");
     });
 
     it("Spherical basis", function () {
