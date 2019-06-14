@@ -15,15 +15,13 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  *
  * #### Features
  *
- * - Manipulate the trajectory of the point
+ * - **Manipulate the trajectory** of the point
  *
- * - Get speed and position of the point
+ * - **Manipulate speed and position** of the point
  *
- * - Change frame of the point
+ * - **Change frame** of the point
  *
- * - Move point by giving a solver for the trajectory
- *
- * - Manipulate current relative position and speed in current frame
+ * - Move point by giving a solver to **generate the trajectory**
  *
  * @property trajectory {BufferTrajectory} trajectory of the point
  * @property mass {number} mass of the point

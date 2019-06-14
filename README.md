@@ -11,7 +11,7 @@ _meca3_ is a **mechanics framework** :rocket:
 It represents **3D space** and provides a **solver** to compute **trajectory** of **moving points** 
 :heavy_plus_sign::heavy_multiplication_x::heavy_minus_sign:
 
-It can be used as an **advanced physics engine** for animation :coffee:
+It can serve as **advanced physics engine** for animation :coffee:
 
 - **Object oriented** syntax to perform mathematical operations
 
@@ -33,6 +33,6 @@ Featuring :
 
 - **Points mechanics** features to move a point according to dynamic equation
 
-- **Mechanics of dependant systems** representation with dependant points field
+- **Mechanics of dependent systems** representation with dependent points field
 
 Feel free to propose contributions to the project : [guide](https://github.com/samiBendou/meca3/blob/master/CONTRIBUTING.md) :satellite:

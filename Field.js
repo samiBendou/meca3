@@ -4,15 +4,15 @@
  * @brief trajectory of a mobile
  * @details `Field` class represent a _system_ of material points attracted in a _field_.
  *
- * Set `withMass` to `true property to simulate 2nd Newton law dynamic.
- *
  * Construct a field by giving an array of points.
+ *
+ * Set `withMass` to `true property to simulate 2nd Newton law dynamic.
  *
  * #### Features
  *
- * - Move all the points with dependant dynamic by giving a solver
+ * - Move all the points with **dependant dynamic** by giving a unique solver
  *
- * - Represent all the points in the same frame
+ * - Represent **all the points in the same frame**
  *
  * @property points {Array} non empty array of `Point` objects composing the system
  * @property solver {Solver} solver used to represent the field
