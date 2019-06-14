@@ -51,7 +51,7 @@ class Field {
      * @returns {Field} reference to this
      */
     update(dt, origin, method) {
-        this.points = this.points.map((point) => point.update(dt, origin, method));
+        this.points = this.points.map((point) => point.copy().update(dt, origin, method));
         return this;
     }
 
