@@ -6,7 +6,7 @@
  *
  * Construct a field by giving an array of points.
  *
- * Set `withMass` to `true property to simulate 2nd Newton law dynamic.
+ * Set `withMass` to `true property to simulate 2nd Newton law dynamic whehn constructing the field.
  *
  * #### Features
  *
@@ -18,7 +18,6 @@
  * @property solver {Solver} solver used to represent the field
  * @property frame {Point} point used as frame of other points
  * @property bcenter {Point} barycenter of the points
- * @property withMass {boolean} `true` if the solver field value is divided by the mass of the point
  */
 class Field {
     constructor(points, solver = new Solver(), frame = points[0], withMass = false) {
