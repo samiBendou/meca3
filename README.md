@@ -21,7 +21,7 @@ It can serve as **advanced physics engine** for animation :coffee:
 
 ### Featuring
 
-- **linear algebra** common features such as matrix and vectors
+- **Linear algebra** common features such as matrix and vectors
 
 - **Geometrical transformations** such as translation or affine transform
 
