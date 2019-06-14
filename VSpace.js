@@ -35,7 +35,7 @@ class VSpace {
     }
 
     static initializer(vector) {
-        return vector.constructor.name === "Vector3" ? Vector3.zeros : Matrix3.zeros;
+        return vector instanceof Vector3 ? Vector3.zeros : Matrix3.zeros;
     }
 }
 
