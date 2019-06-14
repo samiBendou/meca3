@@ -10,7 +10,7 @@
  *
  * #### Features
  *
- * - Move all the points with **dependant dynamic** by giving a unique solver
+ * - Move all the points with **dependent dynamic** by giving a unique solver
  *
  * - Represent **all the points in the same frame**
  *
