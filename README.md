@@ -19,7 +19,7 @@ It can serve as **advanced physics engine** for animation :coffee:
 
 - **Complete documentation** that can be found on the [wiki](https://github.com/samiBendou/meca3/wiki/)
 
-Featuring :
+### Featuring
 
 - **linear algebra** common features such as matrix and vectors
 
