@@ -1,4 +1,4 @@
-const assert = require("chai").assert;
+const assert = require("./common.js");
 
 describe("PointPair Tests", function () {
     const Vector3 = require("../Vector3.js");
@@ -14,19 +14,19 @@ describe("PointPair Tests", function () {
 
     it("Relative", function () {
         setUp();
-        assert(om.relative.isEqual(new Vector3(-1, 1, 0)));
+        assert.meca3.equal(om.relative, new Vector3(-1, 1, 0));
 
         om.relative = Vector3.ex;
-        assert(om.relative.isEqual(Vector3.ex));
-        assert(om.vector.isEqual(Vector3.ex.mul(2)));
+        assert.meca3.equal(om.relative, Vector3.ex);
+        assert.meca3.equal(om.vector, Vector3.ex.mul(2));
     });
 
     it("Length", function () {
         setUp();
-        assert(Math.abs(om.length - Math.SQRT2) < Number.EPSILON);
+        assert.approximately(om.length, Math.SQRT2, Number.EPSILON);
 
         op.length = 2;
-        assert(op.vector.isEqual(Vector3.ex.mul(2)));
+        assert.meca3.equal(op.vector, Vector3.ex.mul(2));
     });
 
     it("Affine", function () {

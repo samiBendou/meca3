@@ -1,4 +1,4 @@
-const assert = require("chai").assert;
+const assert = require("./common.js");
 
 describe("Point Tests", function () {
     const Point = require("../Point.js");
@@ -25,11 +25,7 @@ describe("Point Tests", function () {
         setUp();
         field.reframe(points[1]);
         field.points.forEach((p) => {
-            let origin = p.trajectory.origin;
-            points[1].trajectory.origin.forEach((u, index) => {
-                assert(u.isEqual(origin[index]));
-            });
-            assert(p.trajectory.origin);
+            assert.meca3.arrayEqual(points[1].trajectory.origin, p.trajectory.origin);
         });
     });
 
@@ -37,27 +33,27 @@ describe("Point Tests", function () {
         setUp();
         field.update();
         field.points.forEach((point) => {
-            assert(point.position.isZero())
+            assert.meca3.equal(point.position, Vector3.zeros);
         });
 
         ofield.update();
         ofield.points.forEach((point) => {
-            assert(point.position.isEqual(Vector3.ones.opp()))
+            assert.meca3.equal(point.position, Vector3.ones.opp());
         });
     });
 
     it("Barycenter", function () {
         setUp();
-        assert(field.barycenter.isEqual(Vector3.zeros));
+        assert.meca3.equal(field.barycenter, Vector3.zeros);
 
         ofield.update();
-        assert(ofield.barycenter.isEqual(Vector3.ones.opp()), `${ofield.barycenter}`);
+        assert.meca3.equal(ofield.barycenter, Vector3.ones.opp());
 
         ofield.barycenter = Vector3.zeros;
-        assert(ofield.barycenter.isEqual(Vector3.zeros), `${ofield.barycenter}`);
+        assert.meca3.equal(ofield.barycenter, Vector3.zeros);
 
         ofield.points.forEach((point) => {
-            assert(point.position.isEqual(Vector3.zeros));
+            assert.meca3.equal(point.position, Vector3.zeros);
         });
     })
 });

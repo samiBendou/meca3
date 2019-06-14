@@ -1,4 +1,4 @@
-const assert = require("chai").assert;
+const assert = require("./common.js");
 
 describe("Point Tests", function () {
     const Vector3 = require("../Vector3.js");
@@ -34,7 +34,7 @@ describe("Point Tests", function () {
         assert.equal(q.lat, Math.PI / 2);
         assert.equal(q.lon, 0);
 
-        assert(p.position.isEqual(Vector3.ex.add(Vector3.ez)));
+        assert.meca3.equal(p.position, Vector3.ex.add(Vector3.ez));
     });
 
     it("Get speed", function () {
@@ -54,7 +54,7 @@ describe("Point Tests", function () {
         assert.equal(q.vtheta, 0);
         assert.equal(q.vphi, 0);
 
-        assert(p.speed.isEqual(new Vector3(0, 0, -1)));
+        assert.meca3.equal(p.speed, new Vector3(0, 0, -1));
     });
 
     it("Set position", function () {
@@ -73,16 +73,16 @@ describe("Point Tests", function () {
         assert.equal(p.theta, Math.PI / 2);
 
         p.position = Vector3.ey;
-        assert(p.position.isEqual(Vector3.ey));
+        assert.meca3.equal(p.position, Vector3.ey);
     });
 
     it("Initialization", function () {
         setUp();
         p.init(Vector3.ones);
-        assert(p.trajectory.nexto.relative.isEqual(Vector3.ones));
+        assert.meca3.equal(p.trajectory.nexto.relative, Vector3.ones);
         p.update();
-        assert(p.position.isEqual(Vector3.ones));
-        assert(p.trajectory.nexto.relative.isEqual(Vector3.ones));
+        assert.meca3.equal(p.position, Vector3.ones);
+        assert.meca3.equal(p.trajectory.nexto.relative, Vector3.ones);
     });
 
     it("Rebase", function () {
@@ -91,17 +91,13 @@ describe("Point Tests", function () {
         q.trajectory.add(PointPair.zeros(Vector3.ex));
         p.reframe(q);
 
-        let expected = [Vector3.ones, Vector3.ex];
-        let result = p.trajectory.origin;
+        assert.meca3.arrayEqual([Vector3.ones, Vector3.ex], p.trajectory.origin);
 
-        expected.forEach((u, index) => {
-            assert(u.isEqual(result[index]))
-        });
     });
 
     it("Update", function () {
         setUp();
         p.update();
-        assert(p.position.isEqual(new Vector3(2, 0, 2)));
+        assert.meca3.equal(p.position, new Vector3(2, 0, 2));
     });
 });
