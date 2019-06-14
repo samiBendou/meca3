@@ -1,4 +1,4 @@
-const assert = require("chai").assert;
+const assert = require("./common.js");
 
 describe("Solver Tests", function () {
     const Vector3 = require("../Vector3.js");
@@ -30,23 +30,13 @@ describe("Solver Tests", function () {
 
     it("Solve", function () {
         setUp();
-        let oSolved = osolver.solve(Vector3.zeros, Vector3.ones, count);
-        let gSolved = gsolver.solve(Vector3.zeros, Vector3.zeros, count);
-
-        oSolved.forEach((u, index) => {
-            assert.approximately(u.dist(o(index)), 0, tol, `${u} != ${o(index)} index : ${index}`);
-        });
-        gSolved.forEach((u, index) => {
-            assert.approximately(u.dist(g(index)), 0, tol, `${u} != ${g(index)} index : ${index}`);
-        });
+        assert.meca3.solve(osolver.solve(Vector3.zeros, Vector3.ones, count), o, tol);
+        assert.meca3.solve(gsolver.solve(Vector3.zeros, Vector3.zeros, count), g, tol);
     });
 
     it("Variable step", function () {
         setUp();
-        let oSolved = osolver.solve(Vector3.zeros, Vector3.ones, count, new Array(count).fill(dt));
-        oSolved.forEach((u, index) => {
-            assert.approximately(u.dist(o(index)), 0, tol, `${u} != ${o(index)} index : ${index}`);
-        });
+        assert.meca3.solve(osolver.solve(Vector3.zeros, Vector3.ones, count, new Array(count).fill(dt)), o, tol);
     });
 
     it("Buffer step", function () {
@@ -56,35 +46,21 @@ describe("Solver Tests", function () {
 
         osolver.buffer(trajectory, dt);
         osolver.buffer(trajectory, dt);
-        trajectory.pairs.forEach((pair, index) => {
-            let str = `${pair.relative} != ${o(index)} index : ${index}`;
-            assert.approximately(pair.relative.dist(o(index + 2)), 0, tol, str);
-        });
+        assert.meca3.solve(trajectory, o, tol, 2);
     });
 
     it("Trajectory", function () {
         setUp();
-        let oSolved = osolver.trajectory(Vector3.zeros, Vector3.ones, count, dt);
-        oSolved.pairs.forEach((pair, index) => {
-            assert.approximately(pair.vector.dist(o(index)), 0, tol, `${pair.vector} != ${o(index)} index : ${index}`);
-            assert(pair.origin.isZero(), `${pair.origin}`);
-        });
+        assert.meca3.solve(osolver.trajectory(Vector3.zeros, Vector3.ones, count, dt), o, tol);
     });
 
     it("Max duration solve", function () {
         setUp();
-        let oSolved = osolver.solveMax(Vector3.zeros, Vector3.ones, count * dt, dt);
-        oSolved.forEach((u, index) => {
-            assert.approximately(u.dist(o(index)), 0, tol, `${u} != ${o(index)} index : ${index}`);
-        });
+        assert.meca3.solve(osolver.solveMax(Vector3.zeros, Vector3.ones, count * dt, dt), o, tol);
     });
 
     it("Max duration trajectory", function () {
         setUp();
-        let oSolved = osolver.trajectoryMax(Vector3.zeros, Vector3.ones, count * dt, dt);
-        oSolved.pairs.forEach((pair, index) => {
-            assert.approximately(pair.vector.dist(o(index)), 0, tol, `${pair.vector} != ${o(index)} index : ${index}`);
-            assert(pair.origin.isZero(), `${pair.origin}`);
-        });
+        assert.meca3.solve(osolver.trajectoryMax(Vector3.zeros, Vector3.ones, count * dt, dt), o, tol);
     });
 });

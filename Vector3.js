@@ -308,7 +308,7 @@ class Vector3 {
     }
 
     toString() {
-        return `(${this.x.toFixed(2)} ${this.y.toFixed(2)} ${this.z.toFixed(2)})`;
+        return `(${this.x.toExponential(2)} ${this.y.toExponential(2)} ${this.z.toExponential(2)})`;
     }
 
     /**

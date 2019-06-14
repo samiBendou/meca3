@@ -1,8 +1,10 @@
 /**
- * @class Trajectory
+ * @class Field
  * @author samiBendou
  * @brief trajectory of a mobile
  * @details `Field` class represent a _system_ of material points attracted in a _field_.
+ *
+ * Set `withMass` to `true property to simulate 2nd Newton law dynamic.
  *
  * Construct a field by giving an array of points.
  *
@@ -16,12 +18,13 @@
  * @property solver {Solver} solver used to represent the field
  * @property frame {Point} point used as frame of other points
  * @property bcenter {Point} barycenter of the points
+ * @property withMass {boolean} `true` if the solver field value is divided by the mass of the point
  */
 class Field {
-    constructor(points, solver, frame) {
+    constructor(points, solver = new Solver(), frame = points[0], withMass = false) {
         this.points = points;
-        this.frame = frame || points[0];
-        this.setSolvers(solver || new Solver());
+        this.frame = frame;
+        this.setSolvers(solver, withMass);
     }
 
     get solver() {
@@ -29,12 +32,13 @@ class Field {
     }
 
     set solver(newSolver) {
-        this.setSolvers(newSolver);
+        this.setSolvers(newSolver, false);
     }
 
-    setSolvers(solver) {
+    setSolvers(solver, withMass) {
         this.points.forEach((point) => {
-            point.solver = solver
+            let f = solver.field;
+            point.solver = withMass ? new Solver((u) => f(u).div(point.mass), solver.dt0, solver.method) : solver;
         });
     }
 

@@ -10,22 +10,22 @@ describe("Vector3 Tests", function () {
     let scalars = [1, 2, 3];
 
     it("Sum", function () {
-        assert(VSpace.sum(vectors).isEqual(new Vector3(1, 1, 1)));
-        assert(VSpace.sum(matrices).isEqual(new Matrix3(
+        assert.meca3.equal(VSpace.sum(vectors), new Vector3(1, 1, 1));
+        assert.meca3.equal(VSpace.sum(matrices), new Matrix3(
             7, 1, 1,
             1, 7, 1,
             1, 1, 7
-        )));
-        assert(vectors[0].isEqual(Vector3.ex));
+        ));
+        assert.meca3.equal(vectors[0], Vector3.ex);
     });
 
     it("Comb", function () {
-        assert(VSpace.comb(scalars, vectors).isEqual(new Vector3(1, 2, 3)));
-        assert(VSpace.comb(scalars, matrices).isEqual(new Matrix3(
+        assert.meca3.equal(VSpace.comb(scalars, vectors), new Vector3(1, 2, 3));
+        assert.meca3.equal(VSpace.comb(scalars, matrices), new Matrix3(
             18, 2, 2,
             2, 18, 2,
             2, 2, 18
-        )));
-        assert(vectors[0].isEqual(Vector3.ex));
+        ));
+        assert.meca3.equal(vectors[0], Vector3.ex);
     });
 });

@@ -1,4 +1,4 @@
-const assert = require("chai").assert;
+const assert = require("./common.js");
 
 describe("BufferTrajectory Tests", function () {
     const Vector3 = require("../Vector3.js");
@@ -27,9 +27,9 @@ describe("BufferTrajectory Tests", function () {
 
     it("Bufferize", function () {
         setUp();
-        assert(gamma0.isEqual(gamma));
-        assert(gamma1.isEqual(new Trajectory([om1, om2], dt)));
-        assert(gamma2.isEqual(new Trajectory([om0, om1, om2, PointPair.zeros()], dt)));
+        assert.meca3.equal(gamma0, gamma);
+        assert.meca3.equal(gamma1, new Trajectory([om1, om2], dt));
+        assert.meca3.equal(gamma2, new Trajectory([om0, om1, om2, PointPair.zeros()], dt));
 
         assert.equal(gamma0.dt.length, 2);
         assert.equal(gamma1.dt.length, 1);
@@ -38,18 +38,18 @@ describe("BufferTrajectory Tests", function () {
 
     it("At", function () {
         setUp();
-        assert(gamma1.at(0).isEqual(om1));
-        assert(gamma2.at(0).isEqual(PointPair.zeros()));
+        assert.meca3.equal(gamma1.at(0), om1);
+        assert.meca3.equal(gamma2.at(0), PointPair.zeros());
     });
 
     it("Add", function () {
         setUp();
         gamma1.add(om2);
-        assert(gamma1.isEqual(new Trajectory([om2, om2], dt)));
+        assert.meca3.equal(gamma1, new Trajectory([om2, om2], dt));
 
         gamma2.add(om2);
         gamma2.add(om1);
-        assert(gamma2.isEqual(new Trajectory([om1, om1, om2, om2], dt)));
+        assert.meca3.equal(gamma2, new Trajectory([om1, om1, om2, om2], dt));
         gamma2 = new BufferTrajectory(gamma, 4);
     });
 
@@ -57,10 +57,10 @@ describe("BufferTrajectory Tests", function () {
         setUp();
         gamma1.size++;
         gamma1.add(om0);
-        assert(gamma1.isEqual(new Trajectory([om1, om2, om0], dt)), gamma1.toString());
+        assert.meca3.equal(gamma1, new Trajectory([om1, om2, om0], dt));
 
         gamma1.add(om0);
-        assert(gamma1.isEqual(new Trajectory([om0, om2, om0], dt)), gamma1.toString());
+        assert.meca3.equal(gamma1, new Trajectory([om0, om2, om0], dt));
     });
 
     it("Clear", function () {
@@ -71,36 +71,36 @@ describe("BufferTrajectory Tests", function () {
 
     it("First/Last/Nexto", function () {
         setUp();
-        assert(gamma1.first.isEqual(om1));
-        assert(gamma1.nexto.isEqual(om1));
-        assert(gamma1.last.isEqual(om2));
+        assert.meca3.equal(gamma1.first, om1);
+        assert.meca3.equal(gamma1.nexto, om1);
+        assert.meca3.equal(gamma1.last, om2);
 
-        assert(gamma2.first.isEqual(PointPair.zeros()));
-        assert(gamma2.nexto.isEqual(om1));
-        assert(gamma2.last.isEqual(om2));
+        assert.meca3.equal(gamma2.first, PointPair.zeros());
+        assert.meca3.equal(gamma2.nexto, om1);
+        assert.meca3.equal(gamma2.last, om2);
 
         gamma1.first = om1;
         gamma1.last = om0;
         gamma2.nexto = org;
 
-        assert(gamma1.first.isEqual(om1));
-        assert(gamma1.last.isEqual(om0));
-        assert(gamma2.nexto.isEqual(org));
+        assert.meca3.equal(gamma1.first, om1);
+        assert.meca3.equal(gamma1.last, om0);
+        assert.meca3.equal(gamma2.nexto, org);
     });
 
     it("At/Get", function() {
         setUp();
-        assert(gamma1.get(0).isEqual(om1));
-        assert(gamma1.at(0).isEqual(om1));
+        assert.meca3.equal(gamma1.get(0), om1);
+        assert.meca3.equal(gamma1.at(0), om1);
 
-        assert(gamma1.get(1).isEqual(om2));
-        assert(gamma1.at(0.5).vector.isEqual(new Vector3(-0.5, 0.5, 0)));
+        assert.meca3.equal(gamma1.get(1), om2);
+        assert.meca3.equal(gamma1.at(0.5).vector, new Vector3(-0.5, 0.5, 0));
 
-        assert(gamma2.get(0).isEqual(PointPair.zeros()));
-        assert(gamma2.at(0).isEqual(PointPair.zeros()));
+        assert.meca3.equal(gamma2.get(0), PointPair.zeros());
+        assert.meca3.equal(gamma2.at(0), PointPair.zeros());
 
-        assert(gamma2.get(1).isEqual(om0));
-        assert(gamma2.at(0.5).vector.isEqual(new Vector3(0.5, 0.5, 0)));
+        assert.meca3.equal(gamma2.get(1), om0);
+        assert.meca3.equal(gamma2.at(0.5).vector, new Vector3(0.5, 0.5, 0));
     });
 
     it("Time", function(){
@@ -133,6 +133,6 @@ describe("BufferTrajectory Tests", function () {
     it("Generators", function () {
         setUp();
         let phi = BufferTrajectory.discrete([Vector3.ex, Vector3.ey, Vector3.ex.opp()], 0.1);
-        assert(phi.isEqual(gamma0));
+        assert.meca3.equal(phi, gamma0);
     });
 });

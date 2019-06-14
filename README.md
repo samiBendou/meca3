@@ -6,10 +6,20 @@
 
 # meca3
 
-_meca3_ is a **mechanics toolbox** :rocket:
+_meca3_ is a **mechanics framework** :rocket:
 
 It represents **3D space** and provides a **solver** to compute **trajectory** of **moving points** 
 :heavy_plus_sign::heavy_multiplication_x::heavy_minus_sign:
+
+It can be used as an **advanced physics engine** for animation :coffee:
+
+- **Object oriented** syntax to perform mathematical operations
+
+- **3D optimized implementation** of common algebraical operations to provide fast computation
+
+- **Complete documentation** that can be found on the [wiki](https://github.com/samiBendou/meca3/wiki/)
+
+Featuring :
 
 - **linear algebra** common features such as matrix and vectors
 
@@ -17,14 +27,12 @@ It represents **3D space** and provides a **solver** to compute **trajectory** o
 
 - **Coordinates systems** representation such as spherical and cylindrical coordinates
 
-- **Point's trajectory** representation, transformation and bufferization features for animation
+- **Trajectory** representation, transformation and bufferization features for animation
 
 - **Lightweight solver** to perform either step by step or global 2nd order ODE solving with trajectory
 
-- **Object oriented** syntax to perform mathematical operations
+- **Points mechanics** features to move a point according to dynamic equation
 
-- **3D optimized implementation** of common algebraical operations to provide fast computation
-
-- **Complete documentation** that can be found on the [wiki](https://github.com/samiBendou/meca3/wiki/)
+- **Mechanics of dependant systems** representation with dependant points field
 
 Feel free to propose contributions to the project : [guide](https://github.com/samiBendou/meca3/blob/master/CONTRIBUTING.md) :satellite:
