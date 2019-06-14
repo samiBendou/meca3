@@ -6,7 +6,7 @@
  *
  * Construct a field by giving an array of points.
  *
- * Set `withMass` to `true property to simulate 2nd Newton law dynamic whehn constructing the field.
+ * Set `withMass` to `true property to simulate 2nd Newton law dynamic when constructing the field.
  *
  * #### Features
  *
