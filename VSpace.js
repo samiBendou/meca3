@@ -7,14 +7,15 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 /**
  * @class VSpace
  * @author samiBendou
- * @brief operations in vector space
- * @details This static class represents operations provided on a vector and matrix array
+ * @brief operations in _vector space_
+ * @details This static class represents operations provided on a vector and matrix array such as **addition** and
+ * **linear combination**
  */
 
 class VSpace {
     /**
      * @brief sums vectors in array
-     * @param vectors {Array} array of vectors
+     * @param vectors {Array} array of `Vector3` or `Matrix3`
      * @returns {Vector3|Matrix3} value of the sum
      */
     static sum(vectors) {
@@ -25,7 +26,7 @@ class VSpace {
     /**
      * @brief linear combination of vectors in array
      * @param scalars {Array} array of numbers
-     * @param vectors {Array} array of vectors
+     * @param vectors {Array} array of `Vector3` or `Matrix3`
      * @returns {Vector3|Matrix3} value of linear combination
      */
     static comb(scalars, vectors) {
