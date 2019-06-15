@@ -45,9 +45,9 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
  * @property vy {number} cartesian speed
  * @property vz {number} cartesian speed
  * @property vr {number} spherical speed
- * @property vrxy {number} cylindrical speed
- * @property vtheta {number} cylindrical and spherical speed
- * @property vphi {number} spherical speed
+ * @property vrxy {number} cylindrical speed, equals to **drxy/dt**
+ * @property vtheta {number} cylindrical and spherical speed, equals to **dtheta/dt**
+ * @property vphi {number} spherical speed, equals to **dphi/dt**
  */
 
 class Point {

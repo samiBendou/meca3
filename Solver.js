@@ -52,12 +52,12 @@ class Solver {
      * @brief compute one solution step
      * @param u1 {Vector3} current value of unknown vector
      * @param u0 {Vector3} previous value of unknown vector
-     * @param t {number} duration since initial instant
+     * @param t {number=} duration since initial instant
      * @param dt {number=} time step for this iteration
      * @param method {string=} method to use for this step
      * @returns {Vector3} value of next solution from ODE
      */
-    step(u1, u0, t, dt = this.dt1, method = this.method) {
+    step(u1, u0, t = 0, dt = this.dt1, method = this.method) {
         this.dt0 = this.dt1;
         this.dt1 = dt;
         return Solver.methods[this.method](this.field, u1, u0, t, this.dt0, this.dt1);
