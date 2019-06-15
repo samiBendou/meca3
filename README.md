@@ -17,7 +17,7 @@ It can serve as **advanced physics engine** for animation :coffee:
 
 - **3D optimized implementation** of common algebraical operations to provide fast computation
 
-- **Complete documentation** that can be found on the [wiki](https://github.com/samiBendou/meca3/wiki/)
+- **Complete documentation** with **examples** that can be found on the [wiki](https://github.com/samiBendou/meca3/wiki/)
 
 ### Featuring
 
