@@ -361,16 +361,6 @@ export default class Matrix3 implements Vector {
     }
 
     /**
-     * @details product of the matrices in array
-     * @details The product is performed in the same order as the elements in the array.
-     * @param matrices array of `Vector3`
-     * @returns value of the product
-     */
-    static prod(matrices: Matrix3[]) {
-        return matrices.reduce((acc, m) => acc.prod(m), Matrix3.eye);
-    }
-
-    /**
      * @brief rotation matrix of axis (`0`, `ex`)
      * @details Anticlockwise rotation.
      * @param cos `x` metric function of the rotation

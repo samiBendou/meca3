@@ -223,7 +223,7 @@ export default class Trajectory {
     /**
      * @brief generates an immobile trajectory
      * @details Observer and mobile positions are equal
-     * @param u {Vector3}
+     * @param u position of observer and mobile
      * @param size number of elements in trajectory
      * @param dt time step between each position
      * @returns new instance of trajectory
