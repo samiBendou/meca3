@@ -1,3 +1,7 @@
+import Point from "./Point";
+import Solver, {methods} from "./Solver";
+import Vector3 from "./Vector3";
+
 /**
  * @brief trajectory of a mobile
  * @details `Field` class represent a _system_ of material points attracted in a _field_.
@@ -9,10 +13,6 @@
  * - Represent **all the points in the same frame**
  *
  */
-import Point from "./Point";
-import Solver, {methods} from "./Solver";
-import Vector3 from "./Vector3";
-
 export default class Field {
 
     /** points composing the system **/
