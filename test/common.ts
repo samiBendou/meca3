@@ -52,8 +52,8 @@ export const check = {
             });
         } else {
             approx.pairs.forEach((pair: any, index: number) => {
-                let str = `${pair.vector} != ${exact(index + shift)} index : ${index}`;
-                assert.approximately(pair.vector.dist(exact(index + shift)), 0, tol, str);
+                let str = `${pair.position} != ${exact(index + shift)} index : ${index}`;
+                assert.approximately(pair.position.dist(exact(index + shift)), 0, tol, str);
                 assert(pair.origin.isZero(), `${pair.origin}`);
             });
         }

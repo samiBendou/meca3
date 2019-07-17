@@ -3,8 +3,7 @@ import Trajectory from "./Trajectory";
 import Vector3 from "./Vector3";
 
 /**
- * @class BufferTrajectory
- * @author samiBendou
+ *
  * @brief fixed size trajectory
  * @details `BufferTrajectory` is a _fixed size_ `Trajectory` that can be updated.
  *
