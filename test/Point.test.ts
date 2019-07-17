@@ -1,16 +1,18 @@
-const assert = require("./common.js");
+import {assert} from "chai";
+import {check} from "./common";
+import Vector3 from "../src/Vector3";
+import Point from "../src/Point";
+import Pair3 from "../src/Pair3";
 
 describe("Point Tests", function () {
-    const Vector3 = require("../src/Vector3.js");
-    const Point = require("../src/Point.js");
 
-    let p, q;
+    let p: Point, q: Point;
 
     function setUp() {
-        p = Point.zeros(0, Vector3.zeros, 10);
-        q = Point.zeros(0, Vector3.zeros, 2);
-        p.trajectory.add(PointPair.vect(new Vector3(1, 0, 1)));
-        q.trajectory.add(PointPair.zeros(Vector3.ones));
+        p = Point.zeros(10, Vector3.zeros, 0);
+        q = Point.zeros(2, Vector3.zeros, 0);
+        p.trajectory.add(Pair3.vect(new Vector3(1, 0, 1)));
+        q.trajectory.add(Pair3.zeros(Vector3.ones));
     }
 
     it("Get position", function () {
@@ -34,13 +36,13 @@ describe("Point Tests", function () {
         assert.equal(q.lat, Math.PI / 2);
         assert.equal(q.lon, 0);
 
-        assert.meca3.equal(p.position, Vector3.ex.add(Vector3.ez));
+        check.equal(p.position, Vector3.ex.add(Vector3.ez));
     });
 
     it("Get speed", function () {
         setUp();
-        p.trajectory.add(PointPair.vect(Vector3.ex));
-        q.trajectory.add(PointPair.zeros(Vector3.ex));
+        p.trajectory.add(Pair3.vect(Vector3.ex));
+        q.trajectory.add(Pair3.zeros(Vector3.ex));
 
         assert.equal(p.vx, 0);
         assert.equal(p.vz, -1);
@@ -54,7 +56,7 @@ describe("Point Tests", function () {
         assert.equal(q.vtheta, 0);
         assert.equal(q.vphi, 0);
 
-        assert.meca3.equal(p.speed, new Vector3(0, 0, -1));
+        check.equal(p.speed, new Vector3(0, 0, -1));
     });
 
     it("Set position", function () {
@@ -73,31 +75,31 @@ describe("Point Tests", function () {
         assert.equal(p.theta, Math.PI / 2);
 
         p.position = Vector3.ey;
-        assert.meca3.equal(p.position, Vector3.ey);
+        check.equal(p.position, Vector3.ey);
     });
 
     it("Initialization", function () {
         setUp();
         p.init(Vector3.ones);
-        assert.meca3.equal(p.trajectory.nexto.relative, Vector3.ones);
+        check.equal(p.trajectory.nexto.relative, Vector3.ones);
         p.update();
-        assert.meca3.equal(p.position, Vector3.ones);
-        assert.meca3.equal(p.trajectory.nexto.relative, Vector3.ones);
+        check.equal(p.position, Vector3.ones);
+        check.equal(p.trajectory.nexto.relative, Vector3.ones);
     });
 
     it("Rebase", function () {
         setUp();
-        p.trajectory.add(PointPair.vect(Vector3.ex));
-        q.trajectory.add(PointPair.zeros(Vector3.ex));
+        p.trajectory.add(Pair3.vect(Vector3.ex));
+        q.trajectory.add(Pair3.zeros(Vector3.ex));
         p.reframe(q);
 
-        assert.meca3.arrayEqual([Vector3.ones, Vector3.ex], p.trajectory.origin);
+        check.arrayEqual([Vector3.ones, Vector3.ex], p.trajectory.origin);
 
     });
 
     it("Update", function () {
         setUp();
         p.update();
-        assert.meca3.equal(p.position, new Vector3(2, 0, 2));
+        check.equal(p.position, new Vector3(2, 0, 2));
     });
 });
