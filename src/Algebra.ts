@@ -11,6 +11,10 @@
  * implements a binary product in order to perform repeated multiplications.
  */
 export interface Vector {
+
+    x: any;
+    y: any;
+    z: any;
     /**
      * @brief clone a vector by creating a new instance with same values
      * @returns cloned vector
@@ -21,7 +25,7 @@ export interface Vector {
      * @brief fills the vector with a single value
      * @param s value used to fill
      */
-    fill(s: number): Vector;
+    fill(s: number): this;
 
     fillc(s: number): Vector;
 
@@ -29,7 +33,7 @@ export interface Vector {
      * @brief usual addition between two vectors
      * @param vector vector to add
      */
-    add(vector: Vector): Vector;
+    add(vector: Vector): this;
 
     addc(vector: Vector): Vector;
 
@@ -37,14 +41,14 @@ export interface Vector {
      * @brief usual subtraction between two vectors
      * @param vector vector to subtract
      */
-    sub(vector: Vector): Vector;
+    sub(vector: Vector): this;
 
     subc(vector: Vector): Vector;
 
     /**
      * @brief usual opposite of the vector
      */
-    opp(): Vector;
+    opp(): this;
 
     oppc(): Vector;
 
@@ -52,7 +56,7 @@ export interface Vector {
      * @brief usual scalar multiplication of the vector
      * @param s scalar to multiply
      */
-    mul(s: number): Vector;
+    mul(s: number): this;
 
     mulc(s: number): Vector;
 
@@ -60,15 +64,19 @@ export interface Vector {
      * @brief usual scalar division of the vector
      * @param s scalar to divide
      */
-    div(s: number): Vector;
+    div(s: number): this;
 
     divc(s: number): Vector;
+
+    trans(): this;
+
+    transc(): Vector;
 
     /**
      * @brief meaningful product between two vectors
      * @param vector vector to multiply
      */
-    prod(vector: Vector): Vector;
+    prod(vector: Vector): this;
 
     prodc(vector: Vector): Vector;
 

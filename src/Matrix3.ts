@@ -40,6 +40,12 @@ export default class Matrix3 implements Vector {
         this.z = new Vector3(zx, zy, zz);
     }
 
+
+    /** norm of the matrix from usual inner product**/
+    get norm(): number {
+        return Math.sqrt(this.scal(this));
+    }
+
     /**
      * @brief i-th row
      * @param i index of the row to get
@@ -87,25 +93,25 @@ export default class Matrix3 implements Vector {
         return this.copy().fill(s);
     }
 
-    add(m: Matrix3) {
+    add(m: Vector) {
         this.x.add(m.x);
         this.y.add(m.y);
         this.z.add(m.z);
         return this;
     }
 
-    addc(m: Matrix3) {
+    addc(m: Vector) {
         return this.copy().add(m);
     }
 
-    sub(m: Matrix3) {
+    sub(m: Vector) {
         this.x.sub(m.x);
         this.y.sub(m.y);
         this.z.sub(m.z);
         return this;
     }
 
-    subc(m: Matrix3) {
+    subc(m: Vector) {
         return this.copy().sub(m);
     }
 
@@ -164,7 +170,7 @@ export default class Matrix3 implements Vector {
      * @param m matrix to multiply
      * @returns reference to `this`
      */
-    prod(m: Matrix3) {
+    prod(m: Vector) {
         const mTrs = m.copy().trans();
         this.set(
             this.x.scal(mTrs.x), this.x.scal(mTrs.y), this.x.scal(mTrs.z),
@@ -174,19 +180,15 @@ export default class Matrix3 implements Vector {
         return this;
     }
 
-    prodc(m: Matrix3) {
+    prodc(m: Vector) {
         return this.copy().prod(m);
     }
 
-    scal(m: Matrix3) {
+    scal(m: Vector) {
         return this.x.scal(m.x) + this.y.scal(m.y) + this.z.scal(m.z);
     }
 
-    get norm() {
-        return Math.sqrt(this.scal(this));
-    }
-
-    dist(m: Matrix3) {
+    dist(m: Vector) {
         return this.copy().sub(m).norm;
     }
 

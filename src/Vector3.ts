@@ -29,7 +29,7 @@ export default class Vector3 implements Vector {
     }
 
     /** first spherical coordinate, length of the vector **/
-    get r() {
+    get r(): number {
         return Math.sqrt(this.scal(this));
     }
 
@@ -130,25 +130,25 @@ export default class Vector3 implements Vector {
         return this.copy().fill(s);
     }
 
-    add(u: Vector3) {
+    add(u: Vector) {
         this.x += u.x;
         this.y += u.y;
         this.z += u.z;
         return this;
     }
 
-    addc(u: Vector3) {
+    addc(u: Vector) {
         return this.copy().add(u);
     }
 
-    sub(u: Vector3) {
+    sub(u: Vector) {
         this.x -= u.x;
         this.y -= u.y;
         this.z -= u.z;
         return this;
     }
 
-    subc(u: Vector3) {
+    subc(u: Vector) {
         return this.copy().sub(u);
     }
 
@@ -185,7 +185,7 @@ export default class Vector3 implements Vector {
         return this.copy().div(s);
     }
 
-    scal(u: Vector3) {
+    scal(u: Vector) {
         return this.x * u.x + this.y * u.y + this.z * u.z;
     }
 
@@ -194,7 +194,7 @@ export default class Vector3 implements Vector {
      * @param u vector to multiply
      * @returns reference to `this`
      */
-    cross(u: Vector3) {
+    cross(u: Vector) {
         this.xyz = [
             this.y * u.z - this.z * u.y,
             this.z * u.x - this.x * u.z,
@@ -203,19 +203,27 @@ export default class Vector3 implements Vector {
         return this;
     }
 
-    crossc(u: Vector3) {
+    crossc(u: Vector) {
         return this.copy().cross(u);
     }
 
-    prod(u: Vector3) {
+    trans() {
+        return this;
+    }
+
+    transc() {
+        return this.copy();
+    }
+
+    prod(u: Vector) {
         return this.cross(u);
     }
 
-    prodc(u: Vector3) {
+    prodc(u: Vector) {
         return this.crossc(u)
     }
 
-    dist(u: Vector3) {
+    dist(u: Vector) {
         return this.copy().sub(u).r;
     }
 
