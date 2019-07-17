@@ -1,7 +1,7 @@
 const assert = require("./common.js");
 
 describe("Vector3 Tests", function () {
-    const Vector3 = require("../Vector3.js");
+    const Vector3 = require("../src/Vector3.js");
 
     let u, v, w;
 

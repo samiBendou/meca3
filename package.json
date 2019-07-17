@@ -2,7 +2,7 @@
   "name": "meca3",
   "version": "3.2.2",
   "description": "3D geometry, linear algebra and ODE solving for point's mechanics",
-  "main": "main.js",
+  "main": "src/main.js",
   "directories": {
     "test": "test"
   },
@@ -16,7 +16,8 @@
   "license": "GPL-3.0",
   "dependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "tsd-jsdoc": "^2.3.1"
   },
   "repository": {
     "type": "git",

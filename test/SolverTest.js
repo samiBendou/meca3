@@ -1,9 +1,9 @@
 const assert = require("./common.js");
 
 describe("Solver Tests", function () {
-    const Vector3 = require("../Vector3.js");
-    const Solver = require("../Solver.js");
-    const BufferTrajectory = require("../BufferTrajectory.js");
+    const Vector3 = require("../src/Vector3.js");
+    const Solver = require("../src/Solver.js");
+    const BufferTrajectory = require("../src/BufferTrajectory.js");
 
     let osolver, gsolver;
     let pulse, amp, freq;

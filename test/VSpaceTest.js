@@ -1,9 +1,9 @@
 const assert = require("chai").assert;
 
 describe("Vector3 Tests", function () {
-    const Vector3 = require("../Vector3.js");
-    const Matrix3 = require("../Matrix3.js");
-    const VSpace = require("../VSpace.js");
+    const Vector3 = require("../src/Vector3.js");
+    const Matrix3 = require("../src/Matrix3.js");
+    const VSpace = require("../src/VSpace.js");
 
     let vectors = [Vector3.ex, Vector3.ey, Vector3.ez];
     let matrices = [Matrix3.eye, Matrix3.ones, Matrix3.scal(5)];

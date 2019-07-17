@@ -1,9 +1,9 @@
 const assert = require("./common.js");
 
 describe("PointPair Tests", function () {
-    const Vector3 = require("../Vector3.js");
-    const Matrix3 = require("../Matrix3.js");
-    const PointPair = require("../PointPair.js");
+    const Vector3 = require("../src/Vector3.js");
+    const Matrix3 = require("../src/Matrix3.js");
+    const PointPair = require("../src/PointPair.js");
 
     let om, op;
 

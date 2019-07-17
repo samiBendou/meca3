@@ -1,10 +1,10 @@
 const assert = require("./common.js");
 
 describe("BufferTrajectory Tests", function () {
-    const Vector3 = require("../Vector3.js");
-    const PointPair = require("../PointPair.js");
-    const Trajectory = require("../Trajectory.js");
-    const BufferTrajectory = require("../BufferTrajectory.js");
+    const Vector3 = require("../src/Vector3.js");
+    const PointPair = require("../src/PointPair.js");
+    const Trajectory = require("../src/Trajectory.js");
+    const BufferTrajectory = require("../src/BufferTrajectory.js");
 
     let dt;
     let org, om0, om1, om2;

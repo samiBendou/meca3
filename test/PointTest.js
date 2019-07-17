@@ -1,8 +1,8 @@
 const assert = require("./common.js");
 
 describe("Point Tests", function () {
-    const Vector3 = require("../Vector3.js");
-    const Point = require("../Point.js");
+    const Vector3 = require("../src/Vector3.js");
+    const Point = require("../src/Point.js");
 
     let p, q;
 

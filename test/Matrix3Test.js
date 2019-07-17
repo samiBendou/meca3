@@ -1,8 +1,8 @@
 const assert = require("./common.js");
 
 describe("Matrix3 Tests", function () {
-    const Vector3 = require("../Vector3.js");
-    const Matrix3 = require("../Matrix3.js");
+    const Vector3 = require("../src/Vector3.js");
+    const Matrix3 = require("../src/Matrix3.js");
 
     let a, b, c, cInv;
 

@@ -1,8 +1,8 @@
 const assert = require("./common.js");
 
 describe("Point Tests", function () {
-    const Point = require("../Point.js");
-    const Field = require("../Field.js");
+    const Point = require("../src/Point.js");
+    const Field = require("../src/Field.js");
 
     let points, opoints;
     let field, ofield;

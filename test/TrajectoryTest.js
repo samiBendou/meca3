@@ -1,9 +1,9 @@
 const assert = require("./common.js");
 
 describe("Trajectory Tests", function () {
-    const Vector3 = require("../Vector3.js");
-    const PointPair = require("../PointPair.js");
-    const Trajectory = require("../Trajectory.js");
+    const Vector3 = require("../src/Vector3.js");
+    const PointPair = require("../src/PointPair.js");
+    const Trajectory = require("../src/Trajectory.js");
 
 
     let dt;
