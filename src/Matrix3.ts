@@ -355,10 +355,13 @@ export default class Matrix3 implements Vector {
      * @returns value of canonical matrix
      */
     static e(i: number, j: number) {
-        const labels = ["x", "y", "z"];
+        const row = new Vector3(j === 0 ? 1 : 0, j === 1 ? 1 : 0, j === 2 ? 1 : 0);
         const can = Matrix3.zeros;
 
-        // can[labels[i]][labels[j]] = 1;
+        can.x = i == 0 ? row : can.x;
+        can.y = i == 1 ? row : can.y;
+        can.z = i == 2 ? row : can.z;
+
         return can;
     }
 
