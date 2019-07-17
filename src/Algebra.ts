@@ -4,7 +4,7 @@
  * It might be numerical vectors, matrices, or something more complicated.
  *
  * This interface is designed such that each provided algebraical operation must has a similar **copy operation** implemented.
- * The regular operation returns a reference to `this` and the copy operation a new instance of the `Vector`
+ * The regular operations return a reference to `this` and the copy operations a new instance of the `Vector`
  * containing the **result of the operation**.
  *
  * The the vectors represented by this interface are **not only vectors** in a strict mathematical meaning. These vectors
@@ -20,7 +20,6 @@ export interface Vector {
     /**
      * @brief fills the vector with a single value
      * @param s value used to fill
-     * @returns reference to `this`
      */
     fill(s: number): Vector;
 
@@ -29,7 +28,6 @@ export interface Vector {
     /**
      * @brief usual addition between two vectors
      * @param vector vector to add
-     * @returns reference to `this`
      */
     add(vector: Vector): Vector;
 
@@ -38,7 +36,6 @@ export interface Vector {
     /**
      * @brief usual subtraction between two vectors
      * @param vector vector to subtract
-     * @returns reference to `this`
      */
     sub(vector: Vector): Vector;
 
@@ -46,7 +43,6 @@ export interface Vector {
 
     /**
      * @brief usual opposite of the vector
-     * @returns reference to `this`
      */
     opp(): Vector;
 
@@ -55,7 +51,6 @@ export interface Vector {
     /**
      * @brief usual scalar multiplication of the vector
      * @param s scalar to multiply
-     * @returns reference to `this`
      */
     mul(s: number): Vector;
 
@@ -64,7 +59,6 @@ export interface Vector {
     /**
      * @brief usual scalar division of the vector
      * @param s scalar to divide
-     * @returns reference to `this`
      */
     div(s: number): Vector;
 
@@ -73,7 +67,6 @@ export interface Vector {
     /**
      * @brief meaningful product between two vectors
      * @param vector vector to multiply
-     * @returns reference to `this`
      */
     prod(vector: Vector): Vector;
 

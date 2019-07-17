@@ -10,6 +10,7 @@ import {Vector} from "./Algebra";
  *
  * - Use cylindrical `r`, `theta`, `z` and spherical `rxy`, `theta`, `phi` coordinates
  * with provided **setters and getters**.
+ *
  */
 export default class Vector3 implements Vector {
 
@@ -22,6 +23,7 @@ export default class Vector3 implements Vector {
     /** third cartesian coordinate **/
     z: number;
 
+    /** construct with cartesian coordinates **/
     constructor(x: number = 0, y: number = 0, z: number = 0) {
         this.xyz = [x, y, z];
     }
@@ -391,8 +393,8 @@ export default class Vector3 implements Vector {
      * @returns array of `Vector` representing the value of the derivative
      */
     static derivative(vectors: Vector3[], dt: number[] | number = 1) {
-        let steps = (typeof dt == "number") ? Array(vectors.length).fill(dt) : dt;
-        let der = new Array(vectors.length - 1);
+        const steps = (typeof dt == "number") ? Array(vectors.length).fill(dt) : dt;
+        const der = new Array(vectors.length - 1);
         for (let i = 0; i < vectors.length - 1; i++) {
             der[i] = vectors[i + 1].copy().sub(vectors[i]).div(steps[i]);
         }
@@ -414,7 +416,7 @@ export default class Vector3 implements Vector {
      * @returns new instance of vector
      */
     static cylindrical(rxy: number, theta: number, z: number) {
-        let u = new Vector3();
+        const u = new Vector3();
         u.rthz = [rxy, theta, z];
         return u;
     }
@@ -424,7 +426,7 @@ export default class Vector3 implements Vector {
      * @returns new instance of vector
      */
     static spherical(r: number, theta: number, phi: number) {
-        let u = new Vector3();
+        const u = new Vector3();
         u.rthph = [r, theta, phi];
         return u;
     }
