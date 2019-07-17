@@ -165,7 +165,7 @@ export default class Matrix3 implements Vector {
      * @returns reference to `this`
      */
     prod(m: Matrix3) {
-        let mTrs = m.copy().trans();
+        const mTrs = m.copy().trans();
         this.set(
             this.x.scal(mTrs.x), this.x.scal(mTrs.y), this.x.scal(mTrs.z),
             this.y.scal(mTrs.x), this.y.scal(mTrs.y), this.y.scal(mTrs.z),
@@ -220,7 +220,7 @@ export default class Matrix3 implements Vector {
      * @returns reference to this
      */
     inv() {
-        let det = this.det;
+        const det = this.det;
         this.set(
             this.y.y * this.z.z - this.y.z * this.z.y,
             this.x.z * this.z.y - this.x.y * this.z.z,
@@ -242,7 +242,7 @@ export default class Matrix3 implements Vector {
 
     rpow(exp: number) {
         if (exp > 1) {
-            let copy = this.copy();
+            const copy = this.copy();
             this.prod(copy);
             if (exp % 2 === 0) {
                 this.rpow(exp / 2);
@@ -353,8 +353,8 @@ export default class Matrix3 implements Vector {
      * @returns value of canonical matrix
      */
     static e(i: number, j: number) {
-        let labels = ["x", "y", "z"];
-        let can = Matrix3.zeros;
+        const labels = ["x", "y", "z"];
+        const can = Matrix3.zeros;
 
         // can[labels[i]][labels[j]] = 1;
         return can;
@@ -457,7 +457,7 @@ export default class Matrix3 implements Vector {
      * @returns value of the tensor product
      */
     static tens(u: Vector3, v?: Vector3) {
-        let right = v || u;
+        const right = v || u;
         return new Matrix3(
             u.x * right.x, u.x * right.y, u.x * right.z,
             u.y * right.x, u.y * right.y, u.y * right.z,

@@ -1,5 +1,5 @@
-import {assets} from "./common";
 import {assert} from "chai";
+import {assets} from "./common";
 import {epsilon} from "../src/Algebra";
 import Vector3 from "../src/Vector3";
 import Matrix3 from "../src/Matrix3";

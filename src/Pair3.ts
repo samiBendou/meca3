@@ -82,7 +82,7 @@ export default class Pair3 {
      * @returns reference to `this`
      */
     affine(m: Matrix3, v: Vector3) {
-        let aff = Matrix3.makeAffine(m, v);
+        const aff = Matrix3.makeAffine(m, v);
         this.origin = aff(this.origin);
         this.position = aff(this.position);
         return this;
