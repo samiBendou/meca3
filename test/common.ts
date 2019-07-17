@@ -1,8 +1,8 @@
-let assert = require("chai").assert;
+import {assert} from "chai";
 
-assert.meca3 = {
-    equal: function (actual,
-                     expected,
+export const assets = {
+    equal: function (actual: any,
+                     expected: any,
                      message = `${actual.constructor.name} equality \n${actual}\n!=\n${expected}`) {
         if (typeof actual == "number") {
             assert.equal(actual, expected, message);
@@ -11,9 +11,9 @@ assert.meca3 = {
         }
     },
 
-    approximately: function (actual,
-                             expected,
-                             tol,
+    approximately: function (actual: any,
+                             expected: any,
+                             tol: number,
                              message = `${actual.constructor.name} equality \n${actual}\n!=\n${expected}`) {
         if (typeof actual == "number") {
             assert.approximately(actual, expected, tol, message);
@@ -22,36 +22,36 @@ assert.meca3 = {
         }
     },
 
-    arrayEqual: function (actual, expected, tol) {
+    arrayEqual: function (actual: any[], expected: any[], tol?: number) {
 
-        actual.forEach((value, index) => {
+        actual.forEach((value: any, index: number) => {
             let message = `\n${actual}\n${expected}\nindex: ${index}`;
             if (tol === undefined)
-                assert.meca3.equal(value, expected[index], message);
+                assets.equal(value, expected[index], message);
             else
-                assert.meca3.approximately(value, expected[index], tol, message);
+                assets.approximately(value, expected[index], tol, message);
         });
     },
 
-    arrayEqual2D: function (actual, expected, tol) {
-        actual.forEach((row, i) => {
-            row.forEach((value, j) => {
+    arrayEqual2D: function (actual: any[], expected: any[], tol?: number) {
+        actual.forEach((row: any[], i: number) => {
+            row.forEach((value: any, j: number) => {
                 let message = `\n${actual}\n${expected}\nindex: ${i}, ${j}`;
                 if (tol === undefined)
-                    assert.meca3.equal(value, expected[i][j], message);
+                    assets.equal(value, expected[i][j], message);
                 else
-                    assert.meca3.approximately(value, expected[i][j], tol, message);
+                    assets.approximately(value, expected[i][j], tol, message);
             })
         });
     },
 
-    solve: function (approx, exact, tol, shift = 0) {
+    solve: function (approx: any, exact: any, tol: number, shift = 0) {
         if (approx instanceof Array) {
-            approx.forEach((u, index) => {
+            approx.forEach((u: any, index: number) => {
                 assert.approximately(u.dist(exact(index + shift)), 0, tol, `${u} != ${exact(index)} index: ${index}`);
             });
         } else {
-            approx.pairs.forEach((pair, index) => {
+            approx.pairs.forEach((pair: any, index: number) => {
                 let str = `${pair.vector} != ${exact(index + shift)} index : ${index}`;
                 assert.approximately(pair.vector.dist(exact(index + shift)), 0, tol, str);
                 assert(pair.origin.isZero(), `${pair.origin}`);
@@ -59,6 +59,3 @@ assert.meca3 = {
         }
     }
 };
-
-module.exports = assert;
-

@@ -1,6 +1,5 @@
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    const VSpace = require("./VSpace.js");
-    const Vector3 = require("./Vector3.js");
+    const Vector3 = require("../dist/Vector3.js");
     const Matrix3 = require("./Matrix3.js");
     const PointPair = require("./PointPair.js");
     const Trajectory = require("./Trajectory.js");

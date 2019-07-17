@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "nyc mocha --timeout=3000",
+    "test": "nyc mocha -r ts-node/register test/**/*.test.ts --timeout=3000",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "homepage": "https://github.com/samiBendou/meca3/wiki",
@@ -17,6 +17,7 @@
   "dependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
+    "ts-node": "^8.3.0",
     "tsd-jsdoc": "^2.3.1"
   },
   "repository": {
@@ -35,6 +36,8 @@
     "solver"
   ],
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
     "coveralls": "^3.0.3",
     "jsdoc-to-markdown": "^5.0.0",
     "nyc": "^14.1.1"
