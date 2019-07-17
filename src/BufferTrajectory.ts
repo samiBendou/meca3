@@ -12,7 +12,6 @@ import Vector3 from "./Vector3";
  * - **Insertion by replacement** when buffer is full
  *
  * - Extends all the features from `Trajectory` class
- *
  */
 
 export default class BufferTrajectory extends Trajectory {
