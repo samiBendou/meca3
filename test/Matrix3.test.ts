@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {assets} from "./common";
+import {check} from "./common";
 import {epsilon} from "../src/Algebra";
 import Vector3 from "../src/Vector3";
 import Matrix3 from "../src/Matrix3";
@@ -32,7 +32,7 @@ describe("Matrix3 Tests", function () {
 
     it("Transpose", function () {
         setUp();
-        assets.equal(b.transc(), new Matrix3(
+        check.equal(b.transc(), new Matrix3(
             1, 1, 1,
             2, 2, 2,
             3, 3, 3
@@ -41,15 +41,15 @@ describe("Matrix3 Tests", function () {
 
     it("Matrix Product", function () {
         setUp();
-        assets.equal(a.prodc(a), a, `\n${a}\n*\n${a}\n=\n${a.prodc(a)}`);
-        assets.equal(b.prodc(a.mulc(2)), b.mulc(2), `\n${b}\n*\n${a.mulc(2)}\n=\n${b.prodc(a.mulc(2))}`);
+        check.equal(a.prodc(a), a, `\n${a}\n*\n${a}\n=\n${a.prodc(a)}`);
+        check.equal(b.prodc(a.mulc(2)), b.mulc(2), `\n${b}\n*\n${a.mulc(2)}\n=\n${b.prodc(a.mulc(2))}`);
     });
 
     it("Linear mapping", function () {
         setUp();
         let u = Vector3.ones;
-        assets.equal(a.map(u), u, `\n${a}\n*\n${u}\n=\n${a.mapc(u)}`);
-        assets.equal(b.mapc(u), new Vector3(6, 6, 6), `\n${b}\n*\n${u}\n=\n${b.mapc(u)}`);
+        check.equal(a.map(u), u, `\n${a}\n*\n${u}\n=\n${a.mapc(u)}`);
+        check.equal(b.mapc(u), new Vector3(6, 6, 6), `\n${b}\n*\n${u}\n=\n${b.mapc(u)}`);
     });
 
     it("Determinant", function () {
@@ -61,42 +61,42 @@ describe("Matrix3 Tests", function () {
 
     it("Inverse", function () {
         setUp();
-        assets.equal(a.invc(), a, `\n${a}^-1\n=\n${a.invc()}`);
-        assets.equal(c.invc(), cInv, `\n${c}^-1\n=\n${c.invc()}`);
-        assets.equal(c.prod(c.invc()), a);
+        check.equal(a.invc(), a, `\n${a}^-1\n=\n${a.invc()}`);
+        check.equal(c.invc(), cInv, `\n${c}^-1\n=\n${c.invc()}`);
+        check.equal(c.prod(c.invc()), a);
     });
 
     it("Exponentiation", function () {
         setUp();
-        assets.equal(a.powc(2), a, `\n${a}^2\n=\n${a.powc(2)}`);
-        assets.equal(b.powc(0), a, `\n${b}^0\n=\n${b.powc(0)}`);
-        assets.equal(c.powc(1), c, `\n${c}^1\n=\n${c.powc(1)}`);
-        assets.equal(a.mulc(2).pow(4), Matrix3.eye.mul(16), `\n(2 * ${a})^4\n=\n${a.mulc(2).pow(4)}`);
-        assets.equal(c.powc(-1), cInv, `\n${c}^-1\n=\n${c.powc(-1)}`);
-        assets.equal(Matrix3.ones.powc(3), Matrix3.ones.mul(9));
+        check.equal(a.powc(2), a, `\n${a}^2\n=\n${a.powc(2)}`);
+        check.equal(b.powc(0), a, `\n${b}^0\n=\n${b.powc(0)}`);
+        check.equal(c.powc(1), c, `\n${c}^1\n=\n${c.powc(1)}`);
+        check.equal(a.mulc(2).pow(4), Matrix3.eye.mul(16), `\n(2 * ${a})^4\n=\n${a.mulc(2).pow(4)}`);
+        check.equal(c.powc(-1), cInv, `\n${c}^-1\n=\n${c.powc(-1)}`);
+        check.equal(Matrix3.ones.powc(3), Matrix3.ones.mul(9));
     });
 
     it("Get elements", function () {
         setUp();
         let assertRow = new Vector3(1, 2, 3);
-        assets.equal(b.row(0), assertRow);
-        assets.equal(b.row(2), assertRow);
+        check.equal(b.row(0), assertRow);
+        check.equal(b.row(2), assertRow);
 
-        assets.equal(a.col(0), Vector3.ex);
-        assets.equal(a.col(2), Vector3.ez);
+        check.equal(a.col(0), Vector3.ex);
+        check.equal(a.col(2), Vector3.ez);
     });
 
     it("Rotation", function () {
         setUp();
         const angle = Math.PI / 2;
 
-        assets.equal(Matrix3.rotX(angle), Matrix3.makeRot(Vector3.ex)(angle));
-        assets.equal(Matrix3.rotY(angle), Matrix3.makeRot(Vector3.ey)(angle));
-        assets.equal(Matrix3.rotZ(angle), Matrix3.makeRot(Vector3.ez)(angle));
+        check.equal(Matrix3.rotX(angle), Matrix3.makeRot(Vector3.ex)(angle));
+        check.equal(Matrix3.rotY(angle), Matrix3.makeRot(Vector3.ey)(angle));
+        check.equal(Matrix3.rotZ(angle), Matrix3.makeRot(Vector3.ez)(angle));
 
-        assets.equal(Matrix3.rotX(Math.PI / 2).map(Vector3.ey), Vector3.ez);
-        assets.equal(Matrix3.rotY(Math.PI / 2).map(Vector3.ez), Vector3.ex);
-        assets.equal(Matrix3.rotZ(Math.PI / 2).map(Vector3.ex), Vector3.ey);
+        check.equal(Matrix3.rotX(Math.PI / 2).map(Vector3.ey), Vector3.ez);
+        check.equal(Matrix3.rotY(Math.PI / 2).map(Vector3.ez), Vector3.ex);
+        check.equal(Matrix3.rotZ(Math.PI / 2).map(Vector3.ex), Vector3.ey);
     });
 
     it("Elliptic rotation", function () {
@@ -106,13 +106,13 @@ describe("Matrix3 Tests", function () {
         const cos = (theta: number) => Math.cos(theta);
         const sin = (theta: number) => b / a * Math.sin(theta);
 
-        assets.equal(Matrix3.rotX(angle, cos, sin), Matrix3.makeRot(Vector3.ex, cos, sin)(angle));
-        assets.equal(Matrix3.rotY(angle, cos, sin), Matrix3.makeRot(Vector3.ey, cos, sin)(angle));
-        assets.equal(Matrix3.rotZ(angle, cos, sin), Matrix3.makeRot(Vector3.ez, cos, sin)(angle));
+        check.equal(Matrix3.rotX(angle, cos, sin), Matrix3.makeRot(Vector3.ex, cos, sin)(angle));
+        check.equal(Matrix3.rotY(angle, cos, sin), Matrix3.makeRot(Vector3.ey, cos, sin)(angle));
+        check.equal(Matrix3.rotZ(angle, cos, sin), Matrix3.makeRot(Vector3.ez, cos, sin)(angle));
 
-        assets.equal(Matrix3.rotX(Math.PI / 2, cos, sin).map(Vector3.ey.mul(a)), Vector3.ez);
-        assets.equal(Matrix3.rotY(Math.PI / 2, cos, sin).map(Vector3.ez.mul(a)), Vector3.ex);
-        assets.equal(Matrix3.rotZ(Math.PI / 2, cos, sin).map(Vector3.ex.mul(a)), Vector3.ey);
+        check.equal(Matrix3.rotX(Math.PI / 2, cos, sin).map(Vector3.ey.mul(a)), Vector3.ez);
+        check.equal(Matrix3.rotY(Math.PI / 2, cos, sin).map(Vector3.ez.mul(a)), Vector3.ex);
+        check.equal(Matrix3.rotZ(Math.PI / 2, cos, sin).map(Vector3.ex.mul(a)), Vector3.ey);
     });
 
     it("Hyperbolic rotation", function () {
@@ -125,9 +125,9 @@ describe("Matrix3 Tests", function () {
         const resY = Matrix3.rotY(angle, cos, sin).map(Vector3.ez);
         const resZ = Matrix3.rotZ(angle, cos, sin).map(Vector3.ex);
 
-        assets.equal(Matrix3.rotX(angle, cos, sin), Matrix3.makeRot(Vector3.ex, cos, sin)(angle));
-        assets.equal(Matrix3.rotY(angle, cos, sin), Matrix3.makeRot(Vector3.ey, cos, sin)(angle));
-        assets.equal(Matrix3.rotZ(angle, cos, sin), Matrix3.makeRot(Vector3.ez, cos, sin)(angle));
+        check.equal(Matrix3.rotX(angle, cos, sin), Matrix3.makeRot(Vector3.ex, cos, sin)(angle));
+        check.equal(Matrix3.rotY(angle, cos, sin), Matrix3.makeRot(Vector3.ey, cos, sin)(angle));
+        check.equal(Matrix3.rotZ(angle, cos, sin), Matrix3.makeRot(Vector3.ez, cos, sin)(angle));
 
         assert.equal(resX.y ** 2 - resX.z ** 2, 1, `\nresX : ${resX}`);
         assert.equal(resY.z ** 2 - resY.x ** 2, 1, `\nresY : ${resY}`);
@@ -136,8 +136,8 @@ describe("Matrix3 Tests", function () {
 
     it("Generators", function () {
         setUp();
-        assets.equal(Matrix3.diag(1, 1, 1), a);
-        assets.equal(Matrix3.sym(2, 2, 2, -1, -1), c);
+        check.equal(Matrix3.diag(1, 1, 1), a);
+        check.equal(Matrix3.sym(2, 2, 2, -1, -1), c);
     });
 
     it("Serialize", function () {
@@ -149,11 +149,11 @@ describe("Matrix3 Tests", function () {
         ];
         let a1D = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
-        assets.arrayEqual(a.to1D(), a1D);
-        assets.arrayEqual2D(a.to2D(), a2D);
+        check.arrayEqual(a.to1D(), a1D);
+        check.arrayEqual2D(a.to2D(), a2D);
 
-        assets.equal(Matrix3.from1D(a1D), a);
-        assets.equal(Matrix3.from2D(a2D), a);
+        check.equal(Matrix3.from1D(a1D), a);
+        check.equal(Matrix3.from2D(a2D), a);
 
         assert.equal(a.toString(), "(1.00e+0 0.00e+0 0.00e+0)\n(0.00e+0 1.00e+0 0.00e+0)\n(0.00e+0 0.00e+0 1.00e+0)");
     });

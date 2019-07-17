@@ -1,6 +1,6 @@
 import {assert} from "chai";
 
-export const assets = {
+export const check = {
     equal: function (actual: any,
                      expected: any,
                      message = `${actual.constructor.name} equality \n${actual}\n!=\n${expected}`) {
@@ -27,9 +27,9 @@ export const assets = {
         actual.forEach((value: any, index: number) => {
             let message = `\n${actual}\n${expected}\nindex: ${index}`;
             if (tol === undefined)
-                assets.equal(value, expected[index], message);
+                check.equal(value, expected[index], message);
             else
-                assets.approximately(value, expected[index], tol, message);
+                check.approximately(value, expected[index], tol, message);
         });
     },
 
@@ -38,9 +38,9 @@ export const assets = {
             row.forEach((value: any, j: number) => {
                 let message = `\n${actual}\n${expected}\nindex: ${i}, ${j}`;
                 if (tol === undefined)
-                    assets.equal(value, expected[i][j], message);
+                    check.equal(value, expected[i][j], message);
                 else
-                    assets.approximately(value, expected[i][j], tol, message);
+                    check.approximately(value, expected[i][j], tol, message);
             })
         });
     },

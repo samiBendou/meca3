@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {assets} from "./common";
+import {check} from "./common";
 import {epsilon} from "../src/Algebra";
 import Vector3 from "../src/Vector3";
 import Matrix3 from "../src/Matrix3";
@@ -16,11 +16,11 @@ describe("Pair3 Tests", function () {
 
     it("Relative", function () {
         setUp();
-        assets.equal(om.relative, new Vector3(-1, 1, 0));
+        check.equal(om.relative, new Vector3(-1, 1, 0));
 
         om.relative = Vector3.ex;
-        assets.equal(om.relative, Vector3.ex);
-        assets.equal(om.position, Vector3.ex.mul(2));
+        check.equal(om.relative, Vector3.ex);
+        check.equal(om.position, Vector3.ex.mul(2));
     });
 
     it("Length", function () {
@@ -28,7 +28,7 @@ describe("Pair3 Tests", function () {
         assert.approximately(om.length, Math.SQRT2, epsilon);
 
         op.length = 2;
-        assets.equal(op.position, Vector3.ex.mul(2));
+        check.equal(op.position, Vector3.ex.mul(2));
     });
 
     it("Affine", function () {
