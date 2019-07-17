@@ -1,5 +1,5 @@
 import Point from "./Point";
-import Solver, {methods} from "./Solver";
+import Solver from "./Solver";
 import Vector3 from "./Vector3";
 
 /**
@@ -62,11 +62,10 @@ export default class Field {
      * @details Solves a step of the ODE of the solver and update position.
      * @param dt time step for this iteration
      * @param origin origin to set for the solution
-     * @param method method to use for this step
      * @returns reference to this
      */
-    update(dt?: number, origin?: Vector3, method?: methods) {
-        this.points = this.points.map((point) => point.copy().update(dt, method, origin));
+    update(dt?: number, origin?: Vector3) {
+        this.points = this.points.map((point) => point.copy().update(dt, origin));
         return this;
     }
 

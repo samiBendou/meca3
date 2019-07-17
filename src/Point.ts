@@ -1,10 +1,12 @@
 import Vector3 from "./Vector3";
-import Solver, {methods} from "./Solver";
+import Solver from "./Solver";
 import BufferTrajectory from "./BufferTrajectory";
 
 /**
  * @brief material point
  * @details `Point` class represents physics _material points_ model in a _frame_.
+ *
+ * `Points` must be initialized using the `init` method in order to performed trajectory updates.
  *
  * - **Manipulate the trajectory** of the point
  *
@@ -192,11 +194,13 @@ export default class Point {
      * @brief initialize the point with position and speed
      * @param u0 initial position
      * @param v0 initial speed
+     * @param f field function used with the solver
      * @param dt0 initial time step
-     * @param field f used with the solver
      * @return reference to this
      */
-    init(u0 = Vector3.zeros, v0 = Vector3.zeros, dt0 = this.solver.dt0, field = this.solver.f) {
+    init(u0 = Vector3.zeros, v0 = Vector3.zeros, f = this.solver.f, dt0 = this.solver.dt0) {
+        this.solver.f = f;
+        this.solver.dt0 = dt0;
         this.trajectory.nexto.relative = v0.mulc(-dt0).add(u0);
         this.trajectory.last.relative = u0;
         this.trajectory.dt[this.trajectory.lastStepIndex] = dt0;
@@ -207,12 +211,11 @@ export default class Point {
      * @brief updates the position of the point
      * @details Solves a step of the ODE of the solver and update position.
      * @param dt time step for this iteration
-     * @param method method to use for this step
      * @param origin origin to set for the solution
      * @returns reference to this
      */
-    update(dt?: number, method?: methods, origin?: Vector3) {
-        this.solver.buffer(this.trajectory, dt, method, origin);
+    update(dt?: number, origin?: Vector3) {
+        this.solver.buffer(this.trajectory, dt, origin);
         return this;
     }
 
