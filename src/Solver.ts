@@ -80,14 +80,14 @@ export default class Solver {
      * if no observer's position is specified then the last one in trajectory is taken.
      * @param trajectory buffer to store the computed iteration
      * @param dt time step for this iteration
-     * @param origin origin to set for the solution
      * @param method method to use for this step
+     * @param origin origin to set for the solution
      * @returns reference to `trajectory`
      */
     buffer(trajectory: BufferTrajectory,
            dt = this.dt1,
-           origin = trajectory.pairs[trajectory.lastIndex].origin,
-           method = this.method) {
+           method = this.method,
+           origin = trajectory.pairs[trajectory.lastIndex].origin) {
         let next = this.step(trajectory.last.position, trajectory.nexto.position, trajectory.duration(), dt, method);
         trajectory.add(new Pair3(origin, next), this.dt0);
         return trajectory;
