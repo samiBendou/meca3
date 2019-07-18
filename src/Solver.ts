@@ -10,7 +10,7 @@ import {BufferTrajectory} from "./BufferTrajectory";
  * We introduce the following definition :
  * - **u** is the _unknown vector_ time dependant function
  * - **d2u/dt2** denotes the _second order derivative_ of **u**
- * - **f(u, t)** is a _smooth function_ depending only on coordinates of **u** and time **t**
+ * - **f(u, t)** is a _smooth vector field_ depending only on coordinates of **u** and time **t**
  *
  * Only explicit Euler's method is available for the moment.
  *
@@ -37,8 +37,8 @@ export enum methods {
 
 export class Solver {
 
-    /** field function as arrow function **/
-    f: (u?: Vector3, t?: number) => Vector3;
+    /** vector field **f** as arrow function **/
+    field: (u?: Vector3, t?: number) => Vector3;
 
     /** previous step between solution samples **/
     dt0: number;
@@ -50,10 +50,10 @@ export class Solver {
     method: methods;
 
     /** Construct a solver by giving a solving step **dt0** and a function **f** **/
-    constructor(f: (u?: Vector3, t?: number) => Vector3 = () => Vector3.zeros,
+    constructor(field: (u?: Vector3, t?: number) => Vector3 = () => Vector3.zeros,
                 dt = 1,
                 method: methods = methods.EULER) {
-        this.f = f;
+        this.field = field;
         this.dt0 = dt;
         this.dt1 = dt;
         this.method = method;
@@ -70,7 +70,7 @@ export class Solver {
     step(u1: Vector3, u0: Vector3, t = 0, dt = this.dt1) {
         this.dt0 = this.dt1;
         this.dt1 = dt;
-        return compute[this.method](this.f, u1, u0, t, this.dt0, this.dt1);
+        return compute[this.method](this.field, u1, u0, t, this.dt0, this.dt1);
     }
 
     /**
@@ -84,11 +84,9 @@ export class Solver {
      * @param origin origin to set for the solution
      * @returns reference to `trajectory`
      */
-    buffer(trajectory: BufferTrajectory,
-           dt = this.dt1,
-           origin = trajectory.pairs[trajectory.lastIndex].origin) {
+    buffer(trajectory: BufferTrajectory, dt = this.dt1, origin = trajectory.pairs[trajectory.lastIndex].origin) {
         let next = this.step(trajectory.last.position, trajectory.nexto.position, trajectory.duration(), dt);
-        trajectory.add(new Pair3(origin, next), this.dt0);
+        trajectory.add(new Pair3(origin, next), dt);
         return trajectory;
     }
 
@@ -108,7 +106,7 @@ export class Solver {
         this.dt1 = dt1;
 
         let u1 = v0.mulc(dt0).add(u0);
-        return u1.add(this.f(u1, 0).mul(dt0 * dt1 / 2));
+        return u1.add(this.field(u1, 0).mul(dt0 * dt1 / 2));
     }
 
     /**
