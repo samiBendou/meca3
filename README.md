@@ -6,12 +6,12 @@
 
 # meca3
 
-_meca3_ is a **mechanics framework** :rocket:
+## _meca3_ is a **mechanics framework** :rocket:
 
-It's a **3D space** toolbox and a **solver** to compute **trajectory** of **moving points** 
+It designed to be an **advanced physics engine** for animation of **moving material points** 
 :heavy_plus_sign::heavy_multiplication_x::heavy_minus_sign:
 
-It can serve as **advanced physics engine** for animation :coffee:
+It can also be used as a **3D maths** general purpose toolbox :coffee:
 
 - **Object oriented** and written in typescript
 
@@ -19,11 +19,11 @@ It can serve as **advanced physics engine** for animation :coffee:
 
 - **Complete documentation** with **examples** that can be found on the [wiki](https://github.com/samiBendou/meca3/wiki/)
 
-##### Contribute to the project : [guide](https://github.com/samiBendou/meca3/blob/master/CONTRIBUTING.md) :satellite:
+### Contribute to the project : [guide](https://github.com/samiBendou/meca3/blob/master/CONTRIBUTING.md) :satellite:
 
-### Main features
+## Main features
 
-#### Linear algebra
+### Linear algebra
 Common abstraction such as matrix and vectors and usual operations between theses
 
 ```javascript
@@ -34,7 +34,7 @@ console.log(m.det);
 ```
 
 
-#### Geometrical transformations
+### Geometrical transformations
 Translation or affine transform for various geometrical objects
 
 ```javascript
@@ -42,21 +42,21 @@ let gamma = Trajectory.elliptic(1, 2);
 gamma.translate(Vector3.ex);
 ```
 
-#### Coordinates systems
-Spherical and cylindrical coordinates manipulation
+### Coordinates systems
+Spherical and cylindrical coordinates manipulations
 
 ```javascript
 let u = Vector3.cylindrical(1, Math.PI / 2, 0.5);
 ```
 
-#### Trajectory bufferization
+### Trajectory bufferization
 Trajectory of fixed size for trajectory
 ```javascript
 let gamma = BufferTrajectory.discrete([Vector3.ex, Vector3.ey]); // trajectory of size 2
 ```
 
-#### Lightweight solver
+### Lightweight solver
 Step by step or iterative ODE solving, outputs arrays and trajectories
 
-#### Points systems mechanics
+### Points systems mechanics
 Move a point according to dynamic equation and represent dependent points field
