@@ -1,35 +1,35 @@
 import {check} from "./common";
 import {Vector3} from "../src/Vector3";
 import {Point} from "../src/Point";
-import {Field} from "../src/Field";
+import {PointSet} from "../src/PointSet";
 import {Solver} from "../src/Solver";
 
-describe("Point Tests", function () {
+describe("Point Set Tests", function () {
 
     let points: Point[], opoints: Point[];
-    let field: Field, ofield: Field;
+    let field: PointSet, ofield: PointSet;
 
     function setUp() {
         points = [
-            Point.zeros(2, Vector3.zeros, 10),
-            Point.zeros(2, Vector3.zeros, 20),
-            Point.zeros(2, Vector3.zeros, 30)
+            Point.origin({mass: 10}),
+            Point.origin({mass: 20}),
+            Point.origin({mass: 30})
         ];
         opoints = [
-            Point.zeros(2, Vector3.zeros, 10),
-            Point.zeros(2, Vector3.zeros, 20),
-            Point.zeros(2, Vector3.zeros, 30)
+            Point.origin(),
+            Point.origin(),
+            Point.origin()
         ];
 
-        let makeField = function (points: Point[]) {
-            return function (u: Vector3) {
-                return points.reduce(function (acc, point) {
-                    return acc.add(point.trajectory.last.position.subc(u).sub(Vector3.ones).div(points.length));
-                }, Vector3.zeros);
+        let makeField = (points: Point[]) => {
+            return (u: Vector3) => {
+                return points.reduce((acc, point) => {
+                    return acc.add(point.trajectory.last.position.subc(u));
+                }, Vector3.zeros).sub(Vector3.ones);
             }
         };
-        field = new Field(points); // zero f
-        ofield = new Field(opoints, new Solver(makeField(opoints))); // dependent harmonic oscillator
+        field = new PointSet(points); // zero f
+        ofield = new PointSet(opoints, new Solver(makeField(opoints))); // dependent harmonic oscillator
     }
 
     it("Rebase", function () {
@@ -53,15 +53,15 @@ describe("Point Tests", function () {
         });
     });
 
-    it("Barycenter", function () {
+    it("Centers", function () {
         setUp();
         check.equal(field.barycenter, Vector3.zeros);
 
         ofield.update();
-        check.equal(ofield.barycenter, Vector3.ones.opp());
+        check.equal(ofield.center, Vector3.ones.opp());
 
-        ofield.barycenter = Vector3.zeros;
-        check.equal(ofield.barycenter, Vector3.zeros);
+        ofield.center = Vector3.zeros;
+        check.equal(ofield.center, Vector3.zeros);
 
         ofield.points.forEach((point) => {
             check.equal(point.position, Vector3.zeros);

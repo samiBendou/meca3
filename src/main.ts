@@ -7,4 +7,4 @@ export * from "./Trajectory";
 export * from "./BufferTrajectory";
 export * from "./Solver";
 export * from "./Point";
-export * from "./Field";
+export * from "./PointSet";

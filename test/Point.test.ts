@@ -3,14 +3,15 @@ import {check} from "./common";
 import {Vector3} from "../src/Vector3";
 import {Point} from "../src/Point";
 import {Pair3} from "../src/Pair3";
+import {BufferTrajectory} from "../src/BufferTrajectory";
 
 describe("Point Tests", function () {
 
     let p: Point, q: Point;
 
     function setUp() {
-        p = Point.zeros(10, Vector3.zeros, 0);
-        q = Point.zeros(2, Vector3.zeros, 0);
+        p = Point.origin({mass: 0, size: 10});
+        q = Point.origin({mass: 0, size: 2});
         p.trajectory.add(Pair3.vect(new Vector3(1, 0, 1)));
         q.trajectory.add(Pair3.zeros(Vector3.ones));
     }
@@ -101,5 +102,15 @@ describe("Point Tests", function () {
         setUp();
         p.update();
         check.equal(p.position, new Vector3(2, 0, 2));
+    });
+
+    it("Generators", function () {
+        let o1 = Point.origin({mass: 100, size: 10}), o2 = Point.origin();
+        check.equal(o1.trajectory, BufferTrajectory.zeros(Vector3.zeros, 10));
+        check.equal(o2.trajectory, BufferTrajectory.zeros(Vector3.zeros, 2));
+        assert.equal(o2.mass, undefined);
+
+        let o3 = Point.vect(Vector3.ex, Vector3.ey, {mass: 100});
+        check.equal(o3.trajectory, BufferTrajectory.constant(Vector3.ex, 2, undefined, Vector3.ey));
     });
 });

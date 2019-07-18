@@ -16,22 +16,51 @@ import {BufferTrajectory} from "./BufferTrajectory";
  *
  * - Move point by giving a solver to **generate the trajectory**
  */
+
+
+export interface PointOptions {
+    mass?: number;
+    size: number;
+}
+
 export class Point {
+
+    static defaultOptions: Partial<PointOptions> = {size: 2};
 
     /** trajectory of the point **/
     trajectory: BufferTrajectory;
 
+    /** mass of the point **/
+    mass?: Readonly<number>;
+
     /** solver used to update the trajectory **/
     solver: Solver;
 
-    /** mass of the point **/
-    mass: number;
-
     /** Construct a material point by giving a mass and optionally a trajectory **/
-    constructor(trajectory: BufferTrajectory, solver = new Solver(), mass = 0) {
+
+    constructor(trajectory: BufferTrajectory, solver = new Solver(), mass?: number) {
         this.trajectory = trajectory;
-        this.solver = solver;
         this.mass = mass;
+        this.solver = solver;
+
+        this.field = solver.field.bind({});
+    }
+
+    set options(newOptions: Partial<PointOptions>) {
+        this.mass = newOptions.mass || this.mass;
+        this.trajectory.size = newOptions.size || this.trajectory.size;
+    }
+
+    get options() {
+        return {mass: this.mass, size: this.trajectory.size};
+    }
+
+    get field() {
+        return this.solver.field;
+    }
+
+    set field(newField) {
+        this.solver.field = (u, t) => this.mass ? newField(u, t).div(this.mass) : newField(u, t);
     }
 
     /** current relative position **/
@@ -61,9 +90,13 @@ export class Point {
         this.trajectory.last.relative = this.trajectory.nexto.relative.add(newDu);
     }
 
-    /** current time differential **/
+    /** current time step **/
     get dt() {
         return this.trajectory.dt[this.trajectory.lastStepIndex];
+    }
+
+    set dt(newDt) {
+        this.trajectory.dt[this.trajectory.lastStepIndex] = newDt;
     }
 
     /** `x` coordinate of current relative position **/
@@ -198,8 +231,8 @@ export class Point {
      * @param dt0 initial time step
      * @return reference to this
      */
-    init(u0 = Vector3.zeros, v0 = Vector3.zeros, f = this.solver.f, dt0 = this.solver.dt0) {
-        this.solver.f = f;
+    init(u0 = Vector3.zeros, v0 = Vector3.zeros, f = this.solver.field, dt0 = this.solver.dt0) {
+        this.solver.field = f;
         this.solver.dt0 = dt0;
         this.trajectory.nexto.relative = v0.mulc(-dt0).add(u0);
         this.trajectory.last.relative = u0;
@@ -235,13 +268,28 @@ export class Point {
     }
 
     /**
-     * @brief point located at zero
-     * @param size size of the trajectory buffer
-     * @param frame absolute coordinates of the frame of the point
-     * @param mass mass of the point
+     * @brief point absolutely located at zero
+     * @param options additional behavior for the point
+     */
+    static origin(options = Point.defaultOptions) {
+        return new Point(BufferTrajectory.zeros(Vector3.zeros, options.size), new Solver(), options.mass);
+    }
+
+    /**
+     * @brief point relatively located at zero
+     * @param origin absolute coordinates of the frame of the point
+     * @param options additional behavior for the point
      * @returns new instance of point
      */
-    static zeros(size = 2, frame = Vector3.zeros, mass = 0) {
-        return new Point(BufferTrajectory.zeros(frame, size), new Solver(), mass);
+    static zeros(origin = Vector3.zeros, options = Point.defaultOptions) {
+        return new Point(BufferTrajectory.zeros(origin, options.size), new Solver(), options.mass);
+    }
+
+    static vect(u: Vector3, origin = Vector3.zeros, options = Point.defaultOptions) {
+        return new Point(BufferTrajectory.constant(u, options.size, undefined, origin), new Solver(), options.mass);
+    }
+
+    static linear(v = Vector3.ex, dt: number = 1, origin = Vector3.zeros, options = Point.defaultOptions) {
+        return new Point(BufferTrajectory.linear(v, options.size, dt, origin), new Solver(), options.mass);
     }
 }
