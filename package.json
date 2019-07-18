@@ -2,14 +2,38 @@
   "name": "meca3",
   "version": "3.2.2",
   "description": "3D geometry, linear algebra and ODE solving for point's mechanics",
-  "main": "src/main.js",
-  "directories": {
-    "test": "test"
-  },
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "build"
+  ],
   "scripts": {
+    "prepublishOnly": "tsc && tsc -p tsconfig.browser.json",
     "test": "nyc mocha -r ts-node/register test/**/*.test.ts --timeout=3000",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
+  "nyc": {
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+
   "homepage": "https://github.com/samiBendou/meca3/wiki",
   "bugs": "https://github.com/samiBendou/meca3/issues",
   "author": "Sami Dahoux <sbdh75@gmail.com> (https://github.com/samiBendou)",
