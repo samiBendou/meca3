@@ -338,13 +338,21 @@ export default class Matrix3 implements Vector {
     }
 
     /**
-     * @brief sym matrix
-     * @details Fill the matrix by giving diagonal values. Use this method to generate a tri-diagonal matrix
-     * by forgiving the parameter `xz`.
+     * @brief symmetric matrix
+     * @details Fill the matrix by giving diagonal values.
      * @return value of diagonal matrix
      */
     static sym(xx: number, yy: number, zz: number, xy: number, yz: number, xz = 0) {
         return new Matrix3(xx, xy, xz, xy, yy, yz, xz, yz, zz);
+    }
+
+    /**
+     * @brief antisymmetric matrix
+     * @details Fill the matrix by giving diagonal values.
+     * @return value of diagonal matrix
+     */
+    static asym(xy: number, yz: number, xz = 0) {
+        return new Matrix3(0, xy, xz, -xy, 0, yz, -xz, -yz, 0);
     }
 
     /**
