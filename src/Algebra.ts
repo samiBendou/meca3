@@ -98,7 +98,7 @@ export interface Vector {
 const initializer = (vector: Vector): Vector => vector.copy().fill(0);
 
 /**
- * @brief sums vectors in array
+ * sums vectors in array
  * @param vectors array of objects that implements `Vector` interface
  * @returns value of the sum
  */
@@ -106,7 +106,7 @@ export const sum = (vectors: Vector[]): Vector =>
     vectors.reduce((acc, u) => acc.add(u), initializer(vectors[0]));
 
 /**
- * @brief multiplies vectors in array
+ * multiplies vectors in array
  * @param vectors array of objects that implements `Vector` interface
  * @returns value of the product
  */
@@ -114,7 +114,7 @@ export const prod = (vectors: Vector[]): Vector =>
     vectors.reduce((acc, u) => acc.prod(u), initializer(vectors[0]));
 
 /**
- * @brief linear combination of vectors in array
+ * linear combination of vectors in array
  * @param scalars array of coefficient of the combination
  * @param vectors array of objects that implements `Vector` interface
  * @returns value of linear combination

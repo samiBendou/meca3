@@ -391,7 +391,7 @@ export default class Vector3 implements Vector {
     /**
      * @brief derivative of an array of vector with given steps
      * @details Representing discrete derivative of the array of Vector3.
-     * If the original array is of _size `N`, than the derivative is of _size `N - 1`.
+     * If the original array is of size `N`, than the derivative is of size `N - 1`.
      *
      * The derivative is approximated according using the given steps between
      * each value and using lower bound approximation.
