@@ -1,7 +1,7 @@
 {
   "name": "meca3",
-  "version": "3.2.2",
-  "description": "3D geometry, linear algebra and ODE solving for point's mechanics",
+  "version": "4.0.0",
+  "description": "3D space and physics engine for point's mechanics",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "files": [
