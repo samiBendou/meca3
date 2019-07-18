@@ -107,7 +107,7 @@ export class Pair3 {
     }
 
     toString() {
-        return `origin ${this.origin.toString()}\t vector ${this.position.toString()}`;
+        return `org ${this.origin.toString()}\t pos ${this.position.toString()}`;
     }
 
     /**

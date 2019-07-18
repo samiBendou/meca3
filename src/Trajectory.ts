@@ -222,19 +222,19 @@ export class Trajectory {
 
     /**
      * @brief generates an immobile trajectory
-     * @details Observer and mobile positions are equal
+     * @details Observer and mobile positions are equal and remains constant
      * @param u position of observer and mobile
      * @param size number of elements in trajectory
      * @param dt time step between each position
      * @returns new instance of trajectory
      */
-    static zeros(u: Vector3, size: number, dt: number[] | number = 1) {
+    static zeros(u = Vector3.zeros, size: number, dt: number[] | number = 1) {
         return new Trajectory(Array(size).fill(Pair3.zeros(u)), dt);
     }
 
     /**
      * @brief trajectory from array of position vectors
-     * @details The observer is considered as immobile.
+     * @details give the trajectory of a mobile as an array of vectors
      * @param positions successive absolute positions of the mobile as `Vector3`
      * @param dt time step between each position
      * @param origin observer's position
@@ -245,16 +245,28 @@ export class Trajectory {
     }
 
     /**
-     * @brief linear trajectory
-     * @details Computes a linear trajectory starting from the given `origin` with director coefficient `v`.
-     * The observer is considered as immobile
-     * @param count number of samples
+     * @brief constant trajectory
+     * @details compute a trajectory where the relative position of the mobile remains constant.
+     * @param u relative position of the mobile
+     * @param count number of steps
      * @param dt sampling step
-     * @param v director coefficient
+     * @param origin observer's position
+     */
+    static constant(u: Vector3, count: number = 2, dt: number = 1, origin = Vector3.zeros) {
+        return Trajectory.discrete(Array(count).fill(u.addc(origin)), dt, origin);
+    }
+
+
+    /**
+     * @brief linear trajectory
+     * @details Computes a linear trajectory starting from the given `origin`.
+     * @param v speed of the trajectory
+     * @param count number of steps
+     * @param dt time step
      * @param origin observer's position
      * @return value of linear trajectory
      */
-    static linear(count: number, dt: number = 1, v = Vector3.ex, origin = Vector3.zeros) {
+    static linear(v = Vector3.ex, count: number = 2, dt: number = 1, origin = Vector3.zeros) {
         const vectors = new Array(count);
         for (let i = 0; i < count; i++) {
             vectors[i] = v.mulc(dt * i).add(origin);
