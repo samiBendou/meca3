@@ -99,9 +99,12 @@ describe("Trajectory Tests", function () {
             Trajectory.discrete([om0.position, om1.position, om2.position], 0.1, Vector3.zeros));
     });
 
-    it("Generate linear", function () {
-        let gamma2 = Trajectory.linear(3);
+    it("Generate linear and constant", function () {
+        let gamma1 = Trajectory.constant(Vector3.ex, 2);
+        let expect1 = Trajectory.discrete([Vector3.ex, Vector3.ex]);
+        let gamma2 = Trajectory.linear(Vector3.ex, 3);
         let expect2 = Trajectory.discrete([Vector3.zeros, Vector3.ex, Vector3.ex.mul(2)]);
+        check.equal(gamma1, expect1);
         check.equal(gamma2, expect2);
     });
 

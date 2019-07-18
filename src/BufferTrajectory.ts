@@ -178,4 +178,12 @@ export class BufferTrajectory extends Trajectory {
         let pairs = positions.map((u: Vector3) => new Pair3(origin, u));
         return new BufferTrajectory(new Trajectory(pairs, dt));
     }
+
+    static constant(u: Vector3, count: number = 2, dt: number = 1, origin = Vector3.zeros) {
+        return new BufferTrajectory(Trajectory.constant(u, count, dt, origin), count);
+    }
+
+    static linear(v = Vector3.ex, count: number = 2, dt: number = 1, origin = Vector3.zeros) {
+        return new BufferTrajectory(Trajectory.linear(v, count, dt, origin), count);
+    }
 }
