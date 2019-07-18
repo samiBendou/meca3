@@ -1,23 +1,44 @@
 {
   "name": "meca3",
-  "version": "3.2.2",
-  "description": "3D geometry, linear algebra and ODE solving for point's mechanics",
-  "main": "main.js",
-  "directories": {
-    "test": "test"
-  },
+  "version": "4.0.0",
+  "description": "3D space and physics engine for point's mechanics",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "build"
+  ],
   "scripts": {
-    "test": "nyc mocha --timeout=3000",
+    "prepublishOnly": "tsc && tsc -p tsconfig.browser.json",
+    "test": "nyc mocha -r ts-node/register test/**/*.test.ts --timeout=3000",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
+  "nyc": {
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+
   "homepage": "https://github.com/samiBendou/meca3/wiki",
   "bugs": "https://github.com/samiBendou/meca3/issues",
   "author": "Sami Dahoux <sbdh75@gmail.com> (https://github.com/samiBendou)",
   "license": "GPL-3.0",
-  "dependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.1.4"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/samiBendou/meca3.git"
@@ -34,8 +55,13 @@
     "solver"
   ],
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
     "coveralls": "^3.0.3",
-    "jsdoc-to-markdown": "^5.0.0",
-    "nyc": "^14.1.1"
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
   }
 }
