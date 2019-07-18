@@ -1,6 +1,6 @@
-import Vector3 from "./Vector3";
-import Pair3 from "./Pair3";
-import Matrix3 from "./Matrix3";
+import {Vector3} from "./Vector3";
+import {Pair3} from "./Pair3";
+import {Matrix3} from "./Matrix3";
 
 /**
  * @brief trajectory of a mobile
@@ -22,7 +22,7 @@ import Matrix3 from "./Matrix3";
  * - Extend all **geometrical transformation** of `Pair3`
  *
  */
-export default class Trajectory {
+export class Trajectory {
 
     /** array of successive position of mobile from the point of view of observer **/
     pairs: Pair3[];

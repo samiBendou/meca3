@@ -1,5 +1,5 @@
-import Vector3 from "./Vector3";
-import Matrix3 from "./Matrix3";
+import {Vector3} from "./Vector3";
+import {Matrix3} from "./Matrix3";
 
 /**
  * @brief couple of points
@@ -10,7 +10,7 @@ import Matrix3 from "./Matrix3";
  * - Manipulate **relative coordinates** of the mobile.
  */
 
-export default class Pair3 {
+export class Pair3 {
 
     /** absolute coordinates the observer **/
     origin: Vector3;

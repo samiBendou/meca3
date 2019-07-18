@@ -1,9 +1,9 @@
 import {assert} from "chai";
 import {check} from "./common";
 import {epsilon} from "../src/Algebra";
-import Vector3 from "../src/Vector3";
-import Matrix3 from "../src/Matrix3";
-import Pair3 from "../src/Pair3";
+import {Vector3} from "../src/Vector3";
+import {Matrix3} from "../src/Matrix3";
+import {Pair3} from "../src/Pair3";
 
 describe("Pair3 Tests", function () {
 

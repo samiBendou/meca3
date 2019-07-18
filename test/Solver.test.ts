@@ -1,7 +1,7 @@
 import {check} from "./common";
-import Vector3 from "../src/Vector3";
-import BufferTrajectory from "../src/BufferTrajectory";
-import Solver from "../src/Solver";
+import {Vector3} from "../src/Vector3";
+import {BufferTrajectory} from "../src/BufferTrajectory";
+import {Solver} from "../src/Solver";
 
 describe("Solver Tests", function () {
 

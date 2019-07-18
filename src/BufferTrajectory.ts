@@ -1,6 +1,6 @@
-import Pair3 from "./Pair3";
-import Trajectory from "./Trajectory";
-import Vector3 from "./Vector3";
+import {Pair3} from "./Pair3";
+import {Trajectory} from "./Trajectory";
+import {Vector3} from "./Vector3";
 
 /**
  *
@@ -14,7 +14,7 @@ import Vector3 from "./Vector3";
  * - Extends all the features from `Trajectory` class
  */
 
-export default class BufferTrajectory extends Trajectory {
+export class BufferTrajectory extends Trajectory {
 
     private _addIndex: number;
 

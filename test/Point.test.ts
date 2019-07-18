@@ -1,8 +1,8 @@
 import {assert} from "chai";
 import {check} from "./common";
-import Vector3 from "../src/Vector3";
-import Point from "../src/Point";
-import Pair3 from "../src/Pair3";
+import {Vector3} from "../src/Vector3";
+import {Point} from "../src/Point";
+import {Pair3} from "../src/Pair3";
 
 describe("Point Tests", function () {
 

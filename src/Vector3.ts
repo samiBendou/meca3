@@ -12,7 +12,7 @@ import {Vector} from "./Algebra";
  * with provided **setters and getters**.
  *
  */
-export default class Vector3 implements Vector {
+export class Vector3 implements Vector {
 
     /** first cartesian coordinate **/
     x: number;

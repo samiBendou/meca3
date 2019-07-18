@@ -1,7 +1,7 @@
-import Vector3 from "./Vector3";
-import Pair3 from "./Pair3";
-import Trajectory from "./Trajectory";
-import BufferTrajectory from "./BufferTrajectory";
+import {Vector3} from "./Vector3";
+import {Pair3} from "./Pair3";
+import {Trajectory} from "./Trajectory";
+import {BufferTrajectory} from "./BufferTrajectory";
 
 /**
  * @brief second order differential equations solver
@@ -35,7 +35,7 @@ export enum methods {
     EULER,
 }
 
-export default class Solver {
+export class Solver {
 
     /** field function as arrow function **/
     f: (u?: Vector3, t?: number) => Vector3;

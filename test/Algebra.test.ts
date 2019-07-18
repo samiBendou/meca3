@@ -1,7 +1,7 @@
 import {check} from "./common";
 import * as Algebra from "../src/Algebra";
-import Vector3 from "../src/Vector3";
-import Matrix3 from "../src/Matrix3";
+import {Vector3} from "../src/Vector3";
+import {Matrix3} from "../src/Matrix3";
 
 describe("Algebra Tests", function () {
 

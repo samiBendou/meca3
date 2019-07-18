@@ -1,5 +1,5 @@
 import {Vector} from "./Algebra";
-import Vector3 from "./Vector3";
+import {Vector3} from "./Vector3";
 
 /**
  * @brief 3x3 matrices
@@ -21,7 +21,7 @@ import Vector3 from "./Vector3";
  *
  * - All the generators from `Vector3` are extended to `Matrix3` class.
  */
-export default class Matrix3 implements Vector {
+export class Matrix3 implements Vector {
 
     /** first row **/
     x: Vector3;
@@ -348,7 +348,7 @@ export default class Matrix3 implements Vector {
 
     /**
      * @brief antisymmetric matrix
-     * @details Fill the matrix by giving diagonal values.
+     * @details Fill the matrix by gidiagonal values.
      * @return value of diagonal matrix
      */
     static asym(xy: number, yz: number, xz = 0) {

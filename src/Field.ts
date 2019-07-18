@@ -1,6 +1,6 @@
-import Point from "./Point";
-import Solver from "./Solver";
-import Vector3 from "./Vector3";
+import {Point} from "./Point";
+import {Solver} from "./Solver";
+import {Vector3} from "./Vector3";
 
 /**
  * @brief trajectory of a mobile
@@ -13,7 +13,7 @@ import Vector3 from "./Vector3";
  * - Represent **all the points in the same frame**
  *
  */
-export default class Field {
+export class Field {
 
     /** points composing the system **/
     points: Point[];

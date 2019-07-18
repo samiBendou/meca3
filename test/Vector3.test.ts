@@ -1,7 +1,7 @@
 import {assert} from "chai";
 import {check} from "./common";
 import {epsilon} from "../src/Algebra";
-import Vector3 from "../src/Vector3";
+import {Vector3} from "../src/Vector3";
 
 describe("Vector3 Tests", function () {
 

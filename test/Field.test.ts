@@ -1,8 +1,8 @@
 import {check} from "./common";
-import Vector3 from "../src/Vector3";
-import Point from "../src/Point";
-import Field from "../src/Field";
-import Solver from "../src/Solver";
+import {Vector3} from "../src/Vector3";
+import {Point} from "../src/Point";
+import {Field} from "../src/Field";
+import {Solver} from "../src/Solver";
 
 describe("Point Tests", function () {
 

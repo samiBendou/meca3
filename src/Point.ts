@@ -1,6 +1,6 @@
-import Vector3 from "./Vector3";
-import Solver from "./Solver";
-import BufferTrajectory from "./BufferTrajectory";
+import {Vector3} from "./Vector3";
+import {Solver} from "./Solver";
+import {BufferTrajectory} from "./BufferTrajectory";
 
 /**
  * @brief material point
@@ -16,7 +16,7 @@ import BufferTrajectory from "./BufferTrajectory";
  *
  * - Move point by giving a solver to **generate the trajectory**
  */
-export default class Point {
+export class Point {
 
     /** trajectory of the point **/
     trajectory: BufferTrajectory;

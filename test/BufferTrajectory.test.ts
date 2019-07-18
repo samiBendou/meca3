@@ -1,9 +1,9 @@
 import {assert} from "chai";
 import {check} from "./common";
-import Vector3 from "../src/Vector3";
-import Pair3 from "../src/Pair3";
-import Trajectory from "../src/Trajectory";
-import BufferTrajectory from "../src/BufferTrajectory";
+import {Vector3} from "../src/Vector3";
+import {Pair3} from "../src/Pair3";
+import {Trajectory} from "../src/Trajectory";
+import {BufferTrajectory} from "../src/BufferTrajectory";
 
 describe("BufferTrajectory Tests", function () {
     let dt: number;
