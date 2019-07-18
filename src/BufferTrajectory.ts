@@ -24,8 +24,6 @@ export class BufferTrajectory extends Trajectory {
     constructor(trajectory: Trajectory, size?: number) {
         super();
         this._size = size || (trajectory !== undefined ? trajectory.pairs.length : 2);
-        this._addIndex = 0;
-        this.clear();
         if (trajectory !== undefined)
             this.bufferize(trajectory);
     }
@@ -105,14 +103,20 @@ export class BufferTrajectory extends Trajectory {
         let delta = (trajectory.pairs.length - this._size);
         let end = delta >= 0 ? this._size : trajectory.pairs.length;
 
-        this.pairs = this.pairs.map((pair, index) =>
-            index < end ? trajectory.pairs[delta >= 0 ? (index + delta) : index].copy() : Pair3.zeros()
-        );
-        this.dt = this.dt.map((dt, index) =>
-            index < end ? trajectory.dt[delta >= 0 ? (index + delta) : index] : trajectory.dt[0]
-        );
-        this._addIndex = delta >= 0 ? 0 : trajectory.pairs.length;
-
+        this.clear();
+        if (delta != 0) {
+            this.pairs = this.pairs.map((pair, index) =>
+                index < end ? trajectory.pairs[delta >= 0 ? (index + delta) : index].copy() : Pair3.zeros()
+            );
+            this.dt = this.dt.map((dt, index) =>
+                index < end ? trajectory.dt[delta >= 0 ? (index + delta) : index] : trajectory.dt[0]
+            );
+            this._addIndex = delta >= 0 ? 0 : trajectory.pairs.length;
+        } else {
+            this.pairs = trajectory.pairs.map(pair => pair.copy());
+            this.dt = [...trajectory.dt];
+            this._addIndex = 0;
+        }
         return this;
     }
 
@@ -166,7 +170,7 @@ export class BufferTrajectory extends Trajectory {
         return copy;
     }
 
-    static zeros(u: Vector3, size = 2, dt: number[] | number = 1) {
+    static zeros(u = Vector3.zeros, size = 2, dt: number[] | number = 1) {
         return new BufferTrajectory(Trajectory.zeros(u, size, dt));
     }
 
