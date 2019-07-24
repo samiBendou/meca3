@@ -4,8 +4,6 @@
 [![Issues](https://img.shields.io/github/issues-raw/samiBendou/meca3.svg?style=flat-square)](https://github.com/samiBendou/meca3/issues)
 [![License](https://img.shields.io/npm/l/meca3.svg?style=flat-square)](https://www.npmjs.com/package/meca3)
 
-**Note : Pure mathematical features of this framework have been extended and are now available in the [space3](https://www.npmjs.com/package/space3) framework**
-
 # meca3
 
 ## _meca3_ is a **mechanics framework** :rocket:
@@ -24,6 +22,10 @@ It can also be used as a **3D maths** general purpose toolbox :coffee:
 ## Contribute to the project : [guide](https://github.com/samiBendou/meca3/blob/master/CONTRIBUTING.md) :satellite:
 
 ## Main features
+
+**Note : Classes Vector3, Matrix3 and Point3 have been extended and are now available in the [space3](https://www.npmjs.com/package/space3) framework**
+
+**Note : Theses classes will be removed from code base in next release**
 
 ### Linear algebra
 Common abstraction such as matrix and vectors and usual operations between theses
