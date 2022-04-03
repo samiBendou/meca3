@@ -1,4 +1,4 @@
-import { BufferCurve, Vector3, Vector6 } from "../../space3/src";
+import { Vector3, Vector6 } from "../../space3/src";
 
 /**
  * @brief material point
@@ -10,45 +10,72 @@ import { BufferCurve, Vector3, Vector6 } from "../../space3/src";
  *
  * - **Manipulate speed and position** of the point
  *
- * - **Change frame** of the point
- *
- * - Move point by giving a solver to **generate the trajectory**
  */
 export default class Point {
-  /** trajectory of the point **/
-  trajectory: BufferCurve<Vector6>;
-
-  position: Vector3;
-
-  speed: Vector3;
-
   /** mass of the point **/
   mass: number;
 
-  /** Construct a material point by giving a mass and optionally a trajectory **/
-  constructor(
-    position: Vector3,
-    speed: Vector3,
-    trajectory: BufferCurve<Vector6>,
-    mass = 1.0
-  ) {
+  private _position: Vector3;
+
+  private _speed: Vector3;
+
+  private _state: Vector6;
+
+  /** Construct a material point by specifying mass, position and speed **/
+  constructor(mass: number, position?: Vector3, speed?: Vector3) {
     this.mass = mass;
-    this.position = position;
-    this.speed = speed;
-    this.trajectory = trajectory;
+    this._position = position ?? Vector3.zeros;
+    this._speed = speed ?? Vector3.zeros;
+    this._state = new Vector6(...this.position.xyz, ...this.speed.xyz);
+  }
+
+  get position() {
+    return this._position;
+  }
+
+  set position(newPosition) {
+    this._position.copy(newPosition);
+    this._state.upper = newPosition.xyz;
+  }
+
+  get speed() {
+    return this._speed;
+  }
+
+  set speed(newPosition) {
+    this._speed.copy(newPosition);
+    this._state.upper = newPosition.xyz;
+  }
+
+  get state() {
+    return this._state;
+  }
+
+  set state(newState) {
+    this._position.assign(...newState.upper);
+    this._speed.assign(...newState.lower);
+    this._state.copy(newState);
   }
 
   /**
    * @brief initialize the point with position and speed
-   * @param u0 initial position
-   * @param v0 initial speed
+   * @param position initial position
+   * @param speed initial speed
    * @return reference to this
    */
-  init(position: Vector3, speed: Vector3): this {
-    const state = new Vector6(...position.array(), ...speed.array());
-    this.trajectory.last = state;
-    this.position.copy(position);
-    this.speed.copy(speed);
+  reset(position: Vector3, speed: Vector3): this {
+    const state = new Vector6(...position.xyz, ...speed.xyz);
+    this._position.copy(position);
+    this._speed.copy(speed);
+    this._state = state;
     return this;
+  }
+
+  translate(translation: Vector6) {
+    const posShift = new Vector3(...translation.upper);
+    const speedShift = new Vector3(...translation.lower);
+    this._position.add(posShift);
+    this._speed.add(speedShift);
+    this._state.add(translation);
   }
 }

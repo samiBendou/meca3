@@ -1,29 +1,55 @@
-import { Solver, Vector3, Vector6 } from "../../space3/src";
+import { Solver, Vector3, Vector6, VectorField } from "../../space3/src";
 import Point from "./Point";
 
-type InteractionField<T extends Point> = (
-  points?: T[]
-) => ((u?: Vector6, t?: number) => Vector6)[];
+type AccelerationField = (
+  acceleration: Vector3,
+  position: Vector3,
+  speed: Vector3,
+  time?: number
+) => Vector3;
 
 export default class Field<T extends Point> {
   points: T[];
-  solvers: Solver<Vector6>[];
   frame: Vector6;
-  field: InteractionField<T>;
-
+  private field: VectorField<Vector6>;
+  private positionBuffer: Vector3;
+  private speedBuffer: Vector3;
+  private accelerationBuffer: Vector3;
+  private solvers: Solver<Vector6>[];
   constructor(
     points: T[],
-    field: InteractionField<T>,
-    frame: Vector6,
-    dt?: number
+    field: AccelerationField,
+    dt?: number,
+    framePosition?: Vector3,
+    frameSpeed?: Vector3
   ) {
-    this.field = field;
     this.points = points;
-    const f = field(this.points);
+
+    this.frame = Vector6.zeros;
+    this.frame.upper = framePosition?.xyz ?? Vector3.zeros.xyz;
+    this.frame.lower = frameSpeed?.xyz ?? Vector3.zeros.xyz;
+
+    this.accelerationBuffer = Vector3.zeros;
+    this.positionBuffer = Vector3.zeros;
+    this.speedBuffer = Vector3.zeros;
+    this.field = (u?: Vector6, t?: number) => {
+      this.positionBuffer.xyz = u.upper;
+      this.speedBuffer.xyz = u.lower;
+      this.accelerationBuffer.xyz = [0, 0, 0];
+      this.accelerationBuffer = field(
+        this.accelerationBuffer,
+        this.positionBuffer,
+        this.speedBuffer,
+        t
+      );
+      u.upper = this.speedBuffer.xyz;
+      u.lower = this.accelerationBuffer.xyz;
+      return u;
+    };
+
     this.solvers = this.points.map(
-      (point, idx) => new Solver(f[idx], dt, point.trajectory.last)
+      (point) => new Solver(this.field, dt, point.state)
     );
-    this.frame = frame;
   }
 
   /** barycenter of the points **/
@@ -52,18 +78,12 @@ export default class Field<T extends Point> {
    * @returns reference to this
    */
   update(dt?: number): this {
-    const state = this.points.map((point, idx) =>
-      this.solvers[idx].step(point.trajectory.last, dt)
+    const states = this.points.map((point, idx) =>
+      this.solvers[idx].step(point.state, dt)
     );
     this.points.forEach((point, idx) => {
-      point.trajectory.push(state[idx]);
-      point.position.assign(...state[idx].upper);
-      point.speed.assign(...state[idx].lower);
+      point.state = states[idx];
     });
-    // const field = this.field(this.points);
-    // this.solvers.forEach((solver, idx) => {
-    //   solver.f = field[idx];
-    // });
     return this;
   }
 
@@ -75,12 +95,8 @@ export default class Field<T extends Point> {
    */
   reframe(frame: Vector6): this {
     const translation = frame.subc(this.frame);
-    const posShift = new Vector3(...translation.upper);
-    const speedShift = new Vector3(...translation.lower);
     this.points.forEach((point) => {
-      point.trajectory.translate(translation);
-      point.position.add(posShift);
-      point.speed.add(speedShift);
+      point.translate(translation);
     });
     return this;
   }
