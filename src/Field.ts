@@ -1,85 +1,87 @@
-import {Point} from "./Point";
-import {Solver} from "./Solver";
-import {Vector3} from "./Vector3";
+import { Solver, Vector3, Vector6 } from "../../space3/src";
+import Point from "./Point";
 
-/**
- * @brief trajectory of a mobile
- * @details `Field` class represent a _system_ of material points attracted in a _field_.
- *
- * Set `withMass` to `true property to simulate 2nd Newton law dynamic when constructing the f.
- *
- * - Move all the points with **dependent dynamic** by giving a unique solver
- *
- * - Represent **all the points in the same frame**
- *
- */
-export class Field {
+type InteractionField<T extends Point> = (
+  points?: T[]
+) => ((u?: Vector6, t?: number) => Vector6)[];
 
-    /** points composing the system **/
-    points: Point[];
+export default class Field<T extends Point> {
+  points: T[];
+  solvers: Solver<Vector6>[];
+  frame: Vector6;
+  field: InteractionField<T>;
 
-    /** point used as frame of other points **/
-    frame: Point;
+  constructor(
+    points: T[],
+    field: InteractionField<T>,
+    frame: Vector6,
+    dt?: number
+  ) {
+    this.field = field;
+    this.points = points;
+    const f = field(this.points);
+    this.solvers = this.points.map(
+      (point, idx) => new Solver(f[idx], dt, point.trajectory.last)
+    );
+    this.frame = frame;
+  }
 
-    /** Construct a f by giving an array of points a solver and a frame **/
-    constructor(points: Point[], solver = new Solver(), frame = points[0], withMass = false) {
-        this.points = points;
-        this.frame = frame;
-        this._setSolvers(solver, withMass);
-    }
+  /** barycenter of the points **/
+  get barycenter() {
+    let mass = this.points.reduce((acc, point) => acc + point.mass, 0);
+    return this.points
+      .reduce(
+        (acc, point) => acc.add(point.position.mul(point.mass)),
+        Vector3.zeros
+      )
+      .div(mass);
+  }
 
-    /** solver used to update all the points **/
-    get solver() {
-        return this.points[0].solver;
-    }
+  set barycenter(newCenter) {
+    let center = this.barycenter;
+    this.points.forEach((point) => {
+      point.position = point.position.sub(center).add(newCenter);
+    });
+  }
 
-    set solver(newSolver) {
-        this._setSolvers(newSolver, false);
-    }
+  /**
+   * @brief updates the position of all the points
+   * @details Solves a step of the ODE of the solver and update position.
+   * @param dt time step for this iteration
+   * @param origin origin to set for the solution
+   * @returns reference to this
+   */
+  update(dt?: number): this {
+    const state = this.points.map((point, idx) =>
+      this.solvers[idx].step(point.trajectory.last, dt)
+    );
+    this.points.forEach((point, idx) => {
+      point.trajectory.push(state[idx]);
+      point.position.assign(...state[idx].upper);
+      point.speed.assign(...state[idx].lower);
+    });
+    // const field = this.field(this.points);
+    // this.solvers.forEach((solver, idx) => {
+    //   solver.f = field[idx];
+    // });
+    return this;
+  }
 
-    /** barycenter of the points **/
-    get barycenter() {
-        let mass = this.points.reduce((acc, point) => acc + point.mass, 0);
-        return this.points.reduce((acc, point) => acc.add(point.position.mul(point.mass)), Vector3.zeros).div(mass);
-    }
-
-    set barycenter(newCenter) {
-        let center = this.barycenter;
-        this.points.forEach((point) => {
-            point.position = point.position.sub(center).add(newCenter)
-        });
-    }
-
-    private _setSolvers(solver: Solver, withMass: boolean) {
-        this.points.forEach((point) => {
-            let f = solver.f;
-            point.solver = withMass ? new Solver((u) => f(u).div(point.mass), solver.dt0, solver.method) : solver;
-        });
-    }
-
-    /**
-     * @brief updates the position of all the points
-     * @details Solves a step of the ODE of the solver and update position.
-     * @param dt time step for this iteration
-     * @param origin origin to set for the solution
-     * @returns reference to this
-     */
-    update(dt?: number, origin?: Vector3) {
-        this.points = this.points.map((point) => point.copy().update(dt, origin));
-        return this;
-    }
-
-    /**
-     * @brief changes the frame of all the points
-     * @details The whole trajectory of each point is changed.
-     * @param p point to set as frame of each point
-     * @return reference to this
-     */
-    reframe(p: Point) {
-        p = p || Point.zeros();
-        this.points.forEach((q) => {
-            q.reframe(p)
-        });
-        return this;
-    }
+  /**
+   * @brief changes the frame of all the points
+   * @details The whole trajectory of each point is changed.
+   * @param frame point to set as frame of each point
+   * @return reference to this
+   */
+  reframe(frame: Vector6): this {
+    const translation = frame.subc(this.frame);
+    const posShift = new Vector3(...translation.upper);
+    const speedShift = new Vector3(...translation.lower);
+    this.points.forEach((point) => {
+      point.trajectory.translate(translation);
+      point.position.add(posShift);
+      point.speed.add(speedShift);
+    });
+    return this;
+  }
 }

@@ -2,8 +2,8 @@
   "name": "meca3",
   "version": "4.0.1",
   "description": "3D space and physics engine for point's mechanics",
-  "main": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "src",
     "dist",
@@ -33,12 +33,13 @@
     "sourceMap": true,
     "instrument": true
   },
-
   "homepage": "https://github.com/samiBendou/meca3/wiki",
   "bugs": "https://github.com/samiBendou/meca3/issues",
   "author": "Sami Dahoux <sbdh75@gmail.com> (https://github.com/samiBendou)",
   "license": "GPL-3.0",
-  "dependencies": {},
+  "dependencies": {
+    "space3": "../space3"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/samiBendou/meca3.git"
