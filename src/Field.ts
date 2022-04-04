@@ -2,38 +2,42 @@ import { Solver, Vector3, VectorField } from "../../space3/src";
 import Point from "./Point";
 
 type AccelerationField = (
-  acceleration: Vector3,
-  point: Point,
+  current: Point,
+  other?: Point,
   time?: number
 ) => Vector3;
 
 export default class Field {
   points: Point[];
-  private field: VectorField<Point>;
-  private pointBuffer: Point;
-  private accelerationBuffer: Vector3;
-  private solvers: Solver<Point>[];
+
+  private _field: VectorField<Point>;
+
+  private _pointBuffer: Point;
+
+  private _accelerationBuffer: Vector3;
+
+  private _solvers: Solver<Point>[];
+
   constructor(points: Point[], field: AccelerationField, dt?: number) {
     this.points = points;
 
-    this.pointBuffer = new Point(0);
-    this.accelerationBuffer = Vector3.zeros;
+    this._pointBuffer = new Point(0);
+    this._accelerationBuffer = Vector3.zeros;
 
-    this.field = (p?: Point, t?: number) => {
-      this.accelerationBuffer.xyz = [0, 0, 0];
-      this.pointBuffer.copy(p);
-      this.accelerationBuffer = field(
-        this.accelerationBuffer,
-        this.pointBuffer,
-        t
-      );
-      p.position = this.pointBuffer.speed;
-      p.speed = this.accelerationBuffer;
+    this._field = (p?: Point, t?: number) => {
+      this._accelerationBuffer.reset0();
+      this._accelerationBuffer = this.points.reduce((acc, point) => {
+        this._pointBuffer.copy(p);
+        return acc.add(field(this._pointBuffer, point, t));
+      }, this._accelerationBuffer);
+
+      p.position = this._pointBuffer.speed;
+      p.speed = this._accelerationBuffer;
       return p;
     };
 
-    this.solvers = this.points.map(
-      (point) => new Solver(this.field, dt, point)
+    this._solvers = this.points.map(
+      (point) => new Solver(this._field, dt, point)
     );
   }
 
@@ -45,7 +49,7 @@ export default class Field {
    */
   update(dt?: number): this {
     const states = this.points.map((point, idx) =>
-      this.solvers[idx].step(point, dt)
+      this._solvers[idx].step(point, dt)
     );
     this.points.forEach((point, idx) => {
       point.copy(states[idx]);

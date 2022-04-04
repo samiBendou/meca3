@@ -53,6 +53,7 @@ export default class Point implements Vectorial, List {
   }
 
   copy(point: this): this {
+    this.mass = point.mass;
     this._position.copy(point._position);
     this._speed.copy(point._speed);
     this._state.copy(point._state);
