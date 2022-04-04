@@ -24,8 +24,8 @@ export default class Point {
   /** Construct a material point by specifying mass, position and speed **/
   constructor(mass: number, position?: Vector3, speed?: Vector3) {
     this.mass = mass;
-    this._position = position ?? Vector3.zeros;
-    this._speed = speed ?? Vector3.zeros;
+    this._position = position ? position.clone() : Vector3.zeros;
+    this._speed = speed ? speed.clone() : Vector3.zeros;
     this._state = new Vector6(...this.position.xyz, ...this.speed.xyz);
   }
 
@@ -63,19 +63,11 @@ export default class Point {
    * @param speed initial speed
    * @return reference to this
    */
-  reset(position: Vector3, speed: Vector3): this {
-    const state = new Vector6(...position.xyz, ...speed.xyz);
+  reset(position?: Vector3, speed?: Vector3): this {
     this._position.copy(position);
     this._speed.copy(speed);
-    this._state = state;
+    this._state.upper = position.xyz;
+    this._state.lower = speed.xyz;
     return this;
-  }
-
-  translate(translation: Vector6) {
-    const posShift = new Vector3(...translation.upper);
-    const speedShift = new Vector3(...translation.lower);
-    this._position.add(posShift);
-    this._speed.add(speedShift);
-    this._state.add(translation);
   }
 }
