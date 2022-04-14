@@ -12,8 +12,6 @@ export default class Field {
 
   private _field: VectorField<Point>;
 
-  private _pointBuffer: Point;
-
   private _accelerationBuffer: Vector3;
 
   private _solvers: Solver<Point>[];
@@ -21,17 +19,15 @@ export default class Field {
   constructor(points: Point[], field: AccelerationField, dt?: number) {
     this.points = points;
 
-    this._pointBuffer = new Point(0);
     this._accelerationBuffer = Vector3.zeros;
 
     this._field = (p?: Point, t?: number) => {
       this._accelerationBuffer.reset0();
       this._accelerationBuffer = this.points.reduce((acc, point) => {
-        this._pointBuffer.copy(p);
-        return acc.add(field(this._pointBuffer, point, t));
+        return acc.add(field(p, point, t));
       }, this._accelerationBuffer);
 
-      p.position = this._pointBuffer.speed;
+      p.position = p.speed;
       p.speed = this._accelerationBuffer;
       return p;
     };
