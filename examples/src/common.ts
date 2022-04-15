@@ -101,7 +101,7 @@ export function initOrthographicCamera(scale: number, distance: number) {
   const width = (window.innerWidth * scale) / 2;
   const height = (window.innerHeight * scale) / 2;
   const near = 0 * scale;
-  const far = 1e20 * scale;
+  const far = 1e8 * scale;
   const dist = distance * scale;
 
   const camera = new THREE.OrthographicCamera(
@@ -113,7 +113,7 @@ export function initOrthographicCamera(scale: number, distance: number) {
     far
   );
 
-  camera.position.z = dist;
+  camera.position.x = dist;
 
   return camera;
 }
@@ -268,8 +268,8 @@ export function updateObjectLines(
     geometry.vertices.forEach((vertex, vIdx) => {
       const position = trajectory.get(vIdx).xyz;
 
-      // if (framePointIdx !== undefined) {
-      //   const frame = points[framePointIdx].trajectory;
+      // if (frame.idx !== undefined) {
+      //   const frame = points[frame.idx].trajectory;
       //   const framePosition = new THREE.Vector3(...frame.get(vIdx).xyz);
       //   vertex
       //     .set(...position)
@@ -300,5 +300,5 @@ export function updateObjectFrame(
     );
     mesh.position.multiplyScalar(newScaleF / scaleF);
   });
-  scaleF = newScaleF;
+  return newScaleF;
 }

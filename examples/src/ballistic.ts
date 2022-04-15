@@ -63,8 +63,11 @@ const data = [
     id: "plumb",
     mass: 11.3 * WATER_RHO * SPHERE_VOLUME,
     state: Vector6.concatenated(
-      Vector3.ez.mul(INITIAL_ALTITUDE).add(Vector3.ey.mul(-INITIAL_OFFSET)),
-      Vector3.ey.mul(INITIAL_SPEED).add(Vector3.ex.mul(INITIAL_DISTANCE))
+      Vector3.ez
+        .mul(INITIAL_ALTITUDE)
+        .add(Vector3.ex.mul(INITIAL_DISTANCE))
+        .add(Vector3.ey.mul(-INITIAL_OFFSET)),
+      Vector3.ey.mul(INITIAL_SPEED)
     ),
     trajectoryLength: BUFFER_LENGTH,
   },
@@ -132,7 +135,7 @@ function init() {
     updateSimulation(points, solver, delta);
     updateObjectSpheres(points, spheres, frame, scale);
     updateObjectLines(points, lines, frame, scale);
-    updateObjectFrame(camera, frameObj, scale, scaleF);
+    scaleF = updateObjectFrame(camera, frameObj, scale, scaleF);
 
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);
