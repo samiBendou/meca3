@@ -1,6 +1,11 @@
-import { Vector3, Vector6 } from "../../space3/src";
-import List from "../../space3/src/common/List";
-import Vectorial from "../../space3/src/common/Vectorial";
+import { BasicCurve, BufferCurve, Vector3, Vector6 } from "../../space3/src";
+
+export type PointConstructor = {
+  id: string;
+  mass: number;
+  state: Vector6;
+  trajectoryLength: number;
+};
 
 /**
  * @brief material point
@@ -13,7 +18,7 @@ import Vectorial from "../../space3/src/common/Vectorial";
  * - **Manipulate speed and position** of the point
  *
  */
-export default class Point implements Vectorial, List {
+export default class Point {
   /** mass of the point **/
   mass: number;
 
@@ -21,14 +26,26 @@ export default class Point implements Vectorial, List {
 
   private _state: Vector6;
 
+  private _trajectory: BufferCurve<Vector3>;
+
   /** Construct a material point by specifying mass, position and speed **/
-  constructor(id: string, mass: number, position?: Vector3, speed?: Vector3) {
+  constructor(
+    id: string,
+    mass: number,
+    state: Vector6,
+    trajectory: BufferCurve<Vector3>
+  ) {
     this.id = id;
     this.mass = mass;
-    const _position = position ? position.clone() : Vector3.zeros;
-    const _speed = speed ? speed.clone() : Vector3.zeros;
-    this._state = new Vector6(..._position.xyz, ..._speed.xyz);
+    this._state = state;
+    this._trajectory = trajectory;
   }
+
+  update(state: Vector6) {
+    this.state.copy(state);
+    this.trajectory.push(state.upper);
+  }
+
   array(): number[] {
     return this._state.array();
   }
@@ -55,7 +72,12 @@ export default class Point implements Vectorial, List {
   }
 
   clone(): this {
-    return new Point(this.id, this.mass, this.position, this.speed) as this;
+    return new Point(
+      this.id,
+      this.mass,
+      this.state.clone(),
+      new BufferCurve(this.trajectory.vertices.map((v) => v.clone()))
+    ) as this;
   }
 
   get dim() {
@@ -116,14 +138,18 @@ export default class Point implements Vectorial, List {
     this._state.copy(newState);
   }
 
-  /**
-   * @brief initialize the point with position and speed
-   * @param position initial position
-   * @param speed initial speed
-   * @return reference to this
-   */
-  reset(position?: Vector3, speed?: Vector3): this {
-    this._state.concat(position, speed);
-    return this;
+  get trajectory() {
+    return this._trajectory;
+  }
+
+  static makePoint(data: PointConstructor): Point {
+    return new Point(
+      data.id,
+      data.mass,
+      data.state,
+      BufferCurve.bufferize(
+        BasicCurve.constant(data.trajectoryLength, data.state.upper)
+      )
+    );
   }
 }

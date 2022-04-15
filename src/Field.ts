@@ -1,47 +1,35 @@
-import { Vector3 } from "../../space3/src";
-import InteractionSolver, {
-  InteractionField,
-} from "../../space3/src/InteractionSolver";
+import { Vector3, Vector6 } from "../../space3/src";
+import { InteractionField } from "../../space3/src/InteractionSolver";
 import Point from "./Point";
 
 type Acceleration = (current: Point, other?: Point, time?: number) => Vector3;
 
-export default class Field {
-  points: Point[];
-
-  solver: InteractionSolver<Point>;
-
+export default class SystemDynamics {
   private _field: InteractionField<Point>;
 
   private _acceleration: Vector3;
 
   private _point: Point;
 
-  constructor(points: Point[], acceleration: Acceleration) {
-    this.points = points;
-
+  constructor(acceleration: Acceleration) {
     this._acceleration = Vector3.zeros;
-    this._point = points[0].clone();
-
+    this._point = Point.makePoint({
+      id: "_point",
+      mass: 0,
+      state: Vector6.zeros,
+      trajectoryLength: 0,
+    });
     this._field = (p: Point, pts: Point[], t: number) => {
       this._point.copy(p);
       this._acceleration.reset0();
       this._acceleration = pts.reduce((acc, point) => {
-        return acc.add(acceleration(this._point, point, t));
+        return acc.add(acceleration(p, point, t));
       }, this._acceleration);
 
       this._point.position = this._point.speed;
       this._point.speed = this._acceleration;
       return this._point;
     };
-  }
-
-  update(solver: InteractionSolver<Point>): this {
-    const states = solver.u1;
-    this.points.forEach((point, idx) => {
-      point.copy(states[idx]);
-    });
-    return this;
   }
 
   get field(): InteractionField<Point> {
