@@ -1,56 +1,50 @@
-import { Solver, Vector3, VectorField } from "../../space3/src";
+import { Vector3 } from "../../space3/src";
+import InteractionSolver, {
+  InteractionField,
+} from "../../space3/src/InteractionSolver";
 import Point from "./Point";
 
-type AccelerationField = (
-  current: Point,
-  other?: Point,
-  time?: number
-) => Vector3;
+type Acceleration = (current: Point, other?: Point, time?: number) => Vector3;
 
 export default class Field {
   points: Point[];
 
-  private _field: VectorField<Point>;
+  solver: InteractionSolver<Point>;
 
-  private _accelerationBuffer: Vector3;
+  private _field: InteractionField<Point>;
 
-  private _solvers: Solver<Point>[];
+  private _acceleration: Vector3;
 
-  constructor(points: Point[], field: AccelerationField, dt?: number) {
+  private _point: Point;
+
+  constructor(points: Point[], acceleration: Acceleration) {
     this.points = points;
 
-    this._accelerationBuffer = Vector3.zeros;
+    this._acceleration = Vector3.zeros;
+    this._point = points[0].clone();
 
-    this._field = (p?: Point, t?: number) => {
-      this._accelerationBuffer.reset0();
-      this._accelerationBuffer = this.points.reduce((acc, point) => {
-        return acc.add(field(p, point, t));
-      }, this._accelerationBuffer);
+    this._field = (p: Point, pts: Point[], t: number) => {
+      this._point.copy(p);
+      this._acceleration.reset0();
+      this._acceleration = pts.reduce((acc, point) => {
+        return acc.add(acceleration(this._point, point, t));
+      }, this._acceleration);
 
-      p.position = p.speed;
-      p.speed = this._accelerationBuffer;
-      return p;
+      this._point.position = this._point.speed;
+      this._point.speed = this._acceleration;
+      return this._point;
     };
-
-    this._solvers = this.points.map(
-      (point) => new Solver(this._field, dt, point)
-    );
   }
 
-  /**
-   * @brief updates the position of all the points
-   * @details Solves a step of the ODE of the solver and update position.
-   * @param dt time step for this iteration
-   * @returns reference to this
-   */
-  update(dt?: number): this {
-    const states = this.points.map((point, idx) =>
-      this._solvers[idx].step(point, dt)
-    );
+  update(solver: InteractionSolver<Point>): this {
+    const states = solver.u1;
     this.points.forEach((point, idx) => {
       point.copy(states[idx]);
     });
-
     return this;
+  }
+
+  get field(): InteractionField<Point> {
+    return this._field;
   }
 }
