@@ -20,13 +20,12 @@ export default class SystemDynamics {
       trajectoryLength: 0,
     });
     this._field = (p: Point, pts: Point[], t: number) => {
-      this._point.copy(p);
       this._acceleration.reset0();
       this._acceleration = pts.reduce((acc, point) => {
         return acc.add(acceleration(p, point, t));
       }, this._acceleration);
 
-      this._point.position = this._point.speed;
+      this._point.position = p.speed;
       this._point.speed = this._acceleration;
       return this._point;
     };
