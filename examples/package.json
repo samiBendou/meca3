@@ -4,8 +4,11 @@
   "author": "Sami Dahoux <samidahoux@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "webpack serve"
+    "gravity": "tsc; webpack serve --env entry='./dist/examples/src/gravity.js'",
+    "coulomb": "tsc; webpack serve --env entry='./dist/examples/src/coulomb.js'",
+    "ballistic": "tsc; webpack serve --env entry='./dist/examples/src/ballistic.js'",
+    "lorentz": "tsc; webpack serve --env entry='./dist/examples/src/lorentz.js'",
+    "springs": "tsc; webpack serve --env entry='./dist/examples/src/springs.js'"
   },
   "license": "ISC",
   "dependencies": {

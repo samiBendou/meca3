@@ -2,7 +2,7 @@ import { Vector3, Vector6 } from "../algebra";
 import { VectorField } from "../solvers";
 import Point from "./Point";
 
-type Acceleration = (current: Point, time?: number) => Vector3;
+export type PointAcceleration = (current: Point, time?: number) => Vector3;
 
 export default class PointDynamics {
   private _field: VectorField<Point>;
@@ -11,7 +11,7 @@ export default class PointDynamics {
 
   private _point: Point;
 
-  constructor(acceleration: Acceleration) {
+  constructor(acceleration: PointAcceleration) {
     this._acceleration = Vector3.zeros;
     this._point = Point.makePoint({
       id: "_point",

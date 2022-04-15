@@ -2,7 +2,11 @@ import { Vector3, Vector6 } from "../algebra";
 import { InteractionField } from "../solvers/InteractionSolver";
 import Point from "./Point";
 
-type Acceleration = (current: Point, other?: Point, time?: number) => Vector3;
+export type SystemAcceleration = (
+  current: Point,
+  other?: Point,
+  time?: number
+) => Vector3;
 
 export default class SystemDynamics {
   private _field: InteractionField<Point>;
@@ -11,7 +15,7 @@ export default class SystemDynamics {
 
   private _point: Point;
 
-  constructor(acceleration: Acceleration) {
+  constructor(acceleration: SystemAcceleration) {
     this._acceleration = Vector3.zeros;
     this._point = Point.makePoint({
       id: "_point",
