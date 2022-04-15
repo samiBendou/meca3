@@ -1,4 +1,5 @@
-import { BasicCurve, BufferCurve, Vector3, Vector6 } from "../../space3/src";
+import { Vector3, Vector6 } from "../algebra";
+import { BasicCurve, BufferCurve } from "../curves";
 
 export type PointConstructor = {
   id: string;

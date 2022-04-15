@@ -1,5 +1,5 @@
-import { Vector3, Vector6 } from "../../space3/src";
-import { InteractionField } from "../../space3/src/InteractionSolver";
+import { Vector3, Vector6 } from "../algebra";
+import { InteractionField } from "../solvers/InteractionSolver";
 import Point from "./Point";
 
 type Acceleration = (current: Point, other?: Point, time?: number) => Vector3;

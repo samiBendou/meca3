@@ -1,4 +1,5 @@
-import { Vector3, Vector6, VectorField } from "../../space3/src";
+import { Vector3, Vector6 } from "../algebra";
+import { VectorField } from "../solvers";
 import Point from "./Point";
 
 type Acceleration = (current: Point, time?: number) => Vector3;

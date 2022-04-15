@@ -1,6 +1,6 @@
 {
   "name": "meca3",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "3D space and physics engine for point's mechanics",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "prepublishOnly": "tsc && tsc -p tsconfig.browser.json",
-    "test": "nyc mocha -r ts-node/register test/**/*.test.ts",
+    "test": "nyc mocha -r ts-node/register test/**/*.test.ts --timeout=30000",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "nyc": {
