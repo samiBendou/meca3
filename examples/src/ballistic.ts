@@ -113,7 +113,7 @@ console.log(gravity.string());
 console.log(axisCoriolis.string());
 
 let scaleF = 1;
-let speed = 10; // simulation speed
+let speed = 100; // simulation speed
 let delta = speed / TARGET_FRAMERATE; // time step of animation in s
 let scale = 1; // scaling factor to represent bodies in animation
 let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame

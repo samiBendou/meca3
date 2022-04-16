@@ -57,7 +57,7 @@ const data = [
     mass: 1 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
     state: Vector6.concatenated(
       Vector3.ex.mul(10),
-      Vector3.ey.mul(SPEED_OF_LIGHT / 2)
+      Vector3.ez.mul(SPEED_OF_LIGHT / 2)
     ),
     trajectoryLength: BUFFER_LENGTH,
   },
@@ -80,7 +80,7 @@ const electromagAcceleration = (p, point, t) => {
   electricFieldVector.x = electricField(t);
   magneticFieldVector.z = magneticField(t);
   dragVector.copy(p.speed);
-  dragVector.mul(-0.000000001);
+  dragVector.mul(-0.0);
   acceleration.copy(p.speed);
   return acceleration
     .cross(magneticFieldVector)
