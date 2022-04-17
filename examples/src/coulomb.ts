@@ -5,8 +5,8 @@ import {
   initObjectSpheres,
   initPerspectiveCamera,
   initScene,
-  initSimulation,
   initStats,
+  initSystemSimulation,
   updateObjectLines,
   updateObjectSpheres,
   updateSimulation,
@@ -61,7 +61,11 @@ const coulombAcceleration = (p, point) => {
 function init() {
   const frame = { idx: null };
   const stats = initStats();
-  const { points, solver } = initSimulation(data, coulombAcceleration, dt);
+  const { points, solver } = initSystemSimulation(
+    data,
+    coulombAcceleration,
+    dt
+  );
   const spheres = initObjectSpheres(points);
 
   const lines = initObjectLines(points, scale);

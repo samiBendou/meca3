@@ -27,7 +27,7 @@ export function initStats() {
   return stats;
 }
 
-export function initSimulation(
+export function initSystemSimulation(
   data: PointConstructor[],
   acceleration: SystemAcceleration,
   dt: number

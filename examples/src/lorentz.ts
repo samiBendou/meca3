@@ -6,7 +6,7 @@ import {
   initObjectSpheres,
   initPerspectiveCamera,
   initScene,
-  initSimulation,
+  initSystemSimulation,
   updateObjectLines,
   updateObjectSpheres,
   updateSimulation,
@@ -92,7 +92,11 @@ const electromagAcceleration = (p, point, t) => {
 function init() {
   const frame = { idx: null };
   const stats = initStats();
-  const { points, solver } = initSimulation(data, electromagAcceleration, dt);
+  const { points, solver } = initSystemSimulation(
+    data,
+    electromagAcceleration,
+    dt
+  );
   const spheres = initObjectSpheres(points);
 
   const lines = initObjectLines(points, scale);

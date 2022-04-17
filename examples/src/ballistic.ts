@@ -6,8 +6,8 @@ import {
   initObjectSpheres,
   initOrthographicCamera,
   initScene,
-  initSimulation,
   initStats,
+  initSystemSimulation,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
@@ -122,7 +122,7 @@ const dist = (500 + INITIAL_ALTITUDE) * scale;
 function init() {
   const frame = { idx: null };
   const stats = initStats();
-  const { points, solver } = initSimulation(data, earthAcceleration, dt);
+  const { points, solver } = initSystemSimulation(data, earthAcceleration, dt);
   const spheres = initObjectSpheres(points);
   const frameObj = initFrame();
   const lines = initObjectLines(points, scale);

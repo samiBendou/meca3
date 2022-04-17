@@ -5,8 +5,8 @@ import {
   initObjectSpheres,
   initPerspectiveCamera,
   initScene,
-  initSimulation,
   initStats,
+  initSystemSimulation,
   updateObjectLines,
   updateObjectSpheres,
   updateSimulation,
@@ -65,7 +65,7 @@ let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per
 function init() {
   const frame = { idx: null };
   const stats = initStats();
-  const { points, solver } = initSimulation(
+  const { points, solver } = initSystemSimulation(
     data,
     gravitationalAcceleration,
     dt

@@ -5,8 +5,8 @@ import {
   initObjectSpheres,
   initPerspectiveCamera,
   initScene,
-  initSimulation,
   initStats,
+  initSystemSimulation,
   updateObjectLines,
   updateObjectSpheres,
   updateSimulation,
@@ -62,7 +62,7 @@ let scale = 1;
 function init() {
   const frame = { idx: null };
   const stats = initStats();
-  const { points, solver } = initSimulation(data, oscillationField, dt);
+  const { points, solver } = initSystemSimulation(data, oscillationField, dt);
   const spheres = initObjectSpheres(points);
 
   const lines = initObjectLines(points, scale);
