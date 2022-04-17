@@ -218,7 +218,7 @@ export function makeOnKeyPressedHandler(points: Point[], frame: Frame) {
     switch (event.key) {
       case "r":
         frame.idx = frame.idx === null ? 0 : frame.idx + 1;
-        frame.idx = frame.idx > points.length ? null : frame.idx;
+        frame.idx = frame.idx >= points.length ? null : frame.idx;
         break;
     }
   };
@@ -262,22 +262,21 @@ export function updateObjectLines(
   frame: Frame,
   scale: number
 ) {
+  const frameTrajectory =
+    frame.idx !== null ? points[frame.idx].trajectory : null;
   lines.forEach((line, idx) => {
     const geometry = line.geometry as THREE.Geometry;
     const trajectory = points[idx].trajectory;
     geometry.vertices.forEach((vertex, vIdx) => {
       const position = trajectory.get(vIdx).xyz;
-
-      // if (frame.idx !== undefined) {
-      //   const frame = points[frame.idx].trajectory;
-      //   const framePosition = new THREE.Vector3(...frame.get(vIdx).xyz);
-      //   vertex
-      //     .set(...position)
-      //     .sub(framePosition)
-      //     .multiplyScalar(scale);
-      //   return;
-      // }
-      vertex.set(...position).multiplyScalar(scale);
+      const framePosition =
+        frameTrajectory !== null
+          ? new THREE.Vector3(...frameTrajectory.get(vIdx).xyz)
+          : new THREE.Vector3(0, 0, 0);
+      vertex
+        .set(...position)
+        .sub(framePosition)
+        .multiplyScalar(scale);
     });
     geometry.verticesNeedUpdate = true;
     geometry.normalsNeedUpdate = true;

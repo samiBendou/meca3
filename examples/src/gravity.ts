@@ -74,7 +74,7 @@ function init() {
 
   const lines = initObjectLines(points, scale);
   const { renderer, scene } = initScene(...spheres, ...lines);
-  const camera = initPerspectiveCamera(0, 0, 50);
+  const camera = initPerspectiveCamera(0, -0, 50);
   const controls = initControls(points, frame, camera);
 
   return function animate() {
