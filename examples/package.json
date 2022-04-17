@@ -4,11 +4,11 @@
   "author": "Sami Dahoux <samidahoux@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "gravity": "tsc; webpack serve --env entry='./dist/examples/src/gravity.js'",
-    "coulomb": "tsc; webpack serve --env entry='./dist/examples/src/coulomb.js'",
-    "ballistic": "tsc; webpack serve --env entry='./dist/examples/src/ballistic.js'",
-    "lorentz": "tsc; webpack serve --env entry='./dist/examples/src/lorentz.js'",
-    "springs": "tsc; webpack serve --env entry='./dist/examples/src/springs.js'"
+    "gravity": "webpack serve --env entry=./dist/examples/src/gravity.js",
+    "coulomb": "webpack serve --env entry='./dist/examples/src/coulomb.js'",
+    "ballistic": "webpack serve --env entry='./dist/examples/src/ballistic.js'",
+    "lorentz": "webpack serve --env entry='./dist/examples/src/lorentz.js'",
+    "springs": "webpack serve --env entry='./dist/examples/src/springs.js'"
   },
   "license": "ISC",
   "dependencies": {

@@ -38,7 +38,7 @@ const config = {
 };
 
 module.exports = (env) => {
-  config.entry = env.entry;
+  config.entry = path.resolve(__dirname, env.entry);
   if (isProduction) {
     config.mode = "production";
 
