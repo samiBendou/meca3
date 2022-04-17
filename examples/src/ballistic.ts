@@ -1,10 +1,10 @@
 import { Vector3, Vector6 } from "../../src/algebra";
 import {
+  Color,
+  initBodiesMesh,
+  initCamera,
   initControls,
-  initFrame,
-  initObjectLines,
-  initObjectSpheres,
-  initOrthographicCamera,
+  initFrameMesh,
   initScene,
   initStats,
   initSystemSimulation,
@@ -16,7 +16,6 @@ import {
 
 const BUFFER_LENGTH = 8192;
 const SAMPLE_PER_FRAMES = 8192;
-const TARGET_FRAMERATE = 60;
 
 const AIR_RHO = 1.204;
 const WATER_RHO = 1000;
@@ -25,12 +24,12 @@ const RAD_PER_DEG = Math.PI / 180;
 const SPHERE_AREA = 4 * Math.PI * SPHERE_RADIUS ** 2;
 const SPHERE_VOLUME = (4 * Math.PI * SPHERE_RADIUS ** 3) / 3;
 
-const SECONDS_PER_DAY = 60 * 60 * 23 + 56 * 60 + 4;
+const SIDERAL_DAY = 86164;
 const GRAVITY_ACCELERATION = 9.80665;
 const EARTH_RADIUS = 6378.137e3;
 const LATITUDE_DEG = 45;
 const LATITUDE_RAD = LATITUDE_DEG * RAD_PER_DEG;
-const ROTATION_SPEED = (2 * Math.PI) / SECONDS_PER_DAY;
+const ROTATION_SPEED = (2 * Math.PI) / SIDERAL_DAY;
 const FRICTION_COEFFICIENT = (AIR_RHO * 0.03 * SPHERE_AREA) / 2;
 const ROTATION_AXIS = new Vector3(
   0,
@@ -70,6 +69,8 @@ const data = [
       Vector3.ey.mul(INITIAL_SPEED)
     ),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Yellow,
+    radius: 1000,
   },
   {
     id: "steel",
@@ -82,6 +83,8 @@ const data = [
       Vector3.ey.mul(INITIAL_SPEED)
     ),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Cyan,
+    radius: 1000,
   },
   {
     id: "aluminum",
@@ -94,6 +97,8 @@ const data = [
       Vector3.ey.mul(INITIAL_SPEED)
     ),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Magenta,
+    radius: 1000,
   },
 ];
 
@@ -112,30 +117,28 @@ const earthAcceleration = (p, point) => {
 console.log(gravity.string());
 console.log(axisCoriolis.string());
 
-let scaleF = 1;
-let speed = 100; // simulation speed
-let delta = speed / TARGET_FRAMERATE; // time step of animation in s
+let zoomScale = 1;
+let speed = 1; // simulation speed
+let delta = speed; // time step of animation in s
 let scale = 1; // scaling factor to represent bodies in animation
 let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame
-const dist = (500 + INITIAL_ALTITUDE) * scale;
 
 function init() {
-  const frame = { idx: null };
+  const reference = { idx: null };
   const stats = initStats();
   const { points, solver } = initSystemSimulation(data, earthAcceleration, dt);
-  const spheres = initObjectSpheres(points);
-  const frameObj = initFrame();
-  const lines = initObjectLines(points, scale);
-  const { renderer, scene } = initScene(...frameObj, ...spheres, ...lines);
-  const camera = initOrthographicCamera(scale, dist);
-  const controls = initControls(points, frame, camera);
+  const { spheres, lines } = initBodiesMesh(data);
+  const frame = initFrameMesh();
+  const { renderer, scene } = initScene(...spheres, ...lines, ...frame);
+  const camera = initCamera(scale, INITIAL_ALTITUDE, 0, 0);
+  const controls = initControls(points, reference, camera);
 
   return function animate() {
     stats.begin();
     updateSimulation(points, solver, delta);
-    updateObjectSpheres(points, spheres, frame, scale);
-    updateObjectLines(points, lines, frame, scale);
-    scaleF = updateObjectFrame(camera, frameObj, scale, scaleF);
+    updateObjectSpheres(points, spheres, reference, scale);
+    updateObjectLines(points, lines, reference, scale);
+    zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);

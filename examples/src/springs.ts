@@ -1,12 +1,14 @@
 import { Vector3, Vector6 } from "../../src";
 import {
+  Color,
+  initBodiesMesh,
+  initCamera,
   initControls,
-  initObjectLines,
-  initObjectSpheres,
-  initPerspectiveCamera,
+  initFrameMesh,
   initScene,
   initStats,
   initSystemSimulation,
+  updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
   updateSimulation,
@@ -28,12 +30,16 @@ const data = [
     mass: 1,
     state: Vector6.concatenated(Vector3.ex.mul(a), Vector3.zeros),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Yellow,
+    radius: 10,
   },
   {
     id: "second",
     mass: 1,
     state: Vector6.concatenated(Vector3.ex.mul(-a), Vector3.zeros),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Cyan,
+    radius: 10,
   },
   {
     id: "third",
@@ -43,6 +49,8 @@ const data = [
       Vector3.zeros
     ),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Magenta,
+    radius: 10,
   },
 ];
 
@@ -57,25 +65,27 @@ const oscillationField = (p, point) => {
 
 let delta = 1 / TARGET_FRAMERATE; // time step of animation in s
 let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame
-let scale = 1;
+let scale = 10;
+let zoomScale = 1;
 
 function init() {
-  const frame = { idx: null };
+  const reference = { idx: null };
   const stats = initStats();
   const { points, solver } = initSystemSimulation(data, oscillationField, dt);
-  const spheres = initObjectSpheres(points);
+  const { spheres, lines } = initBodiesMesh(data);
+  const frame = initFrameMesh();
 
-  const lines = initObjectLines(points, scale);
-  const { renderer, scene } = initScene(...spheres, ...lines);
-  const camera = initPerspectiveCamera(0, (a * Math.sqrt(3)) / 4, 100);
+  const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
+  const camera = initCamera(scale, 0, (a * Math.sqrt(3)) / 4, 100);
 
-  const controls = initControls(points, frame, camera);
+  const controls = initControls(points, reference, camera);
 
   return function animate() {
     stats.begin();
     updateSimulation(points, solver, delta);
-    updateObjectSpheres(points, spheres, frame, scale);
-    updateObjectLines(points, lines, frame, scale);
+    updateObjectSpheres(points, spheres, reference, scale);
+    updateObjectLines(points, lines, reference, scale);
+    zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);

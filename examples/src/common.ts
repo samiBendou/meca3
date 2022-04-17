@@ -10,9 +10,36 @@ import {
 } from "../../src/dynamics";
 import { InteractionSolver, Timer } from "../../src/solvers";
 
+export type Body = {
+  radius: number;
+  color: Color;
+} & PointConstructor;
+
 export type Frame = {
   idx: number | null;
 };
+
+export enum Axis {
+  X,
+  Y,
+  Z,
+}
+
+export enum Color {
+  Red = 0xff0000,
+  Green = 0x00ff00,
+  Blue = 0x0000ff,
+  Yellow = 0xffff00,
+  Cyan = 0x00ffff,
+  Magenta = 0xff00ff,
+  Black = 0x000000,
+  White = 0xffffff,
+}
+
+export const AXIS_COLORS = [Color.Red, Color.Green, Color.Blue];
+export const AXIS_UNIT_LENGTH = 20;
+export const AXIS_UNIT_SIDE = 2;
+export const AXIS_MAX_LENGTH = 100000;
 
 export const BODY_COLORS = [
   0xffff00, 0x00ffff, 0xff00ff, 0x111111, 0x333333, 0x555555,
@@ -39,36 +66,76 @@ export function initSystemSimulation(
   return { points, solver };
 }
 
-export function initObjectSpheres(points: Point[]) {
-  // The points in simulation are represented as spheres of different colors.
-  const geometry = new THREE.SphereGeometry(1, 16, 32);
-  const materials = points.map(
-    (_, idx) => new THREE.MeshBasicMaterial({ color: BODY_COLORS[idx] })
-  );
-  return materials.map((material) => new THREE.Mesh(geometry, material));
+function coordinatesFromAxis(axis: Axis, max: number, min: number) {
+  const w = axis == Axis.X ? max : min;
+  const h = axis == Axis.Y ? max : min;
+  const d = axis == Axis.Z ? max : min;
+  return [w, h, d];
 }
 
-export function initObjectLines(points: Point[], scale: number = 1) {
-  const geometries = points.map(({ trajectory }) => {
-    const geometry = new THREE.Geometry();
-    geometry.vertices = trajectory.vertices.map(
-      (p) => new THREE.Vector3(p.x * scale, p.y * scale, p.z * scale)
-    );
-    return geometry;
+export function initUnitMesh(axis: Axis) {
+  const [w, h, d] = coordinatesFromAxis(axis, AXIS_UNIT_LENGTH, AXIS_UNIT_SIDE);
+  const geometry = new THREE.BoxGeometry(w, h, d);
+  const material = new THREE.MeshBasicMaterial({
+    color: AXIS_COLORS[axis],
   });
-  const materials = points.map(
-    (_, idx) =>
-      new THREE.LineDashedMaterial({
-        color: BODY_COLORS[idx],
-        linewidth: 1,
-        scale: 100,
-        dashSize: 10,
-        gapSize: 10,
-      })
-  );
-  return points.map(
-    (_, idx) => new THREE.Line(geometries[idx], materials[idx])
-  );
+  const mesh = new THREE.Mesh(geometry, material);
+  const [x, y, z] = coordinatesFromAxis(axis, AXIS_UNIT_LENGTH / 2, 0);
+  mesh.position.set(x, y, z);
+  return mesh;
+}
+
+export function initAxisMesh(axis: Axis) {
+  const [w, h, d] = coordinatesFromAxis(axis, AXIS_MAX_LENGTH, AXIS_UNIT_SIDE);
+  const geometry = new THREE.BoxGeometry(w, h, d);
+  const material = new THREE.MeshBasicMaterial({
+    color: AXIS_COLORS[axis],
+    opacity: 0.4,
+    transparent: true,
+  });
+  return new THREE.Mesh(geometry, material);
+}
+
+export function initCenterMesh() {
+  const geometry = new THREE.BoxGeometry(5, 5, 5);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+  });
+  return new THREE.Mesh(geometry, material);
+}
+
+export function initFrameMesh(axes?: Axis[]) {
+  const visibleAxes = axes ?? [Axis.X, Axis.Y, Axis.Z];
+  return [
+    initCenterMesh(),
+    ...visibleAxes.map((axis) => initAxisMesh(axis)),
+    ...visibleAxes.map((axis) => initUnitMesh(axis)),
+  ];
+}
+
+export function initSphereMesh(point: Body) {
+  const { radius, color } = point;
+  const geometry = new THREE.SphereGeometry(radius, 16, 32);
+  const material = new THREE.MeshBasicMaterial({ color });
+  return new THREE.Mesh(geometry, material);
+}
+
+export function initLineMesh(point: Body) {
+  const { color, trajectoryLength } = point;
+  const geometry = new THREE.Geometry();
+  const material = new THREE.LineDashedMaterial({
+    color,
+  });
+  geometry.vertices = new Array(trajectoryLength)
+    .fill(undefined)
+    .map((_) => new THREE.Vector3(0, 0, 0));
+  return new THREE.Line(geometry, material);
+}
+
+export function initBodiesMesh(points: Body[]) {
+  const spheres = points.map((p) => initSphereMesh(p));
+  const lines = points.map((p) => initLineMesh(p));
+  return { spheres, lines };
 }
 
 export function initScene(...objects: THREE.Object3D[]) {
@@ -84,6 +151,17 @@ export function initScene(...objects: THREE.Object3D[]) {
   return { renderer, scene };
 }
 
+export function makeOnKeyPressedHandler(points: Point[], frame: Frame) {
+  return function onKeyPressed(event: KeyboardEvent) {
+    switch (event.key) {
+      case "r":
+        frame.idx = frame.idx === null ? 0 : frame.idx + 1;
+        frame.idx = frame.idx >= points.length ? null : frame.idx;
+        break;
+    }
+  };
+}
+
 export function initControls(
   points: Point[],
   frame: Frame,
@@ -97,131 +175,17 @@ export function initControls(
   return controls;
 }
 
-export function initOrthographicCamera(scale: number, distance: number) {
-  const width = (window.innerWidth * scale) / 2;
-  const height = (window.innerHeight * scale) / 2;
-  const near = 0 * scale;
-  const far = 1e8 * scale;
-  const dist = distance * scale;
+export function initCamera(scale: number, x: number, y: number, z: number) {
+  const w = window.innerWidth / 2;
+  const h = window.innerHeight / 2;
+  const near = 0;
+  const far = Number.MAX_VALUE;
 
-  const camera = new THREE.OrthographicCamera(
-    -width,
-    width,
-    height,
-    -height,
-    near,
-    far
-  );
+  const camera = new THREE.OrthographicCamera(-w, w, h, -h, near, far);
 
-  camera.position.x = dist;
+  camera.position.set(x, y, z).multiplyScalar(scale);
 
   return camera;
-}
-
-export function initPerspectiveCamera(x: number, y: number, z: number) {
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-
-  camera.position.x = x;
-  camera.position.y = y;
-  camera.position.z = z;
-
-  return camera;
-}
-
-export function initCenter() {
-  const geometry = new THREE.BoxGeometry(5, 5, 5);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-  });
-  return new THREE.Mesh(geometry, material);
-}
-
-export function initXUnit() {
-  const geometry = new THREE.BoxGeometry(20, 2, 2);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xff0000,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.position.x = 10;
-  return mesh;
-}
-
-export function initXAxis() {
-  const geometry = new THREE.BoxGeometry(100000, 2, 2);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xff0000,
-    opacity: 0.4,
-    transparent: true,
-  });
-  return new THREE.Mesh(geometry, material);
-}
-
-export function initYUnit() {
-  const geometry = new THREE.BoxGeometry(2, 20, 2);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.position.y = 10;
-  return mesh;
-}
-
-export function initYAxis() {
-  const geometry = new THREE.BoxGeometry(2, 100000, 2);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    opacity: 0.4,
-    transparent: true,
-  });
-  return new THREE.Mesh(geometry, material);
-}
-
-export function initZUnit() {
-  const geometry = new THREE.BoxGeometry(2, 2, 20);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x0000ff,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.position.z = 10;
-  return mesh;
-}
-
-export function initZAxis() {
-  const geometry = new THREE.BoxGeometry(2, 2, 100000);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x0000ff,
-    opacity: 0.4,
-    transparent: true,
-  });
-  return new THREE.Mesh(geometry, material);
-}
-
-export function initFrame() {
-  return [
-    initCenter(),
-    initXUnit(),
-    initXAxis(),
-    initYUnit(),
-    initYAxis(),
-    initZUnit(),
-    initZAxis(),
-  ];
-}
-
-export function makeOnKeyPressedHandler(points: Point[], frame: Frame) {
-  return function onKeyPressed(event: KeyboardEvent) {
-    switch (event.key) {
-      case "r":
-        frame.idx = frame.idx === null ? 0 : frame.idx + 1;
-        frame.idx = frame.idx >= points.length ? null : frame.idx;
-        break;
-    }
-  };
 }
 
 export function updateSimulation(
@@ -286,18 +250,13 @@ export function updateObjectLines(
 export function updateObjectFrame(
   camera: OrthographicCamera,
   frame: THREE.Mesh[],
-  scale: number,
   scaleF: number
 ) {
-  const newScaleF =
-    (((camera.top - camera.bottom) / camera.zoom) * scale) / 800;
+  const scale = (camera.top - camera.bottom) / camera.zoom / 800;
+  const transfer = scale / scaleF;
   frame.forEach((mesh) => {
-    mesh.geometry.scale(
-      newScaleF / scaleF,
-      newScaleF / scaleF,
-      newScaleF / scaleF
-    );
-    mesh.position.multiplyScalar(newScaleF / scaleF);
+    mesh.geometry.scale(transfer, transfer, transfer);
+    mesh.position.multiplyScalar(transfer);
   });
-  return newScaleF;
+  return scale;
 }

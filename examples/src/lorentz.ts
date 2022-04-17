@@ -1,12 +1,14 @@
-import Stats from "stats.js";
 import { Vector3, Vector6 } from "../../src/algebra";
 import {
+  Color,
+  initBodiesMesh,
+  initCamera,
   initControls,
-  initObjectLines,
-  initObjectSpheres,
-  initPerspectiveCamera,
+  initFrameMesh,
   initScene,
+  initStats,
   initSystemSimulation,
+  updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
   updateSimulation,
@@ -35,15 +37,7 @@ let speed = 1; // simulation speed
 let delta = (10 * speed) / SPEED_OF_LIGHT / TARGET_FRAMERATE; // time step of animation in s
 let scale = 1000000000 / SPEED_OF_LIGHT; // scaling factor to represent bodies in animation
 let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame
-
-function initStats() {
-  const stats = new Stats();
-
-  stats.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.body.appendChild(stats.dom);
-
-  return stats;
-}
+let zoomScale = 1;
 
 const data = [
   {
@@ -51,15 +45,19 @@ const data = [
     mass: 4 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
     state: Vector6.concatenated(Vector3.zeros, Vector3.zeros),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Yellow,
+    radius: 10,
   },
   {
     id: "a",
     mass: 1 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
     state: Vector6.concatenated(
       Vector3.ex.mul(10),
-      Vector3.ez.mul(SPEED_OF_LIGHT / 2)
+      Vector3.ey.mul(SPEED_OF_LIGHT / 2)
     ),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Cyan,
+    radius: 10,
   },
   {
     id: "b",
@@ -69,6 +67,8 @@ const data = [
       Vector3.ey.mul(SPEED_OF_LIGHT / 200)
     ),
     trajectoryLength: BUFFER_LENGTH,
+    color: Color.Magenta,
+    radius: 10,
   },
 ];
 
@@ -77,7 +77,7 @@ const electromagAcceleration = (p, point, t) => {
   if (p.id !== point.id) {
     return zero;
   }
-  electricFieldVector.x = electricField(t);
+  electricFieldVector.y = electricField(t);
   magneticFieldVector.z = magneticField(t);
   dragVector.copy(p.speed);
   dragVector.mul(-0.0);
@@ -90,25 +90,25 @@ const electromagAcceleration = (p, point, t) => {
 };
 
 function init() {
-  const frame = { idx: null };
+  const reference = { idx: null };
   const stats = initStats();
   const { points, solver } = initSystemSimulation(
     data,
     electromagAcceleration,
     dt
   );
-  const spheres = initObjectSpheres(points);
-
-  const lines = initObjectLines(points, scale);
-  const { renderer, scene } = initScene(...spheres, ...lines);
-  const camera = initPerspectiveCamera(0, 0, 50);
-  const controls = initControls(points, frame, camera);
+  const { spheres, lines } = initBodiesMesh(data);
+  const frame = initFrameMesh();
+  const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
+  const camera = initCamera(scale, 0, 0, 50 * scale);
+  const controls = initControls(points, reference, camera);
 
   return function animate() {
     stats.begin();
     updateSimulation(points, solver, delta);
-    updateObjectSpheres(points, spheres, frame, scale);
-    updateObjectLines(points, lines, frame, scale);
+    updateObjectSpheres(points, spheres, reference, scale);
+    updateObjectLines(points, lines, reference, scale);
+    zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);
