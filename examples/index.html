@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>meca3-example</title>
-    </head>
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker
-                    .register("service-worker.js")
-                    .then((registration) => {
-                        console.log("Service Worker registered: ", registration);
-                    })
-                    .catch((registrationError) => {
-                        console.error("Service Worker registration failed: ", registrationError);
-                    });
-            });
-        }
-    </script>
+  <head>
+    <meta charset="utf-8" />
+    <title>meca3-example</title>
+  </head>
+
+  <body>
+    <div id="infos">
+      <div id="settings">
+        <ul>
+          <li><span class="tab">Scale (px/m)</span><span id="scale"></span></li>
+          <li>
+            <span class="tab">Steps per frame </span><span id="samples"></span>
+          </li>
+          <li><span class="tab">Physics step</span><span id="dt"></span></li>
+          <li><span class="tab">Total step</span><span id="delta"></span></li>
+          <li>
+            <span class="tab">Elapsed time</span><span id="elapsed"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+
+  <link rel="stylesheet" type="text/css" href="style.css" />
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then((registration) => {
+            console.log("Service Worker registered: ", registration);
+          })
+          .catch((registrationError) => {
+            console.error(
+              "Service Worker registration failed: ",
+              registrationError
+            );
+          });
+      });
+    }
+  </script>
 </html>

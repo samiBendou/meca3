@@ -6,11 +6,13 @@ import {
   initControls,
   initFrameMesh,
   initScene,
+  initSettingsDom,
   initStats,
   initSystemSimulation,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
+  updateSettingsDom,
   updateSimulation,
 } from "./common";
 // INITIALIZATION OF THE SIMULATION
@@ -56,35 +58,40 @@ const data = [
 
 // oscillating field, each point is linked to the other with a spring of given pulsation
 const acceleration = Vector3.zeros;
-const oscillationField = (p, point) => {
+const field = (p, point) => {
   const dist = point.position.dist(p.position);
   const k = dist > DISTANCE_TOL ? -((pulse / p.mass) ** 2) : 0;
   acceleration.copy(p.position);
   return acceleration.sub(point.position).mul(k);
 };
 
-let delta = 1 / TARGET_FRAMERATE; // time step of animation in s
-let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame
-let scale = 10;
 let zoomScale = 1;
+const settings = {
+  frame: null,
+  speed: 1 / TARGET_FRAMERATE,
+  scale: 10,
+  samples: SAMPLE_PER_FRAMES,
+};
 
 function init() {
-  const reference = { idx: null };
   const stats = initStats();
-  const { points, solver } = initSystemSimulation(data, oscillationField, dt);
+  const { points, solver } = initSystemSimulation(data, field, settings);
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
 
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
-  const camera = initCamera(scale, 0, (a * Math.sqrt(3)) / 4, 100);
+  const camera = initCamera(settings.scale, 0, (a * Math.sqrt(3)) / 4, 100);
 
-  const controls = initControls(points, reference, camera);
+  const controls = initControls(points, settings, camera);
+  const dom = initSettingsDom();
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, solver, delta);
-    updateObjectSpheres(points, spheres, reference, scale);
-    updateObjectLines(points, lines, reference, scale);
+    updateSimulation(points, solver, settings);
+    updateObjectSpheres(points, spheres, settings);
+    updateObjectLines(points, lines, settings);
+
+    updateSettingsDom(dom, settings, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();

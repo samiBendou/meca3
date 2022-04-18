@@ -6,16 +6,19 @@ import {
   initControls,
   initFrameMesh,
   initScene,
+  initSettingsDom,
   initStats,
   initSystemSimulation,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
+  updateSettingsDom,
   updateSimulation,
 } from "./common";
 
 const BUFFER_LENGTH = 8192;
-const SAMPLE_PER_FRAMES = 8 * 8192;
+const SAMPLE_PER_FRAMES = 8192;
+const TARGET_FRAMERATE = 60;
 
 const SECS_PER_MONTH = 2.628e6;
 const GRAVITATIONAL_CONSTANT = -6.67408e-11; // universal gravitation constant in SI
@@ -64,33 +67,36 @@ const gravitationalAcceleration = (p, point) => {
   return acceleration.sub(point.position).mul(k);
 };
 
-let speed = SECS_PER_MONTH / 30; // simulation speed
-let delta = speed; // time step of animation in s
-let scale = 1e-9; // scaling factor to represent bodies in animation
-let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame
 let zoomScale = 1;
+let settings = {
+  frame: null,
+  speed: SECS_PER_MONTH / TARGET_FRAMERATE,
+  scale: 1e-9,
+  samples: SAMPLE_PER_FRAMES,
+};
 
 function init() {
-  const reference = { idx: null };
+  const { scale } = settings;
   const stats = initStats();
   const { points, solver } = initSystemSimulation(
     data,
     gravitationalAcceleration,
-    dt
+    settings
   );
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...spheres, ...lines, ...frame);
   const camera = initCamera(scale, -15e9, -25e9, 50e9);
-  const controls = initControls(points, reference, camera);
+  const controls = initControls(points, settings, camera);
+  const dom = initSettingsDom();
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, solver, delta);
-    updateObjectSpheres(points, spheres, reference, scale);
-    updateObjectLines(points, lines, reference, scale);
+    updateSimulation(points, solver, settings);
+    updateObjectSpheres(points, spheres, settings);
+    updateObjectLines(points, lines, settings);
+    updateSettingsDom(dom, settings, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
-
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.render(scene, camera);

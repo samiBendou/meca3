@@ -10,6 +10,21 @@ import {
 } from "../../src/dynamics";
 import { InteractionSolver, Timer } from "../../src/solvers";
 
+export type Settings = {
+  scale: number; // scaling factor to represent bodies in animation
+  frame: number | null; // reference frame body index
+  speed: number; // simulation speed
+  samples: number; // simulation steps per frame
+};
+
+export type SettingsDom = {
+  scale: HTMLSpanElement;
+  samples: HTMLSpanElement;
+  dt: HTMLSpanElement;
+  delta: HTMLSpanElement;
+  elapsed: HTMLSpanElement;
+};
+
 export type Body = {
   radius: number;
   color: Color;
@@ -36,6 +51,14 @@ export enum Color {
   White = 0xffffff,
 }
 
+export enum Duration {
+  Minutes = 60,
+  Hour = 3600,
+  Day = 86400,
+  Month = 2592000,
+  Year = 31104000,
+}
+
 export const AXIS_COLORS = [Color.Red, Color.Green, Color.Blue];
 export const AXIS_UNIT_LENGTH = 20;
 export const AXIS_UNIT_SIDE = 2;
@@ -44,6 +67,37 @@ export const AXIS_MAX_LENGTH = 100000;
 export const BODY_COLORS = [
   0xffff00, 0x00ffff, 0xff00ff, 0x111111, 0x333333, 0x555555,
 ];
+
+export function makeTime(secs: number) {
+  const years = secs / Duration.Year;
+  const months = secs / Duration.Month;
+  const days = secs / Duration.Day;
+  const hours = secs / Duration.Hour;
+  const minutes = secs / Duration.Minutes;
+  if (years >= 1) {
+    return `${years.toFixed(2)} years`;
+  }
+  if (months >= 1) {
+    return `${months.toFixed(2)} months`;
+  }
+  if (days >= 1) {
+    return `${days.toFixed(2)} days`;
+  }
+  if (hours >= 1) {
+    return `${hours.toFixed(2)} hours`;
+  }
+  if (minutes >= 1) {
+    return `${minutes.toFixed(2)} minutes`;
+  }
+  return `${secs.toPrecision(2)} secs`;
+}
+
+function coordinatesFromAxis(axis: Axis, max: number, min: number) {
+  const w = axis == Axis.X ? max : min;
+  const h = axis == Axis.Y ? max : min;
+  const d = axis == Axis.Z ? max : min;
+  return [w, h, d];
+}
 
 export function initStats() {
   const stats = new Stats();
@@ -54,23 +108,33 @@ export function initStats() {
   return stats;
 }
 
+export function initClock() {
+  const clock = new THREE.Clock();
+  clock.start();
+  return clock;
+}
+
+export function initSettingsDom(): SettingsDom {
+  return {
+    scale: document.getElementById("scale"),
+    samples: document.getElementById("samples"),
+    delta: document.getElementById("delta"),
+    dt: document.getElementById("dt"),
+    elapsed: document.getElementById("elapsed"),
+  };
+}
+
 export function initSystemSimulation(
   data: PointConstructor[],
   acceleration: SystemAcceleration,
-  dt: number
+  settings: Settings
 ) {
+  const dt = settings.speed / settings.samples;
   const points = data.map((d) => Point.makePoint(d));
   const { field } = new SystemDynamics(acceleration);
   const solver = new InteractionSolver(points, field, new Timer(dt));
 
   return { points, solver };
-}
-
-function coordinatesFromAxis(axis: Axis, max: number, min: number) {
-  const w = axis == Axis.X ? max : min;
-  const h = axis == Axis.Y ? max : min;
-  const d = axis == Axis.Z ? max : min;
-  return [w, h, d];
 }
 
 export function initUnitMesh(axis: Axis) {
@@ -151,12 +215,31 @@ export function initScene(...objects: THREE.Object3D[]) {
   return { renderer, scene };
 }
 
-export function makeOnKeyPressedHandler(points: Point[], frame: Frame) {
+export function makeOnKeyPressedHandler(points: Point[], settings: Settings) {
   return function onKeyPressed(event: KeyboardEvent) {
+    let { frame } = settings;
     switch (event.key) {
       case "r":
-        frame.idx = frame.idx === null ? 0 : frame.idx + 1;
-        frame.idx = frame.idx >= points.length ? null : frame.idx;
+        frame = frame === null ? 0 : frame + 1;
+        settings.frame = frame >= points.length ? null : frame;
+        break;
+      case "+":
+        settings.scale *= 2;
+        break;
+      case "-":
+        settings.scale /= 2;
+        break;
+      case "w":
+        settings.samples *= 2;
+        break;
+      case "x":
+        settings.samples /= 2;
+        break;
+      case ";":
+        settings.speed *= 2;
+        break;
+      case ",":
+        settings.speed /= 2;
         break;
     }
   };
@@ -164,14 +247,13 @@ export function makeOnKeyPressedHandler(points: Point[], frame: Frame) {
 
 export function initControls(
   points: Point[],
-  frame: Frame,
+  settings: Settings,
   camera: THREE.Camera
 ) {
   const controls = new OrbitControls(camera);
-  const onKeyPressed = makeOnKeyPressedHandler(points, frame);
+  const onKeyPressed = makeOnKeyPressedHandler(points, settings);
 
   document.body.addEventListener("keypress", onKeyPressed, false);
-
   return controls;
 }
 
@@ -180,21 +262,20 @@ export function initCamera(scale: number, x: number, y: number, z: number) {
   const h = window.innerHeight / 2;
   const near = 0;
   const far = Number.MAX_VALUE;
-
   const camera = new THREE.OrthographicCamera(-w, w, h, -h, near, far);
 
   camera.position.set(x, y, z).multiplyScalar(scale);
-
   return camera;
 }
 
 export function updateSimulation(
   points: Point[],
   solver: InteractionSolver<Point>,
-  delta: number
+  settings: Settings
 ) {
   // updating the position and speed of the points
-  const states = solver.advance(delta);
+  solver.timer.dt = settings.speed / settings.samples;
+  const states = solver.advance(settings.speed);
   points.forEach((point, idx) => {
     point.update(states[idx].state);
   });
@@ -203,31 +284,29 @@ export function updateSimulation(
 export function updateObjectSpheres(
   points: Point[],
   spheres: THREE.Mesh[],
-  frame: Frame,
-  scale: number
+  settings: Settings
 ) {
   // updating spheres position in sphere according to current position of points in field
   const framePosition =
-    frame.idx !== null
-      ? new THREE.Vector3(...points[frame.idx].position.xyz)
+    settings.frame !== null
+      ? new THREE.Vector3(...points[settings.frame].position.xyz)
       : new THREE.Vector3(0, 0, 0);
   spheres.forEach((sphere, idx) => {
     const position = points[idx].position.xyz;
     sphere.position
       .set(...position)
       .sub(framePosition)
-      .multiplyScalar(scale);
+      .multiplyScalar(settings.scale);
   });
 }
 
 export function updateObjectLines(
   points: Point[],
   lines: THREE.Line[],
-  frame: Frame,
-  scale: number
+  settings: Settings
 ) {
   const frameTrajectory =
-    frame.idx !== null ? points[frame.idx].trajectory : null;
+    settings.frame !== null ? points[settings.frame].trajectory : null;
   lines.forEach((line, idx) => {
     const geometry = line.geometry as THREE.Geometry;
     const trajectory = points[idx].trajectory;
@@ -240,7 +319,7 @@ export function updateObjectLines(
       vertex
         .set(...position)
         .sub(framePosition)
-        .multiplyScalar(scale);
+        .multiplyScalar(settings.scale);
     });
     geometry.verticesNeedUpdate = true;
     geometry.normalsNeedUpdate = true;
@@ -259,4 +338,16 @@ export function updateObjectFrame(
     mesh.position.multiplyScalar(transfer);
   });
   return scale;
+}
+
+export function updateSettingsDom(
+  dom: SettingsDom,
+  settings: Settings,
+  timer: Timer
+) {
+  dom.delta.innerText = makeTime(settings.speed);
+  dom.samples.innerText = settings.samples.toFixed(0);
+  dom.dt.innerText = makeTime(timer.dt);
+  dom.scale.innerText = settings.scale.toPrecision(4);
+  dom.elapsed.innerText = makeTime(timer.t1);
 }

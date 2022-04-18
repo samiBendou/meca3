@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+#infos {
+    bottom: 0pt;
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    display: flex;
+    margin : 0;
+    justify-content: center;
+    align-items: center;
+}
+#settings {
+    text-align: left;
+    vertical-align:bottom;
+    display:inline-flex;
+    flex-basis: max-content;
+}
+
+li{
+    list-style: none;
+    margin: 8pt 0 0 0;
+}
+ul {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.tab {
+    display: inline-block;
+    width: 200px;
+}

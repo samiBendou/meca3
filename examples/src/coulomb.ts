@@ -6,11 +6,13 @@ import {
   initControls,
   initFrameMesh,
   initScene,
+  initSettingsDom,
   initStats,
   initSystemSimulation,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
+  updateSettingsDom,
   updateSimulation,
 } from "./common";
 
@@ -48,14 +50,16 @@ const data = [
   },
 ];
 
-let speed = 10 * SECS_PER_AS; // simulation speed
-let delta = speed / TARGET_FRAMERATE; // time step of animation in s
-let scale = 5e12; // scaling factor to represent bodies in animation
-let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame
 let zoomScale = 1;
+const settings = {
+  frame: null,
+  speed: (10 * SECS_PER_AS) / TARGET_FRAMERATE,
+  scale: 5e12,
+  samples: SAMPLE_PER_FRAMES,
+};
 
 const acceleration = Vector3.zeros;
-const coulombAcceleration = (p, point) => {
+const field = (p, point) => {
   const dist3 =
     point.position.dist(p.position) ** 3 || Number.POSITIVE_INFINITY;
   const k =
@@ -66,24 +70,22 @@ const coulombAcceleration = (p, point) => {
 };
 
 function init() {
-  const reference = { idx: null };
+  const { scale } = settings;
   const stats = initStats();
-  const { points, solver } = initSystemSimulation(
-    data,
-    coulombAcceleration,
-    dt
-  );
+  const { points, solver } = initSystemSimulation(data, field, settings);
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
   const camera = initCamera(scale, 0, 0, 50e-11);
-  const controls = initControls(points, reference, camera);
+  const controls = initControls(points, settings, camera);
+  const dom = initSettingsDom();
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, solver, delta);
-    updateObjectSpheres(points, spheres, reference, scale);
-    updateObjectLines(points, lines, reference, scale);
+    updateSimulation(points, solver, settings);
+    updateObjectSpheres(points, spheres, settings);
+    updateObjectLines(points, lines, settings);
+    updateSettingsDom(dom, settings, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();

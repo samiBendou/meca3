@@ -6,11 +6,13 @@ import {
   initControls,
   initFrameMesh,
   initScene,
+  initSettingsDom,
   initStats,
   initSystemSimulation,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
+  updateSettingsDom,
   updateSimulation,
 } from "./common";
 
@@ -32,12 +34,6 @@ const electricField = (t) =>
   SPEED_OF_LIGHT * MAGNETIC_FIELD_AMP * Math.cos(2 * Math.PI * FREQUENCY * t);
 const magneticField = (t) =>
   MAGNETIC_FIELD_AMP * Math.cos(2 * Math.PI * FREQUENCY * t);
-
-let speed = 1; // simulation speed
-let delta = (10 * speed) / SPEED_OF_LIGHT / TARGET_FRAMERATE; // time step of animation in s
-let scale = 1000000000 / SPEED_OF_LIGHT; // scaling factor to represent bodies in animation
-let dt = delta / SAMPLE_PER_FRAMES; // time step = delta / number of samples per frame
-let zoomScale = 1;
 
 const data = [
   {
@@ -72,8 +68,16 @@ const data = [
   },
 ];
 
+let zoomScale = 1;
+const settings = {
+  frame: null,
+  speed: 10 / SPEED_OF_LIGHT / TARGET_FRAMERATE,
+  scale: 1000000000 / SPEED_OF_LIGHT,
+  samples: SAMPLE_PER_FRAMES,
+};
+
 // gravitational field between bodies
-const electromagAcceleration = (p, point, t) => {
+const field = (p, point, t) => {
   if (p.id !== point.id) {
     return zero;
   }
@@ -90,24 +94,23 @@ const electromagAcceleration = (p, point, t) => {
 };
 
 function init() {
-  const reference = { idx: null };
+  const { scale } = settings;
   const stats = initStats();
-  const { points, solver } = initSystemSimulation(
-    data,
-    electromagAcceleration,
-    dt
-  );
+  const { points, solver } = initSystemSimulation(data, field, settings);
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
   const camera = initCamera(scale, 0, 0, 50 * scale);
-  const controls = initControls(points, reference, camera);
+  const controls = initControls(points, settings, camera);
+  const dom = initSettingsDom();
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, solver, delta);
-    updateObjectSpheres(points, spheres, reference, scale);
-    updateObjectLines(points, lines, reference, scale);
+    updateSimulation(points, solver, settings);
+    updateObjectSpheres(points, spheres, settings);
+    updateObjectLines(points, lines, settings);
+    updateSettingsDom(dom, settings, solver.timer);
+
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();
