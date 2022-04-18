@@ -5,10 +5,10 @@ import {
   initCamera,
   initControls,
   initFrameMesh,
+  initPointSimulation,
   initScene,
   initSettingsDom,
   initStats,
-  initSystemSimulation,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
@@ -77,10 +77,7 @@ const settings = {
 };
 
 // gravitational field between bodies
-const field = (p, point, t) => {
-  if (p.id !== point.id) {
-    return zero;
-  }
+const field = (p, t) => {
   electricFieldVector.y = electricField(t);
   magneticFieldVector.z = magneticField(t);
   dragVector.copy(p.speed);
@@ -96,7 +93,7 @@ const field = (p, point, t) => {
 function init() {
   const { scale } = settings;
   const stats = initStats();
-  const { points, solver } = initSystemSimulation(data, field, settings);
+  const { points, solver } = initPointSimulation(data, field, settings);
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);

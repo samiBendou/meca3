@@ -5,10 +5,10 @@ import {
   initCamera,
   initControls,
   initFrameMesh,
+  initPointSimulation,
   initScene,
   initSettingsDom,
   initStats,
-  initSystemSimulation,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
@@ -73,7 +73,7 @@ const data = [
     ),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Yellow,
-    radius: 100,
+    radius: 10,
   },
   {
     id: "steel",
@@ -87,7 +87,7 @@ const data = [
     ),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Cyan,
-    radius: 100,
+    radius: 10,
   },
   {
     id: "aluminum",
@@ -101,16 +101,13 @@ const data = [
     ),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Magenta,
-    radius: 100,
+    radius: 10,
   },
 ];
 
 // gravitational field between bodies
 const acceleration = Vector3.zeros;
-const field = (p, point) => {
-  if (p.id !== point.id) {
-    return zero;
-  }
+const field = (p) => {
   dragVector.copy(p.speed);
   dragVector.mul((-FRICTION_COEFFICIENT * p.speed.mag) / p.mass);
   acceleration.copy(axisCoriolis);
@@ -124,17 +121,22 @@ let zoomScale = 1;
 const settings = {
   frame: null,
   speed: 1 / TARGET_FRAMERATE,
-  scale: 1,
+  scale: 0.1,
   samples: SAMPLE_PER_FRAMES,
 };
 
 function init() {
   const stats = initStats();
-  const { points, solver } = initSystemSimulation(data, field, settings);
+  const { points, solver } = initPointSimulation(data, field, settings);
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...spheres, ...lines, ...frame);
-  const camera = initCamera(settings.scale, INITIAL_ALTITUDE, 0, 0);
+  const camera = initCamera(
+    settings.scale,
+    INITIAL_ALTITUDE * settings.scale,
+    0,
+    0
+  );
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 

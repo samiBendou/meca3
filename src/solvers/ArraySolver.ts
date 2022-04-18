@@ -1,21 +1,17 @@
-import { List, Vectorial } from "../common/";
-import Solver from "./Solver";
+import { List, Vectorial } from "../common";
 import Timer from "./Timer";
+import { VectorField } from "./VectorSolver";
 
-export type InteractionField<T> = (one: T, all: T[], t: number) => T;
-
-export default class InteractionSolver<T extends Vectorial & List>
-  implements Solver<T[], InteractionField<T>>
-{
+export default class ArraySolver<T extends Vectorial & List> {
   /** time dependant vector field **f** */
-  field: InteractionField<T>;
+  field: VectorField<T>;
   timer: Timer;
 
   /** buffer value, stores the value of the last value of the solution */
   private _u1: T[];
   private _u0: T[];
 
-  constructor(u0: T[], field: InteractionField<T>, timer: Timer) {
+  constructor(u0: T[], field: VectorField<T>, timer: Timer) {
     this.field = field;
     this.timer = timer;
 
@@ -46,8 +42,8 @@ export default class InteractionSolver<T extends Vectorial & List>
       x0.copy(x1);
     });
     this.timer.step((dt, t) => {
-      this.forEach1((x1, u1) => {
-        x1.comb(dt, this.field(x1, u1, t));
+      this.forEach1((x1) => {
+        x1.comb(dt, this.field(x1, t));
       });
     });
     return this._u1;
@@ -58,8 +54,8 @@ export default class InteractionSolver<T extends Vectorial & List>
       x0.copy(x1);
     });
     this.timer.advance(duration, (dt, t) => {
-      this.forEach1((x1, u1) => {
-        x1.comb(dt, this.field(x1, u1, t));
+      this.forEach1((x1) => {
+        x1.comb(dt, this.field(x1, t));
       });
     });
     return this._u1;
@@ -70,8 +66,8 @@ export default class InteractionSolver<T extends Vectorial & List>
       x0.copy(x1);
     });
     this.timer.iterate(iterations, (dt, t) => {
-      this.forEach1((x1, u1) => {
-        x1.comb(dt, this.field(x1, u1, t));
+      this.forEach1((x1) => {
+        x1.comb(dt, this.field(x1, t));
       });
     });
     return this._u1;

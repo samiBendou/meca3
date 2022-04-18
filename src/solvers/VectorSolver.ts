@@ -1,4 +1,5 @@
 import { List, Vectorial } from "../common/";
+import Solver from "./Solver";
 import Timer from "./Timer";
 
 export type VectorField<T> = (u: T, t: number) => T;
@@ -58,7 +59,9 @@ export type VectorField<T> = (u: T, t: number) => T;
  * call the `reset` method.
  *
  */
-export default class VectorSolver<T extends Vectorial & List> {
+export default class VectorSolver<T extends Vectorial & List>
+  implements Solver<T, VectorField<T>>
+{
   /** time dependant vector field **f** */
   field: VectorField<T>;
 

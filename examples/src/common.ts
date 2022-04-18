@@ -4,11 +4,18 @@ import { OrthographicCamera } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import {
   Point,
+  PointAcceleration,
   PointConstructor,
+  PointDynamics,
   SystemAcceleration,
   SystemDynamics,
 } from "../../src/dynamics";
-import { InteractionSolver, Timer } from "../../src/solvers";
+import {
+  ArraySolver,
+  InteractionSolver,
+  Solver,
+  Timer,
+} from "../../src/solvers";
 
 export type Settings = {
   scale: number; // scaling factor to represent bodies in animation
@@ -87,7 +94,7 @@ export function makeTime(secs: number) {
     return `${hours.toFixed(2)} hours`;
   }
   if (minutes >= 1) {
-    return `${minutes.toFixed(2)} minutes`;
+    return `${minutes.toFixed(2)} mins`;
   }
   return `${secs.toPrecision(2)} secs`;
 }
@@ -133,6 +140,19 @@ export function initSystemSimulation(
   const points = data.map((d) => Point.makePoint(d));
   const { field } = new SystemDynamics(acceleration);
   const solver = new InteractionSolver(points, field, new Timer(dt));
+
+  return { points, solver };
+}
+
+export function initPointSimulation(
+  data: PointConstructor[],
+  acceleration: PointAcceleration,
+  settings: Settings
+) {
+  const dt = settings.speed / settings.samples;
+  const points = data.map((d) => Point.makePoint(d));
+  const { field } = new PointDynamics(acceleration);
+  const solver = new ArraySolver(points, field, new Timer(dt));
 
   return { points, solver };
 }
@@ -204,10 +224,8 @@ export function initBodiesMesh(points: Body[]) {
 
 export function initScene(...objects: THREE.Object3D[]) {
   const scene = new THREE.Scene();
-
   const renderer = new THREE.WebGLRenderer();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
   scene.add(...objects);
 
   document.body.appendChild(renderer.domElement);
@@ -265,12 +283,13 @@ export function initCamera(scale: number, x: number, y: number, z: number) {
   const camera = new THREE.OrthographicCamera(-w, w, h, -h, near, far);
 
   camera.position.set(x, y, z).multiplyScalar(scale);
+
   return camera;
 }
 
-export function updateSimulation(
+export function updateSimulation<T>(
   points: Point[],
-  solver: InteractionSolver<Point>,
+  solver: Solver<Point[], T>,
   settings: Settings
 ) {
   // updating the position and speed of the points
