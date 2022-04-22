@@ -21,7 +21,7 @@ const GRAVITY_ACCELERATION = 9.80665;
 const PENDULUM_LENGTH = 50;
 
 const BUFFER_LENGTH = 4096;
-const SAMPLE_PER_FRAMES = 16384;
+const SAMPLE_PER_FRAMES = 32768;
 const TARGET_FRAMERATE = 60;
 
 const data = [
@@ -36,31 +36,63 @@ const data = [
   {
     id: "second",
     mass: 1,
-    state: Vector6.concatenated(
-      Vector3.ex.mul(10).add(Vector3.ey.mul(10)),
-      Vector3.ex.mul(40)
-    ),
+    state: Vector6.concatenated(Vector3.zeros, Vector3.ex.mul(100)),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Cyan,
+    radius: 10,
+  },
+  {
+    id: "third",
+    mass: 10,
+    state: Vector6.concatenated(
+      Vector3.ey.mul(PENDULUM_LENGTH).neg(),
+      Vector3.ex.mul(0)
+    ),
+    trajectoryLength: BUFFER_LENGTH,
+    color: Color.Magenta,
     radius: 10,
   },
 ];
 
 const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION);
+const constraints = {
+  first: {
+    second: "linked",
+  },
+  second: {
+    first: "linked",
+    third: "linked",
+  },
+  third: {
+    second: "linked",
+  },
+};
 
 // oscillating field, each point is linked to the other with a spring of given pulsation
 const zero = Vector3.zeros;
+const acceleration = Vector3.zeros;
+const tension = Vector3.zeros;
 const ur = Vector3.zeros;
+const vr = Vector3.zeros;
 const constraint = Vector3.zeros;
 const field = (p, point) => {
-  if (p.id !== "second" || point.id !== "first") {
+  if (p.id === "first") {
+    return zero;
+  }
+
+  if (p.id === point.id) {
+    return gravity;
+  }
+
+  if (constraints[p.id][point.id] !== "linked") {
     return zero;
   }
 
   ur.copy(p.position).sub(point.position).norm();
-  constraint.copy(ur).mul(p.speed.dot(ur));
+  vr.copy(p.speed).sub(point.speed).norm();
+  constraint.copy(ur).mul(vr.dot(ur));
   p.speed.sub(constraint);
-  return gravity;
+  return zero;
 };
 
 let zoomScale = 1;
@@ -94,6 +126,17 @@ function init() {
       updateObjectSpheres(points, barycenter, spheres, settings);
       updateObjectLines(points, barycenter, lines, settings);
       updateSettingsDom(dom, settings, points, barycenter, solver.timer);
+      console.log(
+        "ay",
+        acceleration.y.toFixed(),
+        "vy",
+        points[1].speed.y.toFixed(5),
+        "y",
+        points[1].position.y.toFixed(5),
+        "tension",
+        tension.x.toFixed(5),
+        tension.y.toFixed(5)
+      );
     }
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 

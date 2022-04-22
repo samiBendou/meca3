@@ -60,6 +60,9 @@ const settings = {
 
 const acceleration = Vector3.zeros;
 const field = (p, point) => {
+  if (point.id === p.id) {
+    return;
+  }
   const dist3 = point.position.dist(p.position) ** 3;
   const k =
     -(COULOMB_CONSTANT * ELEMENTARY_CHARGE * ELEMENTARY_CHARGE) /
@@ -88,7 +91,7 @@ function init() {
     updateSimulation(points, barycenter, solver, settings);
     updateObjectSpheres(points, barycenter, spheres, settings);
     updateObjectLines(points, barycenter, lines, settings);
-    updateSettingsDom(dom, settings, points, solver.timer);
+    updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();

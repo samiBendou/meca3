@@ -33,6 +33,7 @@ export type SettingsDom = {
   dt: HTMLSpanElement;
   delta: HTMLSpanElement;
   elapsed: HTMLSpanElement;
+  momentum: HTMLSpanElement;
 };
 
 export type Body = {
@@ -167,6 +168,7 @@ export function initSettingsDom(): SettingsDom {
     delta: document.getElementById("delta"),
     dt: document.getElementById("dt"),
     elapsed: document.getElementById("elapsed"),
+    momentum: document.getElementById("momentum"),
   };
 }
 
@@ -428,12 +430,14 @@ export function updateSettingsDom(
   dom: SettingsDom,
   settings: Settings,
   points: Point[],
+  barycenter: Barycenter,
   timer: Timer
 ) {
   dom.frame.innerText = frameLabel(settings.frame, points);
+  dom.momentum.innerText = barycenter.momentum.mag.toPrecision(5);
+  dom.scale.innerText = settings.scale.toPrecision(4);
   dom.samples.innerText = settings.samples.toFixed(0);
   dom.dt.innerText = makeTime(timer.dt);
   dom.delta.innerText = makeTime(settings.speed);
-  dom.scale.innerText = settings.scale.toPrecision(4);
   dom.elapsed.innerText = makeTime(timer.t1);
 }

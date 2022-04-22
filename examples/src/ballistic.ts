@@ -161,7 +161,7 @@ function init() {
     updateSimulation(points, barycenter, solver, settings);
     updateObjectSpheres(points, barycenter, spheres, settings);
     updateObjectLines(points, barycenter, lines, settings);
-    updateSettingsDom(dom, settings, points, solver.timer);
+    updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();

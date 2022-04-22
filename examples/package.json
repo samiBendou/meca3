@@ -9,7 +9,8 @@
     "ballistic": "webpack serve --env entry=./dist/examples/src/ballistic.js",
     "lorentz": "webpack serve --env entry=./dist/examples/src/lorentz.js",
     "springs": "webpack serve --env entry=./dist/examples/src/springs.js",
-    "pendulum": "webpack serve --env entry=./dist/examples/src/pendulum.js"
+    "pendulum": "webpack serve --env entry=./dist/examples/src/pendulum.js",
+    "pendulums": "webpack serve --env entry=./dist/examples/src/pendulums.js"
   },
   "license": "ISC",
   "dependencies": {

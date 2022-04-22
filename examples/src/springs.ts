@@ -58,6 +58,9 @@ const data = [
 // oscillating field, each point is linked to the other with a spring of given pulsation
 const acceleration = Vector3.zeros;
 const field = (p, point) => {
+  if (point.id === p.id) {
+    return;
+  }
   const k = -((pulse / p.mass) ** 2);
   acceleration.copy(p.position);
   return acceleration.sub(point.position).mul(k);
@@ -93,7 +96,7 @@ function init() {
     updateObjectSpheres(points, barycenter, spheres, settings);
     updateObjectLines(points, barycenter, lines, settings);
 
-    updateSettingsDom(dom, settings, points, solver.timer);
+    updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();

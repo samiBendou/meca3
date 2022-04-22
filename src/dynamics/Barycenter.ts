@@ -34,8 +34,13 @@ export default class Barycenter {
       this._momentum.copy(point.state).mul(point.mass);
       this._state.add(this._momentum);
     });
+    this._momentum.copy(this._state);
     this._state.div(this.mass);
     this._trajectory.push(this._state.upper);
+  }
+
+  get momentum() {
+    return this._momentum.lower;
   }
 
   get position() {

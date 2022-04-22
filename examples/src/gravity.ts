@@ -56,6 +56,9 @@ const data = [
 // gravitational field between bodies
 const acceleration = Vector3.zeros;
 const gravitationalAcceleration = (p, point) => {
+  if (point.id === p.id) {
+    return;
+  }
   const dist3 = point.position.dist(p.position) ** 3;
   const k = (GRAVITATIONAL_CONSTANT * point.mass) / dist3;
   acceleration.copy(p.position);
@@ -90,7 +93,7 @@ function init() {
     updateSimulation(points, barycenter, solver, settings);
     updateObjectSpheres(points, barycenter, spheres, settings);
     updateObjectLines(points, barycenter, lines, settings);
-    updateSettingsDom(dom, settings, points, solver.timer);
+    updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);

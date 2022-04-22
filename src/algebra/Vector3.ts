@@ -376,7 +376,7 @@ export default class Vector3
   }
 
   norm(): this {
-    const s = this.mag;
+    const s = this.mag || Number.POSITIVE_INFINITY;
     this[0] /= s;
     this[1] /= s;
     this[2] /= s;
