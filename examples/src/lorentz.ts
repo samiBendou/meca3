@@ -60,7 +60,7 @@ const data = [
     mass: 1 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
     state: Vector6.concatenated(
       Vector3.ex.mul(10).neg(),
-      Vector3.ey.mul(SPEED_OF_LIGHT / 200)
+      Vector3.ez.mul(SPEED_OF_LIGHT / 2)
     ),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Magenta,
@@ -93,7 +93,11 @@ const field = (p, t) => {
 function init() {
   const { scale } = settings;
   const stats = initStats();
-  const { points, solver } = initPointSimulation(data, field, settings);
+  const { points, solver, barycenter } = initPointSimulation(
+    data,
+    field,
+    settings
+  );
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
@@ -103,10 +107,10 @@ function init() {
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, solver, settings);
-    updateObjectSpheres(points, spheres, settings);
-    updateObjectLines(points, lines, settings);
-    updateSettingsDom(dom, settings, solver.timer);
+    updateSimulation(points, barycenter, solver, settings);
+    updateObjectSpheres(points, barycenter, spheres, settings);
+    updateObjectLines(points, barycenter, lines, settings);
+    updateSettingsDom(dom, settings, points, solver.timer);
 
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 

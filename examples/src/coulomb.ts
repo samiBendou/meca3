@@ -72,7 +72,11 @@ const field = (p, point) => {
 function init() {
   const { scale } = settings;
   const stats = initStats();
-  const { points, solver } = initSystemSimulation(data, field, settings);
+  const { points, solver, barycenter } = initSystemSimulation(
+    data,
+    field,
+    settings
+  );
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
@@ -82,10 +86,10 @@ function init() {
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, solver, settings);
-    updateObjectSpheres(points, spheres, settings);
-    updateObjectLines(points, lines, settings);
-    updateSettingsDom(dom, settings, solver.timer);
+    updateSimulation(points, barycenter, solver, settings);
+    updateObjectSpheres(points, barycenter, spheres, settings);
+    updateObjectLines(points, barycenter, lines, settings);
+    updateSettingsDom(dom, settings, points, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();

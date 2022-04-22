@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { OrthographicCamera } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import {
+  Barycenter,
   Point,
   PointAcceleration,
   PointConstructor,
@@ -19,12 +20,13 @@ import {
 
 export type Settings = {
   scale: number; // scaling factor to represent bodies in animation
-  frame: number | null; // reference frame body index
+  frame: number | null | "barycenter"; // reference frame body index
   speed: number; // simulation speed
   samples: number; // simulation steps per frame
 };
 
 export type SettingsDom = {
+  frame: HTMLSpanElement;
   scale: HTMLSpanElement;
   samples: HTMLSpanElement;
   dt: HTMLSpanElement;
@@ -37,9 +39,7 @@ export type Body = {
   color: Color;
 } & PointConstructor;
 
-export type Frame = {
-  idx: number | null;
-};
+export type Frame = number | null | "barycenter";
 
 export enum Axis {
   X,
@@ -74,6 +74,43 @@ export const AXIS_MAX_LENGTH = 100000;
 export const BODY_COLORS = [
   0xffff00, 0x00ffff, 0xff00ff, 0x111111, 0x333333, 0x555555,
 ];
+
+function framePosition(frame: Frame, points: Point[], barycenter: Barycenter) {
+  switch (frame) {
+    case null:
+      return new THREE.Vector3(0, 0, 0);
+    case "barycenter":
+      return new THREE.Vector3(...barycenter.position.xyz);
+    default:
+      return new THREE.Vector3(...points[frame].position.xyz);
+  }
+}
+
+function frameTrajectory(
+  frame: Frame,
+  points: Point[],
+  barycenter: Barycenter
+) {
+  switch (frame) {
+    case null:
+      return null;
+    case "barycenter":
+      return barycenter.trajectory;
+    default:
+      return points[frame].trajectory;
+  }
+}
+
+function frameLabel(frame: Frame, points: Point[]) {
+  switch (frame) {
+    case null:
+      return "fixed";
+    case "barycenter":
+      return "barycenter";
+    default:
+      return points[frame].id;
+  }
+}
 
 export function makeTime(secs: number) {
   const years = secs / Duration.Year;
@@ -123,6 +160,7 @@ export function initClock() {
 
 export function initSettingsDom(): SettingsDom {
   return {
+    frame: document.getElementById("frame"),
     scale: document.getElementById("scale"),
     samples: document.getElementById("samples"),
     delta: document.getElementById("delta"),
@@ -140,8 +178,8 @@ export function initSystemSimulation(
   const points = data.map((d) => Point.makePoint(d));
   const { field } = new SystemDynamics(acceleration);
   const solver = new InteractionSolver(points, field, new Timer(dt));
-
-  return { points, solver };
+  const barycenter = new Barycenter("barycenter", points);
+  return { points, solver, barycenter };
 }
 
 export function initPointSimulation(
@@ -153,8 +191,8 @@ export function initPointSimulation(
   const points = data.map((d) => Point.makePoint(d));
   const { field } = new PointDynamics(acceleration);
   const solver = new ArraySolver(points, field, new Timer(dt));
-
-  return { points, solver };
+  const barycenter = new Barycenter("barycenter", points);
+  return { points, solver, barycenter };
 }
 
 export function initUnitMesh(axis: Axis) {
@@ -238,7 +276,16 @@ export function makeOnKeyPressedHandler(points: Point[], settings: Settings) {
     let { frame } = settings;
     switch (event.key) {
       case "r":
-        frame = frame === null ? 0 : frame + 1;
+        switch (frame) {
+          case null:
+            frame = "barycenter";
+            break;
+          case "barycenter":
+            frame = 0;
+            break;
+          default:
+            frame++;
+        }
         settings.frame = frame >= points.length ? null : frame;
         break;
       case "+":
@@ -289,6 +336,7 @@ export function initCamera(scale: number, x: number, y: number, z: number) {
 
 export function updateSimulation<T>(
   points: Point[],
+  barycenter: Barycenter,
   solver: Solver<Point[], T>,
   settings: Settings
 ) {
@@ -298,46 +346,44 @@ export function updateSimulation<T>(
   points.forEach((point, idx) => {
     point.update(states[idx].state);
   });
+  barycenter.update(points);
 }
 
 export function updateObjectSpheres(
   points: Point[],
+  barycenter: Barycenter,
   spheres: THREE.Mesh[],
   settings: Settings
 ) {
   // updating spheres position in sphere according to current position of points in field
-  const framePosition =
-    settings.frame !== null
-      ? new THREE.Vector3(...points[settings.frame].position.xyz)
-      : new THREE.Vector3(0, 0, 0);
+  const frame = framePosition(settings.frame, points, barycenter);
   spheres.forEach((sphere, idx) => {
     const position = points[idx].position.xyz;
     sphere.position
       .set(...position)
-      .sub(framePosition)
+      .sub(frame)
       .multiplyScalar(settings.scale);
   });
 }
 
 export function updateObjectLines(
   points: Point[],
+  barycenter: Barycenter,
   lines: THREE.Line[],
   settings: Settings
 ) {
-  const frameTrajectory =
-    settings.frame !== null ? points[settings.frame].trajectory : null;
+  const frame = frameTrajectory(settings.frame, points, barycenter);
+  const zero = new THREE.Vector3(0, 0, 0);
   lines.forEach((line, idx) => {
     const geometry = line.geometry as THREE.Geometry;
     const trajectory = points[idx].trajectory;
     geometry.vertices.forEach((vertex, vIdx) => {
       const position = trajectory.get(vIdx).xyz;
-      const framePosition =
-        frameTrajectory !== null
-          ? new THREE.Vector3(...frameTrajectory.get(vIdx).xyz)
-          : new THREE.Vector3(0, 0, 0);
+      const pos =
+        frame === null ? zero : new THREE.Vector3(...frame.get(vIdx).xyz);
       vertex
         .set(...position)
-        .sub(framePosition)
+        .sub(pos)
         .multiplyScalar(settings.scale);
     });
     geometry.verticesNeedUpdate = true;
@@ -362,11 +408,13 @@ export function updateObjectFrame(
 export function updateSettingsDom(
   dom: SettingsDom,
   settings: Settings,
+  points: Point[],
   timer: Timer
 ) {
-  dom.delta.innerText = makeTime(settings.speed);
+  dom.frame.innerText = frameLabel(settings.frame, points);
   dom.samples.innerText = settings.samples.toFixed(0);
   dom.dt.innerText = makeTime(timer.dt);
+  dom.delta.innerText = makeTime(settings.speed);
   dom.scale.innerText = settings.scale.toPrecision(4);
   dom.elapsed.innerText = makeTime(timer.t1);
 }

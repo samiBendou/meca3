@@ -26,30 +26,27 @@ const DISTANCE_TOL = 100;
 
 const data = [
   {
-    id: "sun",
-    mass: 1.9891e30,
+    id: "first",
+    mass: 2e30,
     state: Vector6.concatenated(Vector3.zeros, Vector3.zeros),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Yellow,
     radius: 10,
   },
   {
-    id: "earth",
-    mass: 5.9736e24,
-    state: Vector6.concatenated(
-      Vector3.ex.mul(1.47098074e11),
-      Vector3.ey.mul(3.0287e4)
-    ),
+    id: "second",
+    mass: 2e30,
+    state: Vector6.concatenated(Vector3.ex.mul(2e11), Vector3.ey.mul(3.0e4)),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Cyan,
     radius: 10,
   },
   {
-    id: "mars",
-    mass: 6.4185e23,
+    id: "third",
+    mass: 2e30,
     state: Vector6.concatenated(
-      Vector3.ex.mul(2.06644545e11),
-      Vector3.ey.mul(2.6499e4)
+      Vector3.ex.mul(3e11).neg(),
+      Vector3.ez.mul(2.5e4)
     ),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Magenta,
@@ -78,7 +75,7 @@ let settings = {
 function init() {
   const { scale } = settings;
   const stats = initStats();
-  const { points, solver } = initSystemSimulation(
+  const { points, solver, barycenter } = initSystemSimulation(
     data,
     gravitationalAcceleration,
     settings
@@ -92,10 +89,10 @@ function init() {
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, solver, settings);
-    updateObjectSpheres(points, spheres, settings);
-    updateObjectLines(points, lines, settings);
-    updateSettingsDom(dom, settings, solver.timer);
+    updateSimulation(points, barycenter, solver, settings);
+    updateObjectSpheres(points, barycenter, spheres, settings);
+    updateObjectLines(points, barycenter, lines, settings);
+    updateSettingsDom(dom, settings, points, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);
