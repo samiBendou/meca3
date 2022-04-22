@@ -25,9 +25,12 @@ export default class SystemDynamics {
     });
     this._field = (p: Point, pts: Point[], t: number) => {
       this._acceleration.reset0();
-      this._acceleration = pts.reduce((acc, point) => {
-        return acc.add(acceleration(p, point, t));
-      }, this._acceleration);
+      pts.forEach((point) => {
+        if (point.id === p.id) {
+          return;
+        }
+        this._acceleration.add(acceleration(p, point, t));
+      });
 
       this._point.position = p.speed;
       this._point.speed = this._acceleration;

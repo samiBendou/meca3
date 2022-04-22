@@ -43,8 +43,8 @@ export default class Point {
   }
 
   update(state: Vector6) {
-    this.state.copy(state);
-    this.trajectory.push(state.upper);
+    this._state.copy(state);
+    this._trajectory.push(state.upper);
   }
 
   array(): number[] {

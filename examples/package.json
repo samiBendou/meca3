@@ -8,7 +8,8 @@
     "coulomb": "webpack serve --env entry=./dist/examples/src/coulomb.js",
     "ballistic": "webpack serve --env entry=./dist/examples/src/ballistic.js",
     "lorentz": "webpack serve --env entry=./dist/examples/src/lorentz.js",
-    "springs": "webpack serve --env entry=./dist/examples/src/springs.js"
+    "springs": "webpack serve --env entry=./dist/examples/src/springs.js",
+    "pendulum": "webpack serve --env entry=./dist/examples/src/pendulum.js"
   },
   "license": "ISC",
   "dependencies": {

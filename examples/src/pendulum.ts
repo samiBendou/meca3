@@ -1,4 +1,4 @@
-import { Vector3, Vector6 } from "../../src/algebra";
+import { Vector3, Vector6 } from "../../src";
 import {
   Color,
   initBodiesMesh,
@@ -15,37 +15,38 @@ import {
   updateSettingsDom,
   updateSimulation,
 } from "./common";
+// INITIALIZATION OF THE SIMULATION
 
-const BUFFER_LENGTH = 8192;
-const SAMPLE_PER_FRAMES = 8192;
+const GRAVITY_ACCELERATION = 9.80665;
+const PENDULUM_LENGTH = 50;
+
+const BUFFER_LENGTH = 4096;
+const SAMPLE_PER_FRAMES = 16384;
 const TARGET_FRAMERATE = 60;
-
-const SECS_PER_MONTH = 2.628e6;
-const GRAVITATIONAL_CONSTANT = -6.67408e-11; // universal gravitation constant in SI
 
 const data = [
   {
     id: "first",
-    mass: 2e30,
-    state: Vector6.concatenated(Vector3.zeros, Vector3.zeros),
+    mass: 10000,
+    state: Vector6.concatenated(Vector3.ey.mul(PENDULUM_LENGTH), Vector3.zeros),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Yellow,
     radius: 10,
   },
   {
     id: "second",
-    mass: 2e30,
-    state: Vector6.concatenated(Vector3.ex.mul(2e11), Vector3.ey.mul(3.0e4)),
+    mass: 1,
+    state: Vector6.concatenated(Vector3.zeros, Vector3.ex.mul(-100)),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Cyan,
     radius: 10,
   },
   {
     id: "third",
-    mass: 2e30,
+    mass: 2,
     state: Vector6.concatenated(
-      Vector3.ex.mul(3e11).neg(),
-      Vector3.ez.mul(2.5e4)
+      Vector3.ey.mul(PENDULUM_LENGTH).neg(),
+      Vector3.ex.mul(150)
     ),
     trajectoryLength: BUFFER_LENGTH,
     color: Color.Magenta,
@@ -53,35 +54,61 @@ const data = [
   },
 ];
 
-// gravitational field between bodies
+const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION);
+const strengths = {
+  first: {
+    first: 0,
+    second: 0,
+    third: 0,
+  },
+  second: {
+    first: 100000,
+    second: 0,
+    third: 100000,
+  },
+  third: {
+    first: 0,
+    second: 100000,
+    third: 0,
+  },
+};
+
+// oscillating field, each point is linked to the other with a spring of given pulsation
+const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
-const gravitationalAcceleration = (p, point) => {
-  const dist3 = point.position.dist(p.position) ** 3;
-  const k = (GRAVITATIONAL_CONSTANT * point.mass) / dist3;
+const unit = Vector3.zeros;
+const field = (p, point) => {
+  if (p.id === "first") {
+    return zero;
+  }
+  const k = -strengths[p.id][point.id] / p.mass;
+  unit.copy(p.position).sub(point.position).norm();
+  unit.mul(PENDULUM_LENGTH);
   acceleration.copy(p.position);
-  return acceleration.sub(point.position).mul(k);
+  return acceleration.sub(point.position).sub(unit).mul(k).add(gravity);
 };
 
 let zoomScale = 1;
-let settings = {
+const settings = {
   frame: null,
-  speed: SECS_PER_MONTH / TARGET_FRAMERATE,
-  scale: 1e-9,
+  speed: 1 / TARGET_FRAMERATE,
+  scale: 10,
   samples: SAMPLE_PER_FRAMES,
 };
 
 function init() {
-  const { scale } = settings;
   const stats = initStats();
   const { points, solver, barycenter } = initSystemSimulation(
     data,
-    gravitationalAcceleration,
+    field,
     settings
   );
   const { spheres, lines } = initBodiesMesh(data);
   const frame = initFrameMesh();
-  const { renderer, scene } = initScene(...spheres, ...lines, ...frame);
-  const camera = initCamera(scale, -15e9, -25e9, 50e9);
+
+  const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
+  const camera = initCamera(settings.scale, 0, PENDULUM_LENGTH / 4, 100);
+
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 
@@ -90,8 +117,10 @@ function init() {
     updateSimulation(points, barycenter, solver, settings);
     updateObjectSpheres(points, barycenter, spheres, settings);
     updateObjectLines(points, barycenter, lines, settings);
+
     updateSettingsDom(dom, settings, points, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
+
     controls.update();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.render(scene, camera);

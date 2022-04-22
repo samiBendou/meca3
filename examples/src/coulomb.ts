@@ -60,8 +60,7 @@ const settings = {
 
 const acceleration = Vector3.zeros;
 const field = (p, point) => {
-  const dist3 =
-    point.position.dist(p.position) ** 3 || Number.POSITIVE_INFINITY;
+  const dist3 = point.position.dist(p.position) ** 3;
   const k =
     -(COULOMB_CONSTANT * ELEMENTARY_CHARGE * ELEMENTARY_CHARGE) /
     (dist3 * p.mass);

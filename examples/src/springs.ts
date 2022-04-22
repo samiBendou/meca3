@@ -24,7 +24,6 @@ let freq = 1 / 2,
 const BUFFER_LENGTH = 4096;
 const SAMPLE_PER_FRAMES = 2048;
 const TARGET_FRAMERATE = 60;
-const DISTANCE_TOL = a / 1000;
 
 const data = [
   {
@@ -59,8 +58,7 @@ const data = [
 // oscillating field, each point is linked to the other with a spring of given pulsation
 const acceleration = Vector3.zeros;
 const field = (p, point) => {
-  const dist = point.position.dist(p.position);
-  const k = dist > DISTANCE_TOL ? -((pulse / p.mass) ** 2) : 0;
+  const k = -((pulse / p.mass) ** 2);
   acceleration.copy(p.position);
   return acceleration.sub(point.position).mul(k);
 };

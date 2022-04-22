@@ -22,7 +22,7 @@ const TARGET_FRAMERATE = 60;
 
 const AIR_RHO = 1.204;
 const WATER_RHO = 1000;
-const SPHERE_RADIUS = 0.1;
+const SPHERE_RADIUS = 1;
 const RAD_PER_DEG = Math.PI / 180;
 const SPHERE_AREA = 4 * Math.PI * SPHERE_RADIUS ** 2;
 const SPHERE_VOLUME = (4 * Math.PI * SPHERE_RADIUS ** 3) / 3;
@@ -46,18 +46,15 @@ const INITIAL_DISTANCE = 1000;
 const INITIAL_OFFSET = 2000;
 const INITIAL_ALTITUDE = 10000;
 
-const zero = Vector3.zeros;
-const dragVector = Vector3.zeros;
+const drag = Vector3.zeros;
+const archimede = Vector3.zeros;
 const centrifugal = ROTATION_AXIS.clone()
   .cross(LINEAR_SPEED)
   .mul(ROTATION_SPEED ** 2);
-const archimede = Vector3.ez.mul(
+const ARCHIMEDE = Vector3.ez.mul(
   AIR_RHO * SPHERE_VOLUME * GRAVITY_ACCELERATION
 );
-const gravity = Vector3.ez
-  .mul(-GRAVITY_ACCELERATION)
-  .add(centrifugal)
-  .add(archimede);
+const gravity = Vector3.ez.mul(-GRAVITY_ACCELERATION).add(centrifugal);
 const axisCoriolis = ROTATION_AXIS.clone().mul(-2 * ROTATION_SPEED);
 
 const data = [
@@ -103,15 +100,30 @@ const data = [
     color: Color.Magenta,
     radius: 10,
   },
+  {
+    id: "hot-air",
+    mass: 0.1 * AIR_RHO * SPHERE_VOLUME,
+    state: Vector6.concatenated(
+      Vector3.ez
+        .mul(INITIAL_ALTITUDE)
+        .add(Vector3.ey.mul(-INITIAL_OFFSET))
+        .add(Vector3.ex.mul(0)),
+      Vector3.ey.mul(INITIAL_SPEED)
+    ),
+    trajectoryLength: BUFFER_LENGTH,
+    color: Color.White,
+    radius: 10,
+  },
 ];
 
 // gravitational field between bodies
 const acceleration = Vector3.zeros;
 const field = (p) => {
-  dragVector.copy(p.speed);
-  dragVector.mul((-FRICTION_COEFFICIENT * p.speed.mag) / p.mass);
+  drag.copy(p.speed);
+  drag.mul((-FRICTION_COEFFICIENT * p.speed.mag) / p.mass);
+  archimede.copy(ARCHIMEDE).div(p.mass);
   acceleration.copy(axisCoriolis);
-  return acceleration.cross(p.speed).add(gravity).add(dragVector);
+  return acceleration.cross(p.speed).add(gravity).add(drag).add(archimede);
 };
 
 console.log(gravity.string());
