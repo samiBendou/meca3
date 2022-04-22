@@ -36,56 +36,35 @@ const data = [
   {
     id: "second",
     mass: 1,
-    state: Vector6.concatenated(Vector3.zeros, Vector3.ex.mul(-100)),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Cyan,
-    radius: 10,
-  },
-  {
-    id: "third",
-    mass: 2,
     state: Vector6.concatenated(
-      Vector3.ey.mul(PENDULUM_LENGTH).neg(),
-      Vector3.ex.mul(150)
+      Vector3.ex.mul(10).add(Vector3.ey.mul(10)),
+      Vector3.ex.mul(40)
     ),
     trajectoryLength: BUFFER_LENGTH,
-    color: Color.Magenta,
+    color: Color.Cyan,
     radius: 10,
   },
 ];
 
 const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION);
-const strengths = {
-  first: {
-    first: 0,
-    second: 0,
-    third: 0,
-  },
-  second: {
-    first: 100000,
-    second: 0,
-    third: 100000,
-  },
-  third: {
-    first: 0,
-    second: 100000,
-    third: 0,
-  },
-};
 
 // oscillating field, each point is linked to the other with a spring of given pulsation
 const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
-const unit = Vector3.zeros;
+const tension = Vector3.zeros;
+const ur = Vector3.zeros;
+const constraint = Vector3.zeros;
 const field = (p, point) => {
-  if (p.id === "first") {
+  if (p.id !== "second" || point.id !== "first") {
     return zero;
   }
-  const k = -strengths[p.id][point.id] / p.mass;
-  unit.copy(p.position).sub(point.position).norm();
-  unit.mul(PENDULUM_LENGTH);
-  acceleration.copy(p.position);
-  return acceleration.sub(point.position).sub(unit).mul(k).add(gravity);
+
+  ur.copy(p.position).sub(point.position).norm();
+  tension.copy(ur).neg();
+  tension.mul(gravity.dot(ur));
+  constraint.copy(ur).mul(p.speed.dot(ur));
+  p.speed.sub(constraint);
+  return acceleration.copy(tension).add(gravity);
 };
 
 let zoomScale = 1;
@@ -94,6 +73,7 @@ const settings = {
   speed: 1 / TARGET_FRAMERATE,
   scale: 10,
   samples: SAMPLE_PER_FRAMES,
+  pause: false,
 };
 
 function init() {
@@ -108,17 +88,17 @@ function init() {
 
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
   const camera = initCamera(settings.scale, 0, PENDULUM_LENGTH / 4, 100);
-
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, barycenter, solver, settings);
-    updateObjectSpheres(points, barycenter, spheres, settings);
-    updateObjectLines(points, barycenter, lines, settings);
-
-    updateSettingsDom(dom, settings, points, solver.timer);
+    if (!settings.pause) {
+      updateSimulation(points, barycenter, solver, settings);
+      updateObjectSpheres(points, barycenter, spheres, settings);
+      updateObjectLines(points, barycenter, lines, settings);
+      updateSettingsDom(dom, settings, points, solver.timer);
+    }
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();

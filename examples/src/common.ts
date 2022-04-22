@@ -23,6 +23,7 @@ export type Settings = {
   frame: number | null | "barycenter"; // reference frame body index
   speed: number; // simulation speed
   samples: number; // simulation steps per frame
+  pause?: boolean;
 };
 
 export type SettingsDom = {
@@ -305,6 +306,9 @@ function makeOnKeyPressedHandler(points: Point[], settings: Settings) {
         break;
       case ",":
         settings.speed /= 2;
+        break;
+      case " ":
+        settings.pause = !settings.pause;
         break;
     }
   };
