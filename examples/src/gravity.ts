@@ -54,10 +54,11 @@ const data = [
 ];
 
 // gravitational field between bodies
+const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
 const gravitationalAcceleration = (p, point) => {
   if (point.id === p.id) {
-    return;
+    return zero;
   }
   const dist3 = point.position.dist(p.position) ** 3;
   const k = (GRAVITATIONAL_CONSTANT * point.mass) / dist3;

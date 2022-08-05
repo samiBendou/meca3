@@ -56,10 +56,11 @@ const data = [
 ];
 
 // oscillating field, each point is linked to the other with a spring of given pulsation
+const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
 const field = (p, point) => {
   if (point.id === p.id) {
-    return;
+    return zero;
   }
   const k = -((pulse / p.mass) ** 2);
   acceleration.copy(p.position);

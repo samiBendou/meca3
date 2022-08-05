@@ -1,3 +1,4 @@
+import { Point } from "../../src";
 import { Vector3, Vector6 } from "../../src/algebra";
 import {
   Color,
@@ -58,10 +59,11 @@ const settings = {
   samples: SAMPLE_PER_FRAMES,
 };
 
+const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
-const field = (p, point) => {
+const field = (p: Point, point: Point): Vector3 => {
   if (point.id === p.id) {
-    return;
+    return zero;
   }
   const dist3 = point.position.dist(p.position) ** 3;
   const k =
