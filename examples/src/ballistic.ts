@@ -35,14 +35,14 @@ const LATITUDE_RAD = LATITUDE_DEG * RAD_PER_DEG;
 const ROTATION_SPEED = (2 * Math.PI) / SIDERAL_DAY;
 const FRICTION_COEFFICIENT = (AIR_RHO * 0.03 * SPHERE_AREA) / 2;
 const ROTATION_AXIS = new Vector3(
+  Math.sin(LATITUDE_RAD),
   0,
-  Math.cos(LATITUDE_RAD),
-  Math.sin(LATITUDE_RAD)
-);
-const LINEAR_SPEED = Vector3.ez.cross(ROTATION_AXIS).mul(EARTH_RADIUS);
+  Math.cos(LATITUDE_RAD)
+); // North is positive z-axis
+const LINEAR_SPEED = Vector3.ey.cross(ROTATION_AXIS).mul(EARTH_RADIUS);
 
 const INITIAL_SPEED = 1000;
-const INITIAL_DISTANCE = 1000;
+const INITIAL_DISTANCE = 20000;
 const INITIAL_OFFSET = 2000;
 const INITIAL_ALTITUDE = 10000;
 
@@ -51,10 +51,10 @@ const archimede = Vector3.zeros;
 const centrifugal = ROTATION_AXIS.clone()
   .cross(LINEAR_SPEED)
   .mul(ROTATION_SPEED ** 2);
-const ARCHIMEDE = Vector3.ez.mul(
+const ARCHIMEDE = Vector3.ey.mul(
   AIR_RHO * SPHERE_VOLUME * GRAVITY_ACCELERATION
 );
-const gravity = Vector3.ez.mul(-GRAVITY_ACCELERATION).add(centrifugal);
+const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION).add(centrifugal);
 const axisCoriolis = ROTATION_AXIS.clone().mul(-2 * ROTATION_SPEED);
 
 const data = {
@@ -69,11 +69,11 @@ const data = {
       id: "plumb",
       mass: 11.3 * WATER_RHO * SPHERE_VOLUME,
       state: Vector6.concatenated(
-        Vector3.ez
+        Vector3.ey
           .mul(INITIAL_ALTITUDE)
-          .add(Vector3.ex.mul(INITIAL_DISTANCE))
-          .add(Vector3.ey.mul(-INITIAL_OFFSET)),
-        Vector3.ey.mul(INITIAL_SPEED)
+          .add(Vector3.ez.mul(INITIAL_DISTANCE))
+          .add(Vector3.ex.mul(-INITIAL_OFFSET)),
+        Vector3.ez.mul(-1 * INITIAL_SPEED)
       ),
       trajectoryLength: BUFFER_LENGTH,
       color: Color.Yellow,
@@ -83,11 +83,11 @@ const data = {
       id: "steel",
       mass: 7.32 * WATER_RHO * SPHERE_VOLUME,
       state: Vector6.concatenated(
-        Vector3.ez
+        Vector3.ey
           .mul(INITIAL_ALTITUDE)
-          .add(Vector3.ey.mul(-INITIAL_OFFSET))
-          .add(Vector3.ex.mul(0)),
-        Vector3.ey.mul(INITIAL_SPEED)
+          .add(Vector3.ez.mul(INITIAL_DISTANCE))
+          .add(Vector3.ex.mul(0 * INITIAL_OFFSET)),
+        Vector3.ez.mul(-INITIAL_SPEED)
       ),
       trajectoryLength: BUFFER_LENGTH,
       color: Color.Cyan,
@@ -97,11 +97,11 @@ const data = {
       id: "aluminum",
       mass: 2.7 * WATER_RHO * SPHERE_VOLUME,
       state: Vector6.concatenated(
-        Vector3.ez
+        Vector3.ey
           .mul(INITIAL_ALTITUDE)
-          .add(Vector3.ey.mul(-INITIAL_OFFSET))
-          .add(Vector3.ex.mul(-INITIAL_DISTANCE)),
-        Vector3.ey.mul(INITIAL_SPEED)
+          .add(Vector3.ez.mul(INITIAL_DISTANCE))
+          .add(Vector3.ex.mul(1 * INITIAL_OFFSET)),
+        Vector3.ez.mul(-INITIAL_SPEED)
       ),
       trajectoryLength: BUFFER_LENGTH,
       color: Color.Magenta,
@@ -111,11 +111,11 @@ const data = {
       id: "hot-air",
       mass: 0.1 * AIR_RHO * SPHERE_VOLUME,
       state: Vector6.concatenated(
-        Vector3.ez
+        Vector3.ey
           .mul(INITIAL_ALTITUDE)
-          .add(Vector3.ey.mul(-INITIAL_OFFSET))
-          .add(Vector3.ex.mul(0)),
-        Vector3.ey.mul(INITIAL_SPEED)
+          .add(Vector3.ez.mul(INITIAL_DISTANCE))
+          .add(Vector3.ex.mul(0 * INITIAL_OFFSET)),
+        Vector3.ez.mul(-INITIAL_SPEED)
       ),
       trajectoryLength: BUFFER_LENGTH,
       color: Color.White,
@@ -141,7 +141,7 @@ let zoomScale = 1;
 const settings = {
   frame: null,
   speed: 1 / TARGET_FRAMERATE,
-  scale: 0.1,
+  scale: 0.05,
   samples: SAMPLE_PER_FRAMES,
 };
 

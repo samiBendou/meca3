@@ -280,9 +280,14 @@ export function initScene(...objects: THREE.Object3D[]) {
   return { renderer, scene };
 }
 
-function makeOnKeyPressedHandler(points: Point[], settings: Settings) {
+function makeOnKeyPressedHandler(
+  points: Point[],
+  settings: Settings,
+  controls: OrbitControls
+) {
   return function onKeyPressed(event: KeyboardEvent) {
     let { frame } = settings;
+    console.log(event.key);
     switch (event.key) {
       case "r":
         switch (frame) {
@@ -318,6 +323,18 @@ function makeOnKeyPressedHandler(points: Point[], settings: Settings) {
       case " ":
         settings.pause = !settings.pause;
         break;
+      case "q":
+        controls.rotateLeft(Math.PI / 2);
+        break;
+      case "d":
+        controls.rotateLeft(-Math.PI / 2);
+        break;
+      case "z":
+        controls.rotateUp(Math.PI / 2);
+        break;
+      case "s":
+        controls.rotateUp(-Math.PI / 2);
+        break;
     }
   };
 }
@@ -340,7 +357,7 @@ export function initControls(
   camera: THREE.OrthographicCamera
 ) {
   const controls = new OrbitControls(camera);
-  const onKeyPressed = makeOnKeyPressedHandler(points, settings);
+  const onKeyPressed = makeOnKeyPressedHandler(points, settings, controls);
   const onResizeHandler = makeOnResizeHandler(camera);
 
   document.body.addEventListener("keypress", onKeyPressed, false);
