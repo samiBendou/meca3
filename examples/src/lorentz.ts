@@ -35,38 +35,46 @@ const electricField = (t) =>
 const magneticField = (t) =>
   MAGNETIC_FIELD_AMP * Math.cos(2 * Math.PI * FREQUENCY * t);
 
-const data = [
-  {
-    id: "mass",
-    mass: 4 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
-    state: Vector6.concatenated(Vector3.zeros, Vector3.zeros),
+const data = {
+  barycenter: {
+    state: Vector6.zeros,
     trajectoryLength: BUFFER_LENGTH,
-    color: Color.Yellow,
-    radius: 10,
+    color: Color.White,
+    radius: 5,
   },
-  {
-    id: "a",
-    mass: 1 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
-    state: Vector6.concatenated(
-      Vector3.ex.mul(10),
-      Vector3.ey.mul(SPEED_OF_LIGHT / 2)
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Cyan,
-    radius: 10,
-  },
-  {
-    id: "b",
-    mass: 1 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
-    state: Vector6.concatenated(
-      Vector3.ex.mul(10).neg(),
-      Vector3.ez.mul(SPEED_OF_LIGHT / 2)
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Magenta,
-    radius: 10,
-  },
-];
+  points: [
+    {
+      id: "mass",
+      mass: 4 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
+      state: Vector6.concatenated(Vector3.zeros, Vector3.zeros),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Yellow,
+      radius: 10,
+    },
+    {
+      id: "a",
+      mass: 1 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
+      state: Vector6.concatenated(
+        Vector3.ex.mul(10),
+        Vector3.ey.mul(SPEED_OF_LIGHT / 2)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Cyan,
+      radius: 10,
+    },
+    {
+      id: "b",
+      mass: 1 / SPEED_OF_LIGHT / SPEED_OF_LIGHT,
+      state: Vector6.concatenated(
+        Vector3.ex.mul(10).neg(),
+        Vector3.ez.mul(SPEED_OF_LIGHT / 2)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Magenta,
+      radius: 10,
+    },
+  ],
+};
 
 let zoomScale = 1;
 const settings = {
@@ -98,7 +106,7 @@ function init() {
     field,
     settings
   );
-  const { spheres, lines } = initBodiesMesh(data);
+  const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
   const camera = initCamera(scale, 0, 0, 50 * scale);

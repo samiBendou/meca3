@@ -24,27 +24,38 @@ const BUFFER_LENGTH = 4096;
 const SAMPLE_PER_FRAMES = 16384;
 const TARGET_FRAMERATE = 60;
 
-const data = [
-  {
-    id: "first",
-    mass: 10000,
-    state: Vector6.concatenated(Vector3.ey.mul(PENDULUM_LENGTH), Vector3.zeros),
+const data = {
+  barycenter: {
+    state: Vector6.zeros,
     trajectoryLength: BUFFER_LENGTH,
-    color: Color.Yellow,
-    radius: 10,
+    color: Color.White,
+    radius: 5,
   },
-  {
-    id: "second",
-    mass: 1,
-    state: Vector6.concatenated(
-      Vector3.ex.mul(10).add(Vector3.ey.mul(10)),
-      Vector3.ex.mul(40)
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Cyan,
-    radius: 10,
-  },
-];
+  points: [
+    {
+      id: "first",
+      mass: 10000,
+      state: Vector6.concatenated(
+        Vector3.ey.mul(PENDULUM_LENGTH),
+        Vector3.zeros
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Yellow,
+      radius: 10,
+    },
+    {
+      id: "second",
+      mass: 1,
+      state: Vector6.concatenated(
+        Vector3.ex.mul(10).add(Vector3.ey.mul(10)),
+        Vector3.ex.mul(40)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Cyan,
+      radius: 10,
+    },
+  ],
+};
 
 const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION);
 
@@ -79,7 +90,7 @@ function init() {
     field,
     settings
   );
-  const { spheres, lines } = initBodiesMesh(data);
+  const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const frame = initFrameMesh();
 
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);

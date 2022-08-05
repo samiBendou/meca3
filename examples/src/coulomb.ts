@@ -18,38 +18,47 @@ import {
 } from "./common";
 
 const BUFFER_LENGTH = 8192;
-const SAMPLE_PER_FRAMES = 8192;
+const SAMPLE_PER_FRAMES = 2 * 8192;
 const TARGET_FRAMERATE = 60;
 
 const SECS_PER_AS = 1e-18;
 const VACUUM_PERMITTIVITY = 8.8541878128e-12;
 const COULOMB_CONSTANT = 1 / (4 * Math.PI * VACUUM_PERMITTIVITY);
 const ELEMENTARY_CHARGE = 1.602176634e-19;
-const PROTON_ELECTRON_DIST = 5.29177e-11;
+const BOHR_RADIUS = 5.29177210903e-11;
 const ELECTRON_MASS = 9.1093837015e-31;
-const SPEED_OF_LIGHT = 299792458;
+const PROTON_MASS = 1.67262192369e-27;
+const ELECTRON_VELOCITY = 7.29e5;
 
-const data = [
-  {
-    id: "proton",
-    mass: Number.POSITIVE_INFINITY,
-    state: Vector6.concatenated(Vector3.zeros, Vector3.zeros),
+const data = {
+  barycenter: {
+    state: Vector6.zeros,
     trajectoryLength: BUFFER_LENGTH,
-    color: Color.Yellow,
-    radius: 10,
+    color: Color.White,
+    radius: 5,
   },
-  {
-    id: "electron",
-    mass: ELECTRON_MASS,
-    state: Vector6.concatenated(
-      Vector3.ex.mul(PROTON_ELECTRON_DIST),
-      Vector3.ey.mul(SPEED_OF_LIGHT / 274)
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Cyan,
-    radius: 10,
-  },
-];
+  points: [
+    {
+      id: "proton",
+      mass: PROTON_MASS,
+      state: Vector6.concatenated(Vector3.zeros, Vector3.zeros),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Yellow,
+      radius: 10,
+    },
+    {
+      id: "electron",
+      mass: ELECTRON_MASS,
+      state: Vector6.concatenated(
+        Vector3.ex.mul(BOHR_RADIUS),
+        Vector3.ey.mul(ELECTRON_VELOCITY)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Cyan,
+      radius: 10,
+    },
+  ],
+};
 
 let zoomScale = 1;
 const settings = {
@@ -81,7 +90,7 @@ function init() {
     field,
     settings
   );
-  const { spheres, lines } = initBodiesMesh(data);
+  const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
   const camera = initCamera(scale, 0, 0, 50e-11);

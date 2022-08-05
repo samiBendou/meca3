@@ -11,6 +11,7 @@ import {
   SystemAcceleration,
   SystemDynamics,
 } from "../../src/dynamics";
+import { BarycenterConstructor } from "../../src/dynamics/Barycenter";
 import {
   ArraySolver,
   InteractionSolver,
@@ -39,9 +40,14 @@ export type SettingsDom = {
 export type Body = {
   radius: number;
   color: Color;
-} & PointConstructor;
+} & Pick<PointConstructor, "trajectoryLength">;
 
 export type Frame = number | null | "barycenter";
+
+export type SimulationData = {
+  points: PointConstructor[];
+  barycenter: BarycenterConstructor;
+};
 
 export enum Axis {
   X,
@@ -173,28 +179,28 @@ export function initSettingsDom(): SettingsDom {
 }
 
 export function initSystemSimulation(
-  data: PointConstructor[],
+  data: SimulationData,
   acceleration: SystemAcceleration,
   settings: Settings
 ) {
   const dt = settings.speed / settings.samples;
-  const points = data.map((d) => Point.makePoint(d));
+  const points = data.points.map((d) => Point.makePoint(d));
   const { field } = new SystemDynamics(acceleration);
   const solver = new InteractionSolver(points, field, new Timer(dt));
-  const barycenter = new Barycenter("barycenter", points);
+  const barycenter = Barycenter.makeBarycenter(data.barycenter);
   return { points, solver, barycenter };
 }
 
 export function initPointSimulation(
-  data: PointConstructor[],
+  data: SimulationData,
   acceleration: PointAcceleration,
   settings: Settings
 ) {
   const dt = settings.speed / settings.samples;
-  const points = data.map((d) => Point.makePoint(d));
+  const points = data.points.map((d) => Point.makePoint(d));
   const { field } = new PointDynamics(acceleration);
   const solver = new ArraySolver(points, field, new Timer(dt));
-  const barycenter = new Barycenter("barycenter", points);
+  const barycenter = Barycenter.makeBarycenter(data.barycenter);
   return { points, solver, barycenter };
 }
 
@@ -378,9 +384,9 @@ export function updateObjectSpheres(
 ) {
   // updating spheres position in sphere according to current position of points in field
   const frame = framePosition(settings.frame, points, barycenter);
-  spheres.forEach((sphere, idx) => {
-    const position = points[idx].position.xyz;
-    sphere.position
+  [barycenter, ...points].forEach((point, idx) => {
+    const position = point.position.xyz;
+    spheres[idx].position
       .set(...position)
       .sub(frame)
       .multiplyScalar(settings.scale);
@@ -395,9 +401,9 @@ export function updateObjectLines(
 ) {
   const frame = frameTrajectory(settings.frame, points, barycenter);
   const zero = new THREE.Vector3(0, 0, 0);
-  lines.forEach((line, idx) => {
-    const geometry = line.geometry as THREE.Geometry;
-    const trajectory = points[idx].trajectory;
+  [barycenter, ...points].forEach((point, idx) => {
+    const geometry = lines[idx].geometry as THREE.Geometry;
+    const trajectory = point.trajectory;
     geometry.vertices.forEach((vertex, vIdx) => {
       const position = trajectory.get(vIdx).xyz;
       const pos =

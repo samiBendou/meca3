@@ -25,35 +25,50 @@ const BUFFER_LENGTH = 4096;
 const SAMPLE_PER_FRAMES = 2048;
 const TARGET_FRAMERATE = 60;
 
-const data = [
-  {
-    id: "first",
-    mass: 1,
-    state: Vector6.concatenated(Vector3.ex.mul(a), Vector3.zeros),
+const barycenterData = {
+  id: "barycenter",
+  state: Vector6.zeros,
+  trajectoryLength: BUFFER_LENGTH,
+};
+
+const data = {
+  barycenter: {
+    id: "barycenter",
+    state: Vector6.zeros,
     trajectoryLength: BUFFER_LENGTH,
-    color: Color.Yellow,
-    radius: 10,
+    color: Color.White,
+    radius: 5,
   },
-  {
-    id: "second",
-    mass: 1,
-    state: Vector6.concatenated(Vector3.ex.mul(-a), Vector3.zeros),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Cyan,
-    radius: 10,
-  },
-  {
-    id: "third",
-    mass: 2,
-    state: Vector6.concatenated(
-      Vector3.ey.mul((a * Math.sqrt(3)) / 2),
-      Vector3.zeros
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Magenta,
-    radius: 10,
-  },
-];
+  points: [
+    {
+      id: "first",
+      mass: 1,
+      state: Vector6.concatenated(Vector3.ex.mul(a), Vector3.zeros),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Yellow,
+      radius: 10,
+    },
+    {
+      id: "second",
+      mass: 1,
+      state: Vector6.concatenated(Vector3.ex.mul(-a), Vector3.zeros),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Cyan,
+      radius: 10,
+    },
+    {
+      id: "third",
+      mass: 2,
+      state: Vector6.concatenated(
+        Vector3.ey.mul((a * Math.sqrt(3)) / 2),
+        Vector3.zeros
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Magenta,
+      radius: 10,
+    },
+  ],
+};
 
 // oscillating field, each point is linked to the other with a spring of given pulsation
 const zero = Vector3.zeros;
@@ -82,7 +97,7 @@ function init() {
     field,
     settings
   );
-  const { spheres, lines } = initBodiesMesh(data);
+  const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const frame = initFrameMesh();
 
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);

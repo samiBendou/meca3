@@ -1,6 +1,8 @@
 import { Vector3, Vector6 } from "../algebra";
 import { BufferCurve } from "../curves";
-import Point from "./Point";
+import Point, { PointConstructor } from "./Point";
+
+export type BarycenterConstructor = Omit<PointConstructor, "mass" | "id">;
 
 export default class Barycenter {
   /** mass of the point **/
@@ -69,5 +71,10 @@ export default class Barycenter {
 
   get trajectory() {
     return this._trajectory;
+  }
+
+  static makeBarycenter(data: BarycenterConstructor): Barycenter {
+    const point = Point.makePoint({ ...data, id: "barycenter", mass: 0 });
+    return new Barycenter("barycenter", [point]);
   }
 }

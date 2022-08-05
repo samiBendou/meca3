@@ -57,64 +57,72 @@ const ARCHIMEDE = Vector3.ez.mul(
 const gravity = Vector3.ez.mul(-GRAVITY_ACCELERATION).add(centrifugal);
 const axisCoriolis = ROTATION_AXIS.clone().mul(-2 * ROTATION_SPEED);
 
-const data = [
-  {
-    id: "plumb",
-    mass: 11.3 * WATER_RHO * SPHERE_VOLUME,
-    state: Vector6.concatenated(
-      Vector3.ez
-        .mul(INITIAL_ALTITUDE)
-        .add(Vector3.ex.mul(INITIAL_DISTANCE))
-        .add(Vector3.ey.mul(-INITIAL_OFFSET)),
-      Vector3.ey.mul(INITIAL_SPEED)
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Yellow,
-    radius: 10,
-  },
-  {
-    id: "steel",
-    mass: 7.32 * WATER_RHO * SPHERE_VOLUME,
-    state: Vector6.concatenated(
-      Vector3.ez
-        .mul(INITIAL_ALTITUDE)
-        .add(Vector3.ey.mul(-INITIAL_OFFSET))
-        .add(Vector3.ex.mul(0)),
-      Vector3.ey.mul(INITIAL_SPEED)
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Cyan,
-    radius: 10,
-  },
-  {
-    id: "aluminum",
-    mass: 2.7 * WATER_RHO * SPHERE_VOLUME,
-    state: Vector6.concatenated(
-      Vector3.ez
-        .mul(INITIAL_ALTITUDE)
-        .add(Vector3.ey.mul(-INITIAL_OFFSET))
-        .add(Vector3.ex.mul(-INITIAL_DISTANCE)),
-      Vector3.ey.mul(INITIAL_SPEED)
-    ),
-    trajectoryLength: BUFFER_LENGTH,
-    color: Color.Magenta,
-    radius: 10,
-  },
-  {
-    id: "hot-air",
-    mass: 0.1 * AIR_RHO * SPHERE_VOLUME,
-    state: Vector6.concatenated(
-      Vector3.ez
-        .mul(INITIAL_ALTITUDE)
-        .add(Vector3.ey.mul(-INITIAL_OFFSET))
-        .add(Vector3.ex.mul(0)),
-      Vector3.ey.mul(INITIAL_SPEED)
-    ),
+const data = {
+  barycenter: {
+    state: Vector6.zeros,
     trajectoryLength: BUFFER_LENGTH,
     color: Color.White,
-    radius: 10,
+    radius: 5,
   },
-];
+  points: [
+    {
+      id: "plumb",
+      mass: 11.3 * WATER_RHO * SPHERE_VOLUME,
+      state: Vector6.concatenated(
+        Vector3.ez
+          .mul(INITIAL_ALTITUDE)
+          .add(Vector3.ex.mul(INITIAL_DISTANCE))
+          .add(Vector3.ey.mul(-INITIAL_OFFSET)),
+        Vector3.ey.mul(INITIAL_SPEED)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Yellow,
+      radius: 10,
+    },
+    {
+      id: "steel",
+      mass: 7.32 * WATER_RHO * SPHERE_VOLUME,
+      state: Vector6.concatenated(
+        Vector3.ez
+          .mul(INITIAL_ALTITUDE)
+          .add(Vector3.ey.mul(-INITIAL_OFFSET))
+          .add(Vector3.ex.mul(0)),
+        Vector3.ey.mul(INITIAL_SPEED)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Cyan,
+      radius: 10,
+    },
+    {
+      id: "aluminum",
+      mass: 2.7 * WATER_RHO * SPHERE_VOLUME,
+      state: Vector6.concatenated(
+        Vector3.ez
+          .mul(INITIAL_ALTITUDE)
+          .add(Vector3.ey.mul(-INITIAL_OFFSET))
+          .add(Vector3.ex.mul(-INITIAL_DISTANCE)),
+        Vector3.ey.mul(INITIAL_SPEED)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.Magenta,
+      radius: 10,
+    },
+    {
+      id: "hot-air",
+      mass: 0.1 * AIR_RHO * SPHERE_VOLUME,
+      state: Vector6.concatenated(
+        Vector3.ez
+          .mul(INITIAL_ALTITUDE)
+          .add(Vector3.ey.mul(-INITIAL_OFFSET))
+          .add(Vector3.ex.mul(0)),
+        Vector3.ey.mul(INITIAL_SPEED)
+      ),
+      trajectoryLength: BUFFER_LENGTH,
+      color: Color.White,
+      radius: 10,
+    },
+  ],
+};
 
 // gravitational field between bodies
 const acceleration = Vector3.zeros;
@@ -144,7 +152,7 @@ function init() {
     field,
     settings
   );
-  const { spheres, lines } = initBodiesMesh(data);
+  const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...spheres, ...lines, ...frame);
   const camera = initCamera(
