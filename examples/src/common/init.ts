@@ -128,7 +128,7 @@ export function initSphereMesh(point: Body) {
 export function initLineMesh(point: Body) {
   const { color, trajectoryLength } = point;
   const geometry = new THREE.Geometry();
-  const material = new THREE.LineDashedMaterial({
+  const material = new THREE.LineBasicMaterial({
     color,
   });
   geometry.vertices = new Array(trajectoryLength)
