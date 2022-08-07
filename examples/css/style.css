@@ -9,6 +9,38 @@ canvas {
     overflow: hidden;
 }
 
+.big-info {
+    font-weight: bold;
+    font-size: large;
+}
+
+#dynamic-info {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#elapsed {
+    position: absolute;
+    bottom: 16px;
+    right: 8px;
+}
+
+#distance {
+    bottom: 16px;
+    left: 8px;
+    width: 200px;
+    position: absolute;
+}
+
+#bar {
+    background-color: white;
+    position: absolute;
+    height: 10px;
+    width: 100%;
+}
+
 #infos {
     bottom: 0pt;
     position: absolute;

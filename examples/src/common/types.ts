@@ -4,12 +4,13 @@ import { Color } from "./constants";
 
 export type SettingsDom = {
   frame: HTMLSpanElement;
-  scale: HTMLSpanElement;
   samples: HTMLSpanElement;
   dt: HTMLSpanElement;
   delta: HTMLSpanElement;
   elapsed: HTMLSpanElement;
   momentum: HTMLSpanElement;
+  bar: HTMLDivElement;
+  scale: HTMLDivElement;
 };
 
 export type Body = {

@@ -26,6 +26,26 @@ export enum Duration {
   Year = 31104000,
 }
 
+export enum UnitPrefix {
+  Nano = "n",
+  Micro = "u",
+  Mili = "m",
+  None = "",
+  Kilo = "k",
+  Mega = "M",
+  Giga = "G",
+}
+
+export const UNIT_MAP: Record<number, UnitPrefix> = {
+  [-9]: UnitPrefix.Nano,
+  [-6]: UnitPrefix.Micro,
+  [-3]: UnitPrefix.Mili,
+  [0]: UnitPrefix.None,
+  [3]: UnitPrefix.Kilo,
+  [6]: UnitPrefix.Mega,
+  [9]: UnitPrefix.Giga,
+};
+
 export const AXIS_COLORS = [Color.Red, Color.Green, Color.Blue];
 export const AXIS_UNIT_LENGTH = 20;
 export const AXIS_UNIT_SIDE = 2;

@@ -6,6 +6,10 @@
   </head>
 
   <body>
+    <div class="big-info" id="dynamic-info">
+      <span class="tab">Momentum (kg.m/s) </span><span id="momentum"></span>
+    </div>
+
     <div id="infos">
       <div id="settings">
         <ul>
@@ -14,18 +18,20 @@
             <span class="tab">Momentum (kg.m/s) </span
             ><span id="momentum"></span>
           </li>
-          <li><span class="tab">Scale (px/m)</span><span id="scale"></span></li>
           <li>
             <span class="tab">Steps per frame </span><span id="samples"></span>
           </li>
           <li><span class="tab">Physics step</span><span id="dt"></span></li>
           <li><span class="tab">Total step</span><span id="delta"></span></li>
-          <li>
-            <span class="tab">Elapsed time</span><span id="elapsed"></span>
-          </li>
         </ul>
       </div>
     </div>
+    <div id="distance">
+      <div class="big-info" id="scale"></div>
+      <div id="bar"></div>
+    </div>
+
+    <div class="big-info" id="elapsed"></div>
   </body>
 
   <link rel="stylesheet" type="text/css" href="style.css" />

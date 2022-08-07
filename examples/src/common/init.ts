@@ -1,3 +1,4 @@
+import Stats from "stats.js";
 import * as THREE from "three";
 import {
   ArraySolver,
@@ -49,18 +50,6 @@ export function initClock() {
   const clock = new THREE.Clock();
   clock.start();
   return clock;
-}
-
-export function initSettingsDom(): SettingsDom {
-  return {
-    frame: document.getElementById("frame") as HTMLSpanElement,
-    scale: document.getElementById("scale") as HTMLSpanElement,
-    samples: document.getElementById("samples") as HTMLSpanElement,
-    delta: document.getElementById("delta") as HTMLSpanElement,
-    dt: document.getElementById("dt") as HTMLSpanElement,
-    elapsed: document.getElementById("elapsed") as HTMLSpanElement,
-    momentum: document.getElementById("momentum") as HTMLSpanElement,
-  };
 }
 
 export function initSystemSimulation(
@@ -163,6 +152,19 @@ export function initScene(...objects: THREE.Object3D[]) {
   document.body.appendChild(renderer.domElement);
 
   return { renderer, scene };
+}
+
+export function initSettingsDom(): SettingsDom {
+  return {
+    frame: document.getElementById("frame") as HTMLSpanElement,
+    samples: document.getElementById("samples") as HTMLSpanElement,
+    delta: document.getElementById("delta") as HTMLSpanElement,
+    dt: document.getElementById("dt") as HTMLSpanElement,
+    elapsed: document.getElementById("elapsed") as HTMLSpanElement,
+    momentum: document.getElementById("momentum") as HTMLSpanElement,
+    bar: document.getElementById("bar") as HTMLDivElement,
+    scale: document.getElementById("scale") as HTMLDivElement,
+  };
 }
 
 export function initControls(

@@ -1,6 +1,7 @@
-import THREE, { OrthographicCamera } from "three";
+import * as THREE from "three";
+import { OrthographicCamera } from "three";
 import { Barycenter, Point, Solver, Timer } from "../../../src";
-import { Duration } from "./constants";
+import { Duration, UnitPrefix, UNIT_MAP } from "./constants";
 import Settings, { Frame } from "./settings";
 import { SettingsDom } from "./types";
 
@@ -63,6 +64,22 @@ export function makeTime(secs: number) {
     return `${minutes.toFixed(2)} mins`;
   }
   return `${secs.toPrecision(2)} secs`;
+}
+
+export function makeUnit(si: number) {
+  const exp = Math.floor(Math.log10(si));
+  if (exp < 3 && exp >= 0) {
+    return { value: si, unit: UnitPrefix.None };
+  }
+  if (exp >= 9) {
+    return { value: si / 1e9, unit: UnitPrefix.Giga };
+  }
+  if (exp <= -9) {
+    return { value: si / 1e-9, unit: UnitPrefix.Nano };
+  }
+  const rem = exp % 3;
+  const exp3 = exp - rem + (exp < 0 && rem !== 0 ? -3 : 0);
+  return { value: si * Math.pow(10, -exp3), unit: UNIT_MAP[exp3] };
 }
 
 export function updateSimulation<T>(
@@ -144,10 +161,12 @@ export function updateSettingsDom(
   timer: Timer
 ) {
   dom.frame.innerText = frameLabel(settings.frame, points);
-  dom.momentum.innerText = barycenter.momentum.mag.toPrecision(5);
-  dom.scale.innerText = settings.scale.toPrecision(4);
   dom.samples.innerText = settings.samples.toFixed(0);
   dom.dt.innerText = makeTime(timer.dt);
   dom.delta.innerText = makeTime(settings.speed);
+  dom.momentum.innerText = barycenter.momentum.mag.toPrecision(5);
   dom.elapsed.innerText = makeTime(timer.t1);
+
+  const { value, unit } = makeUnit(200 / settings.scale);
+  dom.scale.innerText = `${value.toPrecision(4)} ${unit}m`;
 }

@@ -122,9 +122,6 @@ const field: PointAcceleration = (p) => {
   return acceleration.cross(p.speed).add(gravity).add(drag).add(archimede);
 };
 
-console.log(gravity.string());
-console.log(axisCoriolis.string());
-
 let zoomScale = 1;
 const settings = new Settings({
   scale: 0.05,
