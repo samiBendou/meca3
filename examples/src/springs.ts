@@ -9,13 +9,13 @@ import {
   initSettingsDom,
   initStats,
   initSystemSimulation,
+  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
   updateSettingsDom,
   updateSimulation,
 } from "./common";
-// INITIALIZATION OF THE SIMULATION
 
 const BUFFER_LENGTH = 4096;
 const SAMPLE_PER_FRAMES = 2048;
@@ -77,12 +77,11 @@ const field: SystemAcceleration = (p, point) => {
 };
 
 let zoomScale = 1;
-const settings = {
-  frame: null,
-  speed: 1 / TARGET_FRAMERATE,
+const settings = new Settings({
   scale: 10,
+  speed: 1 / TARGET_FRAMERATE,
   samples: SAMPLE_PER_FRAMES,
-};
+});
 
 function init() {
   const stats = initStats();

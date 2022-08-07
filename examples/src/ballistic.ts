@@ -10,6 +10,7 @@ import {
   initScene,
   initSettingsDom,
   initStats,
+  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
@@ -139,13 +140,11 @@ console.log(gravity.string());
 console.log(axisCoriolis.string());
 
 let zoomScale = 1;
-const settings = {
-  frame: null,
-  speed: 1 / TARGET_FRAMERATE,
+const settings = new Settings({
   scale: 0.05,
+  speed: 1 / TARGET_FRAMERATE,
   samples: SAMPLE_PER_FRAMES,
-};
-
+});
 function init() {
   const stats = initStats();
   const { points, solver, barycenter } = initPointSimulation(

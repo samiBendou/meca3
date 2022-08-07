@@ -10,6 +10,7 @@ import {
   initSettingsDom,
   initStats,
   initSystemSimulation,
+  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
@@ -22,7 +23,7 @@ const SAMPLE_PER_FRAMES = 8192;
 const TARGET_FRAMERATE = 60;
 
 const SECS_PER_MONTH = 2.628e6;
-const GRAVITATIONAL_CONSTANT = -6.67408e-11; // universal gravitation constant in SI
+const GRAVITATIONAL_CONSTANT = -6.67408e-11;
 
 const data = {
   barycenter: {
@@ -76,12 +77,11 @@ const gravitationalAcceleration: SystemAcceleration = (p, point) => {
 };
 
 let zoomScale = 1;
-const settings = {
-  frame: null,
-  speed: SECS_PER_MONTH / TARGET_FRAMERATE,
+const settings = new Settings({
   scale: 1e-9,
+  speed: SECS_PER_MONTH / TARGET_FRAMERATE,
   samples: SAMPLE_PER_FRAMES,
-};
+});
 
 function init() {
   const { scale } = settings;

@@ -9,13 +9,13 @@ import {
   initSettingsDom,
   initStats,
   initSystemSimulation,
+  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
   updateSettingsDom,
   updateSimulation,
 } from "./common";
-// INITIALIZATION OF THE SIMULATION
 
 const GRAVITY_ACCELERATION = 9.80665;
 const PENDULUM_LENGTH = 50;
@@ -75,13 +75,11 @@ const field: SystemAcceleration = (p, point) => {
 };
 
 let zoomScale = 1;
-const settings = {
-  frame: null,
-  speed: 1 / TARGET_FRAMERATE,
+const settings = new Settings({
   scale: 10,
+  speed: 1 / TARGET_FRAMERATE,
   samples: SAMPLE_PER_FRAMES,
-  pause: false,
-};
+});
 
 function init() {
   const stats = initStats();

@@ -10,6 +10,7 @@ import {
   initSettingsDom,
   initStats,
   initSystemSimulation,
+  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
@@ -61,13 +62,11 @@ const data = {
 };
 
 let zoomScale = 1;
-const settings = {
-  frame: null,
-  speed: (10 * SECS_PER_AS) / TARGET_FRAMERATE,
+const settings = new Settings({
   scale: 5e12,
+  speed: (10 * SECS_PER_AS) / TARGET_FRAMERATE,
   samples: SAMPLE_PER_FRAMES,
-};
-
+});
 const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
 const field: SystemAcceleration = (p, point) => {

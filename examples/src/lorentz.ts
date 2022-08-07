@@ -10,6 +10,7 @@ import {
   initScene,
   initSettingsDom,
   initStats,
+  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
@@ -77,12 +78,11 @@ const data = {
 };
 
 let zoomScale = 1;
-const settings = {
-  frame: null,
-  speed: 10 / SPEED_OF_LIGHT / TARGET_FRAMERATE,
+const settings = new Settings({
   scale: 1000000000 / SPEED_OF_LIGHT,
+  speed: 10 / SPEED_OF_LIGHT / TARGET_FRAMERATE,
   samples: SAMPLE_PER_FRAMES,
-};
+});
 
 // gravitational field between bodies
 const field: PointAcceleration = (p, t) => {
