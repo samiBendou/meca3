@@ -1,4 +1,4 @@
-import { Vector3, Vector6 } from "../../src";
+import { SystemAcceleration, Vector3, Vector6 } from "../../src";
 import {
   Color,
   initBodiesMesh,
@@ -63,7 +63,7 @@ const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION);
 const zero = Vector3.zeros;
 const ur = Vector3.zeros;
 const constraint = Vector3.zeros;
-const field = (p, point) => {
+const field: SystemAcceleration = (p, point) => {
   if (p.id !== "second" || point.id !== "first") {
     return zero;
   }

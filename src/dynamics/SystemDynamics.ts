@@ -4,8 +4,8 @@ import Point from "./Point";
 
 export type SystemAcceleration = (
   current: Point,
-  other?: Point,
-  time?: number
+  other: Point,
+  time: number
 ) => Vector3;
 
 export default class SystemDynamics {

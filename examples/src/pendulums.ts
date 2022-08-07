@@ -1,4 +1,4 @@
-import { Vector3, Vector6 } from "../../src";
+import { SystemAcceleration, Vector3, Vector6 } from "../../src";
 import {
   Color,
   initBodiesMesh,
@@ -67,7 +67,7 @@ const data = {
 };
 
 const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION);
-const constraints = {
+const constraints: Record<string, Record<string, string | undefined>> = {
   first: {
     second: "linked",
   },
@@ -87,7 +87,7 @@ const tension = Vector3.zeros;
 const ur = Vector3.zeros;
 const vr = Vector3.zeros;
 const constraint = Vector3.zeros;
-const field = (p, point) => {
+const field: SystemAcceleration = (p, point) => {
   if (p.id === "first") {
     return zero;
   }

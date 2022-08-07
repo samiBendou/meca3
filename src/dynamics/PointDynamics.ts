@@ -2,7 +2,7 @@ import { Vector3, Vector6 } from "../algebra";
 import { VectorField } from "../solvers";
 import Point from "./Point";
 
-export type PointAcceleration = (current: Point, time?: number) => Vector3;
+export type PointAcceleration = (current: Point, time: number) => Vector3;
 
 export default class PointDynamics {
   private _field: VectorField<Point>;

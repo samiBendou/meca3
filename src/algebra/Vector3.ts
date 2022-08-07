@@ -259,11 +259,8 @@ export default class Vector3
    * @brief Constructs a vector with cartesian coordinates. `
    * @details If you don't specify components then the underlying array is initialized with the default values for `Float64Array`.
    **/
-  constructor(x?: number, y?: number, z?: number) {
+  constructor(x: number, y: number, z: number) {
     super(3);
-
-    if (x === undefined) return;
-
     this[0] = x;
     this[1] = y;
     this[2] = z;
@@ -858,7 +855,7 @@ export default class Vector3
    * @param u position of local basis
    */
   static er(other: Vector3): Vector3 {
-    return new Vector3().er(other);
+    return new Vector3(0, 0, 0).er(other);
   }
 
   /**
@@ -866,7 +863,7 @@ export default class Vector3
    * @param u position of local basis
    */
   static erxy(other: Vector3): Vector3 {
-    return new Vector3().erxy(other);
+    return new Vector3(0, 0, 0).erxy(other);
   }
 
   /**
@@ -876,7 +873,7 @@ export default class Vector3
    * @param u position of local basis
    */
   static etheta(other: Vector3): Vector3 {
-    return new Vector3().etheta(other);
+    return new Vector3(0, 0, 0).etheta(other);
   }
 
   /**
@@ -885,7 +882,7 @@ export default class Vector3
    * @param u position of local basis
    */
   static ephi(other: Vector3): Vector3 {
-    return new Vector3().ephi(other);
+    return new Vector3(0, 0, 0).ephi(other);
   }
 
   /** vector from coordinates of array in the form `[x, y, z, ...]` */

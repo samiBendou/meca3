@@ -3,7 +3,7 @@
   "compilerOptions": {
     "declaration": true,
     "target": "es6",
-    "module": "none",
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "removeComments": true,
@@ -11,16 +11,13 @@
     "sourceMap": true,
     "outDir": "dist",
     "esModuleInterop": true,
-    "lib": [
-      "dom",
-      "es6"
-    ]
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "lib": ["es6"]
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

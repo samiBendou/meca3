@@ -168,13 +168,13 @@ export function initClock() {
 
 export function initSettingsDom(): SettingsDom {
   return {
-    frame: document.getElementById("frame"),
-    scale: document.getElementById("scale"),
-    samples: document.getElementById("samples"),
-    delta: document.getElementById("delta"),
-    dt: document.getElementById("dt"),
-    elapsed: document.getElementById("elapsed"),
-    momentum: document.getElementById("momentum"),
+    frame: document.getElementById("frame") as HTMLSpanElement,
+    scale: document.getElementById("scale") as HTMLSpanElement,
+    samples: document.getElementById("samples") as HTMLSpanElement,
+    delta: document.getElementById("delta") as HTMLSpanElement,
+    dt: document.getElementById("dt") as HTMLSpanElement,
+    elapsed: document.getElementById("elapsed") as HTMLSpanElement,
+    momentum: document.getElementById("momentum") as HTMLSpanElement,
   };
 }
 
@@ -259,7 +259,7 @@ export function initLineMesh(point: Body) {
   });
   geometry.vertices = new Array(trajectoryLength)
     .fill(undefined)
-    .map((_) => new THREE.Vector3(0, 0, 0));
+    .map(() => new THREE.Vector3(0, 0, 0));
   return new THREE.Line(geometry, material);
 }
 

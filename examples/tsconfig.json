@@ -1,16 +1,24 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "declaration": true,
     "target": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
+    "sourceMap": true,
     "outDir": "dist",
     "esModuleInterop": true,
-    "lib": ["dom", "es6"],
-    "skipLibCheck": true
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "skipLibCheck": true,
+    "lib": ["es6", "dom"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules/*"]
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

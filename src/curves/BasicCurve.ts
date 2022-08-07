@@ -48,7 +48,7 @@ export default class BasicCurve<T extends Vector> implements Curve<T> {
     return this;
   }
 
-  pop(): T {
+  pop(): T | undefined {
     return this.vertices.pop();
   }
 
@@ -78,19 +78,19 @@ export default class BasicCurve<T extends Vector> implements Curve<T> {
     return this;
   }
 
-  indexAt(x: number = 1): [number, number, number] {
+  indexAt(x = 1): [number, number, number] {
     const scale = x * (this.vertices.length - 1),
       i0 = Math.floor(scale),
       i1 = Math.min(this.vertices.length - 1, i0 + 1);
     return [i0, i1, scale - i0];
   }
 
-  positionAt(x: number = 1): T {
+  positionAt(x = 1): T {
     const [i0, i1, dx] = this.indexAt(x);
     return (this.vertices[i0].clone() as T).lerp(this.vertices[i1], dx) as T;
   }
 
-  lengthAt(x: number = 1): number {
+  lengthAt(x = 1): number {
     const [i0, i1, dx] = this.indexAt(x);
     let length = 0;
     for (let i = 1; i <= i0; i++) {

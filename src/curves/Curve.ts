@@ -125,7 +125,7 @@ export default interface Curve<T extends Vector> {
    */
   push(position: T): this;
 
-  pop(): T;
+  pop(): T | undefined;
 
   /**
    * @brief clears the curve

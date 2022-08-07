@@ -1,3 +1,4 @@
+import { PointAcceleration } from "../../src";
 import { Vector3, Vector6 } from "../../src/algebra";
 import {
   Color,
@@ -23,16 +24,15 @@ const TARGET_FRAMERATE = 60;
 const electricFieldVector = Vector3.ex;
 const magneticFieldVector = Vector3.ez;
 const dragVector = Vector3.zeros;
-const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
 
 const SPEED_OF_LIGHT = 299792458;
 const MAGNETIC_FIELD_AMP = 2 / SPEED_OF_LIGHT;
-const FREQUENCY = SPEED_OF_LIGHT / 1000;
+const FREQUENCY = SPEED_OF_LIGHT / 10000;
 
-const electricField = (t) =>
+const electricField = (t: number) =>
   SPEED_OF_LIGHT * MAGNETIC_FIELD_AMP * Math.cos(2 * Math.PI * FREQUENCY * t);
-const magneticField = (t) =>
+const magneticField = (t: number) =>
   MAGNETIC_FIELD_AMP * Math.cos(2 * Math.PI * FREQUENCY * t);
 
 const data = {
@@ -85,7 +85,7 @@ const settings = {
 };
 
 // gravitational field between bodies
-const field = (p, t) => {
+const field: PointAcceleration = (p, t) => {
   electricFieldVector.y = electricField(t);
   magneticFieldVector.z = magneticField(t);
   dragVector.copy(p.speed);

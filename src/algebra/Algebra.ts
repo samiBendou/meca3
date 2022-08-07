@@ -1,10 +1,4 @@
-import {
-  Interpolable,
-  List,
-  Metrical,
-  Numerical,
-  Vectorial
-} from "../common/";
+import { Interpolable, List, Metrical, Numerical, Vectorial } from "../common/";
 
 export const mag = (vector: Metrical): number => Math.sqrt(vector.dot(vector));
 
@@ -28,10 +22,8 @@ export const min = <T extends Numerical & List>(...vectors: T[]): T =>
 export const max = <T extends Numerical & List>(...vectors: T[]): T =>
   vectors.reduce((acc, u) => acc.max(u));
 
-export const trunc = <T extends Numerical & List>(
-  decimals: number = 0,
-  vector: T
-): T => vector.clone().trunc(decimals);
+export const trunc = <T extends Numerical & List>(decimals = 0, vector: T): T =>
+  vector.clone().trunc(decimals);
 
 /** addition between vectors `u0 + u1 + ...` */
 export const add = <T extends Vectorial & List & Numerical>(
@@ -164,7 +156,8 @@ export const dist = <T extends Metrical>(vector1: T, vector2: T): number =>
 export const exact = <T extends Numerical>(...vectors: T[]): boolean => {
   const len = vectors.length - 1;
   return vectors.reduce(
-    (acc, u, index) => acc && vectors[Math.min(index + 1, len)].exact(u),
+    (acc: boolean, u: T, index: number) =>
+      acc && vectors[Math.min(index + 1, len)].exact(u),
     true
   );
 };
@@ -172,7 +165,8 @@ export const exact = <T extends Numerical>(...vectors: T[]): boolean => {
 export const equal1 = <T extends Metrical>(...vectors: T[]): boolean => {
   const len = vectors.length - 1;
   return vectors.reduce(
-    (acc, u, index) => acc && vectors[Math.min(index + 1, len)].equal1(u),
+    (acc: boolean, u: T, index: number) =>
+      acc && vectors[Math.min(index + 1, len)].equal1(u),
     true
   );
 };
@@ -180,7 +174,8 @@ export const equal1 = <T extends Metrical>(...vectors: T[]): boolean => {
 export const equal2 = <T extends Metrical>(...vectors: T[]): boolean => {
   const len = vectors.length - 1;
   return vectors.reduce(
-    (acc, u, index) => acc && vectors[Math.min(index + 1, len)].equal2(u),
+    (acc: boolean, u: T, index: number) =>
+      acc && vectors[Math.min(index + 1, len)].equal2(u),
     true
   );
 };

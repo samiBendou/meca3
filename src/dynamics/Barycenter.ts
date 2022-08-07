@@ -20,6 +20,7 @@ export default class Barycenter {
     if (points.length === 0) {
       throw Error("There must be at least one point to compute the barycenter");
     }
+    this.mass = 0;
     this.id = id;
     this._state = points[0].state.clone();
     this._momentum = points[0].state.clone();

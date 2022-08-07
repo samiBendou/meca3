@@ -1,3 +1,4 @@
+import { SystemAcceleration } from "../../src";
 import { Vector3, Vector6 } from "../../src/algebra";
 import {
   Color,
@@ -64,7 +65,7 @@ const data = {
 // gravitational field between bodies
 const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
-const gravitationalAcceleration = (p, point) => {
+const gravitationalAcceleration: SystemAcceleration = (p, point) => {
   if (point.id === p.id) {
     return zero;
   }
@@ -75,7 +76,7 @@ const gravitationalAcceleration = (p, point) => {
 };
 
 let zoomScale = 1;
-let settings = {
+const settings = {
   frame: null,
   speed: SECS_PER_MONTH / TARGET_FRAMERATE,
   scale: 1e-9,

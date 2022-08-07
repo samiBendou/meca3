@@ -1,4 +1,4 @@
-import { Point } from "../../src";
+import { SystemAcceleration } from "../../src";
 import { Vector3, Vector6 } from "../../src/algebra";
 import {
   Color,
@@ -70,7 +70,7 @@ const settings = {
 
 const zero = Vector3.zeros;
 const acceleration = Vector3.zeros;
-const field = (p: Point, point: Point): Vector3 => {
+const field: SystemAcceleration = (p, point) => {
   if (point.id === p.id) {
     return zero;
   }

@@ -477,7 +477,7 @@ export default class Matrix3
     this.x[2] = Math.round(this.x[2] * pow10) / pow10;
     this.y[2] = Math.round(this.y[2] * pow10) / pow10;
     this.z[2] = Math.round(this.z[2] * pow10) / pow10;
-    return undefined;
+    return this;
   }
 
   max(other: Matrix3): this {
@@ -672,7 +672,7 @@ export default class Matrix3
     this.x[2] = (this.x[2] - other.x[2]) / ds;
     this.y[2] = (this.y[2] - other.y[2]) / ds;
     this.z[2] = (this.z[2] - other.z[2]) / ds;
-    return undefined;
+    return this;
   }
 
   prod(other: Matrix3): this {
@@ -723,7 +723,7 @@ export default class Matrix3
     let det = xx * dyx + yx * dyy + zx * dyz;
 
     if (!det) {
-      return undefined;
+      return this;
     }
 
     det = 1.0 / det;
@@ -923,7 +923,7 @@ export default class Matrix3
   }
 
   prodv(other: Vector3): Vector3 {
-    let ox = other[0],
+    const ox = other[0],
       oy = other[1],
       uz = other[2];
     other[0] = this.x[0] * ox + this.x[1] * oy + this.x[2] * uz;

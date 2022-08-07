@@ -1,3 +1,4 @@
+import { PointAcceleration } from "../../src";
 import { Vector3, Vector6 } from "../../src/algebra";
 import {
   Color,
@@ -126,7 +127,7 @@ const data = {
 
 // gravitational field between bodies
 const acceleration = Vector3.zeros;
-const field = (p) => {
+const field: PointAcceleration = (p) => {
   drag.copy(p.speed);
   drag.mul((-FRICTION_COEFFICIENT * p.speed.mag) / p.mass);
   archimede.copy(ARCHIMEDE).div(p.mass);
