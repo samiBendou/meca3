@@ -109,20 +109,6 @@ const data = {
       color: Color.Magenta,
       radius: 10,
     },
-    {
-      id: "hot-air",
-      mass: 0.1 * AIR_RHO * SPHERE_VOLUME,
-      state: Vector6.concatenated(
-        Vector3.ey
-          .mul(INITIAL_ALTITUDE)
-          .add(Vector3.ez.mul(INITIAL_DISTANCE))
-          .add(Vector3.ex.mul(0 * INITIAL_OFFSET)),
-        Vector3.ez.mul(-INITIAL_SPEED)
-      ),
-      trajectoryLength: BUFFER_LENGTH,
-      color: Color.White,
-      radius: 10,
-    },
   ],
 };
 
@@ -173,7 +159,7 @@ function init() {
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
     controls.update();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.outerWidth, window.outerHeight);
     renderer.render(scene, camera);
     stats.end();
     requestAnimationFrame(animate);

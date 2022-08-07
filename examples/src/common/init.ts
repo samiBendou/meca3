@@ -182,7 +182,6 @@ export function initControls(
   document.body.addEventListener("mousedown", onMouseDown, false);
   document.body.addEventListener("wheel", onMouseWheel, false);
   window.addEventListener("resize", onResize);
-
   return controls;
 }
 

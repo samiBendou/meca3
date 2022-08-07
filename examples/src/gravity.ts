@@ -106,7 +106,7 @@ function init() {
     updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
     controls.update();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.outerWidth, window.outerHeight);
     renderer.render(scene, camera);
     stats.end();
     requestAnimationFrame(animate);
