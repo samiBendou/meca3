@@ -52,18 +52,19 @@ export function makeTime(secs: number) {
     return `${years.toFixed(2)} years`;
   }
   if (months >= 1) {
-    return `${months.toFixed(2)} months`;
+    return `${months.toFixed(2)} m ${Math.floor(months % 30)} d`;
   }
   if (days >= 1) {
-    return `${days.toFixed(2)} days`;
+    return `${Math.floor(days)} d ${Math.floor(hours % 24)} h`;
   }
   if (hours >= 1) {
-    return `${hours.toFixed(2)} hours`;
+    return `${Math.floor(hours)} h ${Math.floor(minutes % 60)} m`;
   }
   if (minutes >= 1) {
-    return `${minutes.toFixed(2)} mins`;
+    return `${Math.floor(minutes)} m ${Math.floor(secs % 60)} s`;
   }
-  return `${secs.toPrecision(2)} secs`;
+  const { value, unit } = makeUnit(secs);
+  return `${value.toFixed(2)} ${unit}s`;
 }
 
 export function makeUnit(si: number) {
@@ -71,10 +72,10 @@ export function makeUnit(si: number) {
   if (exp < 3 && exp >= 0) {
     return { value: si, unit: UnitPrefix.None };
   }
-  if (exp >= 9) {
+  if (exp >= 24) {
     return { value: si / 1e9, unit: UnitPrefix.Giga };
   }
-  if (exp <= -9) {
+  if (exp <= -24) {
     return { value: si / 1e-9, unit: UnitPrefix.Nano };
   }
   const rem = exp % 3;

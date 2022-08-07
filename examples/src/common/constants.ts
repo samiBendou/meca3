@@ -27,6 +27,11 @@ export enum Duration {
 }
 
 export enum UnitPrefix {
+  Yocto = "y",
+  Zepto = "z",
+  Atto = "a",
+  Femto = "p",
+  Pico = "p",
   Nano = "n",
   Micro = "u",
   Mili = "m",
@@ -34,9 +39,19 @@ export enum UnitPrefix {
   Kilo = "k",
   Mega = "M",
   Giga = "G",
+  Tera = "T",
+  Peta = "P",
+  Exa = "E",
+  Zetta = "Z",
+  Yotta = "Y",
 }
 
 export const UNIT_MAP: Record<number, UnitPrefix> = {
+  [-24]: UnitPrefix.Yocto,
+  [-21]: UnitPrefix.Zepto,
+  [-18]: UnitPrefix.Atto,
+  [-15]: UnitPrefix.Femto,
+  [-12]: UnitPrefix.Pico,
   [-9]: UnitPrefix.Nano,
   [-6]: UnitPrefix.Micro,
   [-3]: UnitPrefix.Mili,
@@ -44,6 +59,11 @@ export const UNIT_MAP: Record<number, UnitPrefix> = {
   [3]: UnitPrefix.Kilo,
   [6]: UnitPrefix.Mega,
   [9]: UnitPrefix.Giga,
+  [12]: UnitPrefix.Tera,
+  [15]: UnitPrefix.Peta,
+  [18]: UnitPrefix.Peta,
+  [21]: UnitPrefix.Zetta,
+  [24]: UnitPrefix.Yotta,
 };
 
 export const AXIS_COLORS = [Color.Red, Color.Green, Color.Blue];
