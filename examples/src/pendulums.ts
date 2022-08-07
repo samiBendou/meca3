@@ -82,8 +82,6 @@ const constraints: Record<string, Record<string, string | undefined>> = {
 
 // oscillating field, each point is linked to the other with a spring of given pulsation
 const zero = Vector3.zeros;
-const acceleration = Vector3.zeros;
-const tension = Vector3.zeros;
 const ur = Vector3.zeros;
 const vr = Vector3.zeros;
 const constraint = Vector3.zeros;
@@ -138,17 +136,6 @@ function init() {
       updateObjectSpheres(points, barycenter, spheres, settings);
       updateObjectLines(points, barycenter, lines, settings);
       updateSettingsDom(dom, settings, points, barycenter, solver.timer);
-      console.log(
-        "ay",
-        acceleration.y.toFixed(),
-        "vy",
-        points[1].speed.y.toFixed(5),
-        "y",
-        points[1].position.y.toFixed(5),
-        "tension",
-        tension.x.toFixed(5),
-        tension.y.toFixed(5)
-      );
     }
     zoomScale = updateObjectFrame(camera, frame, zoomScale);
 
