@@ -94,7 +94,7 @@ function init() {
   const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const frame = initFrameMesh();
   const { renderer, scene } = initScene(...spheres, ...lines, ...frame);
-  const camera = initCamera(scale, -15e9, -25e9, 50e9);
+  const camera = initCamera(scale, 0, 0, 50e9);
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 

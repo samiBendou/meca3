@@ -29,7 +29,7 @@ const acceleration = Vector3.zeros;
 
 const SPEED_OF_LIGHT = 299792458;
 const MAGNETIC_FIELD_AMP = 2 / SPEED_OF_LIGHT;
-const FREQUENCY = SPEED_OF_LIGHT / 10000;
+const FREQUENCY = SPEED_OF_LIGHT / 1000;
 
 const electricField = (t: number) =>
   SPEED_OF_LIGHT * MAGNETIC_FIELD_AMP * Math.cos(2 * Math.PI * FREQUENCY * t);
