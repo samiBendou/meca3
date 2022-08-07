@@ -6,8 +6,8 @@ import {
   SCALING_SCROLL_SPEED,
   TIME_SPEED,
 } from "./constants";
-import { OrbitControls } from "./controls";
-import { Settings } from "./settings";
+import OrbitControls from "./controls";
+import Settings from "./settings";
 
 export function makeOnMouseWheel(settings: Settings) {
   return function onMouseWheel(event: WheelEvent) {

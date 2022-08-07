@@ -1,7 +1,7 @@
 import THREE, { OrthographicCamera } from "three";
 import { Barycenter, Point, Solver, Timer } from "../../../src";
 import { Duration } from "./constants";
-import { Frame, Settings } from "./settings";
+import Settings, { Frame } from "./settings";
 import { SettingsDom } from "./types";
 
 function framePosition(frame: Frame, points: Point[], barycenter: Barycenter) {

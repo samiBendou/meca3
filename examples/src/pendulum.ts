@@ -9,13 +9,13 @@ import {
   initSettingsDom,
   initStats,
   initSystemSimulation,
-  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
   updateSettingsDom,
   updateSimulation,
 } from "./common";
+import Settings from "./common/settings";
 
 const GRAVITY_ACCELERATION = 9.80665;
 const PENDULUM_LENGTH = 50;

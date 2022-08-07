@@ -2,7 +2,7 @@ import { Camera, Quaternion, Spherical, Vector2, Vector3 } from "three";
 
 const UP_VECTOR = new Vector3(0, 1, 0);
 
-export class OrbitControls {
+export default class OrbitControls {
   object: Camera;
   initial: Vector3;
 
@@ -62,9 +62,8 @@ export class OrbitControls {
     // so camera.up is the orbit axis
     this._quat.setFromUnitVectors(this.object.up, UP_VECTOR);
     this._quatInverse.copy(this._quat).inverse();
-    const position = this.object.position;
 
-    this._offset.copy(position);
+    this._offset.copy(this.object.position);
 
     // rotate offset to "y-axis-is-up" space
     this._offset.applyQuaternion(this._quat);
@@ -91,7 +90,7 @@ export class OrbitControls {
     this._offset.setFromSpherical(this._spherical);
     // rotate offset back to "camera-up-vector-is-up" space
     this._offset.applyQuaternion(this._quatInverse);
-    position.copy(this._offset);
+    this.object.position.copy(this._offset);
     this.object.lookAt(0, 0, 0);
 
     this._sphericalDelta.set(0, 0, 0);

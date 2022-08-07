@@ -13,7 +13,7 @@ function nextFrame(frame: Frame) {
   }
 }
 
-export class Settings {
+export default class Settings {
   scale: number; // scaling factor to represent bodies in animation
   speed: number; // simulation speed
   samples: number; // simulation steps per frame

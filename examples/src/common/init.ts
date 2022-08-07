@@ -17,7 +17,7 @@ import {
   AXIS_UNIT_LENGTH,
   AXIS_UNIT_SIDE,
 } from "./constants";
-import { OrbitControls } from "./controls";
+import OrbitControls from "./controls";
 import {
   makeOnKeyPressedHandler,
   makeOnMouseDownHandler,
@@ -26,7 +26,7 @@ import {
   makeOnMouseWheel,
   makeOnResizeHandler,
 } from "./events";
-import { Settings } from "./settings";
+import Settings from "./settings";
 import { Body, SettingsDom, SimulationData } from "./types";
 
 function coordinatesFromAxis(axis: Axis, max: number, min: number) {

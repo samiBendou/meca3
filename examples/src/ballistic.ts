@@ -10,13 +10,13 @@ import {
   initScene,
   initSettingsDom,
   initStats,
-  Settings,
   updateObjectFrame,
   updateObjectLines,
   updateObjectSpheres,
   updateSettingsDom,
   updateSimulation,
 } from "./common";
+import Settings from "./common/settings";
 
 const BUFFER_LENGTH = 8192;
 const SAMPLE_PER_FRAMES = 8192;
