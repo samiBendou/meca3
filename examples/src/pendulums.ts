@@ -123,7 +123,7 @@ function init() {
   const frame = initFrameMesh();
 
   const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
-  const camera = initCamera(settings.scale, 0, 0, 100);
+  const camera = initCamera(settings.scale, 0, 0, 1000);
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 
