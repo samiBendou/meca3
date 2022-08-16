@@ -1,5 +1,4 @@
-import { SystemAcceleration } from "../../src";
-import { Vector3, Vector6 } from "../../src/algebra";
+import { SystemAcceleration, Vector3, Vector6 } from "meca3";
 import {
   Color,
   initBodiesMesh,
@@ -17,7 +16,6 @@ import {
   updateSimulation,
 } from "./common";
 import Settings from "./common/settings";
-
 const BUFFER_LENGTH = 8192;
 const SAMPLE_PER_FRAMES = 2 * 8192;
 const TARGET_FRAMERATE = 60;

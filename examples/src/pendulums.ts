@@ -1,4 +1,4 @@
-import { SystemAcceleration, Vector3, Vector6 } from "../../src";
+import { SystemAcceleration, Vector3, Vector6 } from "meca3";
 import {
   Color,
   initBodiesMesh,

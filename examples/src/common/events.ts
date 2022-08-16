@@ -1,4 +1,4 @@
-import { Point } from "../../../src";
+import { Point } from "meca3";
 import {
   ROTATION_SPEED,
   SAMPLES_SPEED,

@@ -1,5 +1,4 @@
-import { PointConstructor } from "../../../src";
-import { BarycenterConstructor } from "../../../src/dynamics/Barycenter";
+import { BarycenterConstructor, PointConstructor } from "meca3";
 import { Color } from "./constants";
 
 export type SettingsDom = {

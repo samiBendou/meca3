@@ -1,5 +1,4 @@
-import { SystemAcceleration } from "../../src";
-import { Vector3, Vector6 } from "../../src/algebra";
+import { SystemAcceleration, Vector3, Vector6 } from "meca3";
 import {
   Color,
   initBodiesMesh,

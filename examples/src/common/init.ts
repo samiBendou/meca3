@@ -1,5 +1,3 @@
-import Stats from "stats.js";
-import * as THREE from "three";
 import {
   ArraySolver,
   Barycenter,
@@ -10,7 +8,9 @@ import {
   SystemAcceleration,
   SystemDynamics,
   Timer,
-} from "../../../src";
+} from "meca3";
+import Stats from "stats.js";
+import * as THREE from "three";
 import {
   Axis,
   AXIS_COLORS,

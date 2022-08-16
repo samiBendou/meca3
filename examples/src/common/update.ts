@@ -1,6 +1,6 @@
+import { Barycenter, Point, Solver, Timer } from "meca3";
 import * as THREE from "three";
 import { OrthographicCamera } from "three";
-import { Barycenter, Point, Solver, Timer } from "../../../src";
 import { Duration, UnitPrefix, UNIT_MAP } from "./constants";
 import Settings, { Frame } from "./settings";
 import { SettingsDom } from "./types";

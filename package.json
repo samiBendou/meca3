@@ -4,11 +4,6 @@
   "description": "3D space and physics engine for point's mechanics",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "src",
-    "dist",
-    "build"
-  ],
   "scripts": {
     "lint": "eslint",
     "test": "nyc mocha -r ts-node/register test/**/*.test.ts --timeout=30000",
