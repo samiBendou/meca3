@@ -32,11 +32,6 @@
   "bugs": "https://github.com/samiBendou/meca3/issues",
   "author": "Sami Dahoux <sbdh75@gmail.com> (https://github.com/samiBendou)",
   "license": "GPL-3.0",
-  "dependencies": {
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier-eslint": "^13.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/samiBendou/meca3.git"
@@ -55,8 +50,11 @@
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier-eslint": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "@typescript-eslint/parser": "^5.19.0",
+    "@typescript-eslint/parser": "^5.33.1",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "eslint": "^7.12.1",

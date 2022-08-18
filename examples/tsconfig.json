@@ -2,8 +2,8 @@
   "compileOnSave": true,
   "compilerOptions": {
     "declaration": true,
-    "target": "es6",
-    "module": "esnext",
+    "target": "es2020",
+    "module": "es2020",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "removeComments": true,
@@ -17,8 +17,16 @@
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "skipLibCheck": true,
-    "lib": ["es6", "dom"]
+    "lib": [
+      "es2020",
+      "dom"
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }

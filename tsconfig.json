@@ -16,8 +16,15 @@
     "strict": true,
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
-    "lib": ["es6"]
+    "lib": [
+      "es6"
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }
