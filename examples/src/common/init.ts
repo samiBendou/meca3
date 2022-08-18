@@ -109,7 +109,7 @@ export function initCenterMesh() {
   return new THREE.Mesh(geometry, material);
 }
 
-export function initFrameMesh(axes?: Axis[]) {
+export function initAxesMesh(axes?: Axis[]) {
   const visibleAxes = axes ?? [Axis.X, Axis.Y, Axis.Z];
   return [
     initCenterMesh(),

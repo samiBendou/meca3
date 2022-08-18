@@ -1,19 +1,19 @@
 import { PointAcceleration, Vector3, Vector6 } from "meca3";
 import {
   Color,
+  initAxesMesh,
   initBodiesMesh,
   initCamera,
   initControls,
-  initFrameMesh,
   initPointSimulation,
   initScene,
   initSettingsDom,
   initStats,
-  updateObjectFrame,
-  updateObjectLines,
-  updateObjectSpheres,
+  updateAxesMesh,
+  updateLinesMesh,
   updateSettingsDom,
   updateSimulation,
+  updateSpheresMesh,
 } from "./common";
 import Settings from "./common/settings";
 
@@ -106,8 +106,8 @@ function init() {
     settings
   );
   const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
-  const frame = initFrameMesh();
-  const { renderer, scene } = initScene(...frame, ...spheres, ...lines);
+  const axes = initAxesMesh();
+  const { renderer, scene } = initScene(...axes, ...spheres, ...lines);
   const camera = initCamera(scale, 0, 0, 50 * scale);
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
@@ -115,11 +115,11 @@ function init() {
   return function animate() {
     stats.begin();
     updateSimulation(points, barycenter, solver, settings);
-    updateObjectSpheres(points, barycenter, spheres, settings);
-    updateObjectLines(points, barycenter, lines, settings);
+    updateSpheresMesh(points, barycenter, spheres, settings);
+    updateLinesMesh(points, barycenter, lines, settings);
     updateSettingsDom(dom, settings, points, barycenter, solver.timer);
 
-    zoomScale = updateObjectFrame(camera, frame, zoomScale);
+    zoomScale = updateAxesMesh(camera, axes, zoomScale);
 
     controls.update();
     renderer.setSize(window.outerWidth, window.outerHeight);

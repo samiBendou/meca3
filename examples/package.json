@@ -13,6 +13,10 @@
     "pendulum": "webpack serve --env entry=./dist/pendulum.js",
     "pendulums": "webpack serve --env entry=./dist/pendulums.js"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "license": "ISC",
   "dependencies": {
     "@types/stats": "^0.16.30",

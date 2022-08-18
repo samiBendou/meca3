@@ -98,7 +98,7 @@ export function updateSimulation<T>(
   barycenter.update(points);
 }
 
-export function updateObjectSpheres(
+export function updateSpheresMesh(
   points: Point[],
   barycenter: Barycenter,
   spheres: THREE.Mesh[],
@@ -115,7 +115,7 @@ export function updateObjectSpheres(
   });
 }
 
-export function updateObjectLines(
+export function updateLinesMesh(
   points: Point[],
   barycenter: Barycenter,
   lines: THREE.Line[],
@@ -137,10 +137,11 @@ export function updateObjectLines(
     });
     geometry.verticesNeedUpdate = true;
     geometry.normalsNeedUpdate = true;
+    lines[idx].computeLineDistances();
   });
 }
 
-export function updateObjectFrame(
+export function updateAxesMesh(
   camera: OrthographicCamera,
   frame: THREE.Mesh[],
   scaleF: number
