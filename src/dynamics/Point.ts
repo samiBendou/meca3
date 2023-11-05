@@ -1,4 +1,5 @@
 import { Vector3, Vector6 } from "../algebra";
+import { List, Vectorial } from "../common";
 import { BasicCurve, BufferCurve } from "../curves";
 
 export type PointConstructor = {
@@ -19,7 +20,7 @@ export type PointConstructor = {
  * - **Manipulate speed and position** of the point
  *
  */
-export default class Point {
+export default class Point implements Vectorial, List {
   /** mass of the point **/
   mass: number;
 

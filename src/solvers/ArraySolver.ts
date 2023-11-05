@@ -1,8 +1,11 @@
 import { List, Vectorial } from "../common";
+import Solver from "./Solver";
 import Timer from "./Timer";
 import { VectorField } from "./VectorSolver";
 
-export default class ArraySolver<T extends Vectorial & List> {
+export default class ArraySolver<T extends Vectorial & List>
+  implements Solver<T[], VectorField<T>>
+{
   /** time dependant vector field **f** */
   field: VectorField<T>;
   timer: Timer;
