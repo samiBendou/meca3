@@ -1,6 +1,6 @@
 import { Barycenter, Point, Solver, Timer } from "meca3";
 import * as THREE from "three";
-import { OrthographicCamera } from "three";
+import { Object3D, OrthographicCamera } from "three";
 import { Duration, UnitPrefix, UNIT_MAP } from "./constants";
 import Settings, { Frame } from "./settings";
 import { SettingsDom } from "./types";
@@ -115,29 +115,40 @@ export function updateSpheresMesh(
   });
 }
 
-export function updateLinesMesh(
+export function updateLinesObject<T extends Object3D>(
   points: Point[],
   barycenter: Barycenter,
-  lines: THREE.Line[],
+  lines: T[][],
   settings: Settings
 ) {
   const frame = frameTrajectory(settings.frame, points, barycenter);
   const zero = new THREE.Vector3(0, 0, 0);
+  const direction = new THREE.Vector3();
+  const upVector = new THREE.Vector3(0, 1, 0);
+  const quaternion = new THREE.Quaternion();
+  const frameVector = new THREE.Vector3();
+
   [barycenter, ...points].forEach((point, idx) => {
-    const geometry = lines[idx].geometry as THREE.Geometry;
+    const line = lines[idx];
     const trajectory = point.trajectory;
-    geometry.vertices.forEach((vertex, vIdx) => {
-      const position = trajectory.get(vIdx).xyz;
+    line.forEach((vertex, vIdx) => {
+      const previousLine = line[vIdx - 1];
+      const previousVertex = vIdx === 0 ? zero : previousLine.position;
+      const position = trajectory.get(vIdx);
       const pos =
-        frame === null ? zero : new THREE.Vector3(...frame.get(vIdx).xyz);
-      vertex
-        .set(...position)
+        frame === null ? zero : frameVector.set(...frame.get(vIdx).xyz);
+
+      vertex.position
+        .set(...position.xyz)
         .sub(pos)
         .multiplyScalar(settings.scale);
+      direction
+        .subVectors(vertex.position, previousVertex)
+        .negate()
+        .normalize();
+      quaternion.setFromUnitVectors(upVector, direction);
+      vertex.setRotationFromQuaternion(quaternion);
     });
-    geometry.verticesNeedUpdate = true;
-    geometry.normalsNeedUpdate = true;
-    lines[idx].computeLineDistances();
   });
 }
 

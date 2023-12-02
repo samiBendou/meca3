@@ -10,14 +10,16 @@ import {
   initStats,
   initSystemSimulation,
   updateAxesMesh,
-  updateLinesMesh,
+  updateLinesObject,
   updateSettingsDom,
   updateSimulation,
   updateSpheresMesh,
 } from "./common";
 import Settings from "./common/settings";
+import * as THREE from "three";
 
-const BUFFER_LENGTH = 4096;
+
+const BUFFER_LENGTH = 1024;
 const SAMPLE_PER_FRAMES = 2048;
 const TARGET_FRAMERATE = 60;
 
@@ -92,8 +94,9 @@ function init() {
   );
   const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const axes = initAxesMesh();
+  const light = new THREE.AmbientLight(0xffffff);
 
-  const { renderer, scene } = initScene(...axes, ...spheres, ...lines);
+  const { renderer, scene } = initScene(...axes, ...spheres, ...lines.flat(1), light);
   const camera = initCamera(settings.scale, 0, 0, 100);
 
   const controls = initControls(points, settings, camera);
@@ -103,7 +106,7 @@ function init() {
     stats.begin();
     updateSimulation(points, barycenter, solver, settings);
     updateSpheresMesh(points, barycenter, spheres, settings);
-    updateLinesMesh(points, barycenter, lines, settings);
+    updateLinesObject(points, barycenter, lines, settings);
 
     updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateAxesMesh(camera, axes, zoomScale);

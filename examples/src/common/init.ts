@@ -12,11 +12,12 @@ import {
 import Stats from "stats.js";
 import * as THREE from "three";
 import {
-  Axis,
   AXIS_COLORS,
   AXIS_MAX_LENGTH,
   AXIS_UNIT_LENGTH,
   AXIS_UNIT_SIDE,
+  Axis,
+  Color,
 } from "./constants";
 import OrbitControls from "./controls";
 import {
@@ -30,6 +31,60 @@ import {
 import Settings from "./settings";
 import { Body, SettingsDom, SimulationData } from "./types";
 
+function componentToHex(c: number) {
+  const hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r: number, g: number, b: number) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function getAverageRGB(imgEl: HTMLImageElement) {
+  const blockSize = 100, // only visit every 5 pixels
+    defaultRGB = { r: 0, g: 0, b: 0 }, // for non-supporting envs
+    rgb = { r: 0, g: 0, b: 0 },
+    canvas = document.createElement("canvas"),
+    context = canvas.getContext && canvas.getContext("2d");
+  let data,
+    i = -4,
+    count = 0;
+
+  const height =
+    imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height || 1000;
+  const width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width || 1000;
+
+  if (!context) {
+    return defaultRGB;
+  }
+
+  context.canvas.height = height;
+  context.canvas.width = width;
+
+  context.drawImage(imgEl, 0, 0);
+
+  try {
+    data = context.getImageData(0, 0, width, height);
+  } catch (e) {
+    /* security error, img on diff domain */
+    return defaultRGB;
+  }
+  const length = data.data.length;
+
+  while ((i += blockSize * 4) < length) {
+    ++count;
+    rgb.r += data.data[i];
+    rgb.g += data.data[i + 1];
+    rgb.b += data.data[i + 2];
+  }
+
+  // ~~ used to floor values
+  rgb.r = ~~(rgb.r / count);
+  rgb.g = ~~(rgb.g / count);
+  rgb.b = ~~(rgb.b / count);
+
+  return rgb;
+}
 function coordinatesFromAxis(axis: Axis, max: number, min: number) {
   const w = axis == Axis.X ? max : min;
   const h = axis == Axis.Y ? max : min;
@@ -120,21 +175,59 @@ export function initAxesMesh(axes?: Axis[]) {
 
 export function initSphereMesh(point: Body) {
   const { radius, color } = point;
-  const geometry = new THREE.SphereGeometry(radius, 16, 32);
-  const material = new THREE.MeshBasicMaterial({ color });
+  const geometry = new THREE.SphereGeometry(radius * 2, 16, 32);
+
+  const texture = point.texture
+    ? new THREE.TextureLoader().load(point.texture)
+    : undefined;
+  const material = !point.emissive
+    ? new THREE.MeshLambertMaterial({
+        color: texture ? undefined : color,
+        map: texture,
+      })
+    : new THREE.MeshLambertMaterial({
+        color: texture ? undefined : color,
+        emissive: point.emissive,
+        emissiveMap: texture,
+        emissiveIntensity: 1,
+        map: texture,
+      });
   return new THREE.Mesh(geometry, material);
 }
 
 export function initLineMesh(point: Body) {
-  const { color, trajectoryLength } = point;
-  const geometry = new THREE.Geometry();
-  const material = new THREE.LineBasicMaterial({
-    color,
+  const { color, radius, trajectoryLength } = point;
+  const geometry = new THREE.CylinderGeometry(radius / 6, radius / 6, 20);
+  const texture = point.texture
+    ? new THREE.ImageLoader().load(point.texture)
+    : undefined;
+  console.log(texture);
+  if (texture && point.texture) {
+    texture.src = point.texture;
+  }
+
+  const meshes = new Array(trajectoryLength).fill(undefined).map((_, idx) => {
+    return new THREE.Mesh(
+      geometry.clone(),
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: (0.7 * (idx + 1)) / trajectoryLength,
+      })
+    );
   });
-  geometry.vertices = new Array(trajectoryLength)
-    .fill(undefined)
-    .map(() => new THREE.Vector3(0, 0, 0));
-  return new THREE.Line(geometry, material);
+
+  if (texture) {
+    texture.onload = () => {
+      const average = getAverageRGB(texture);
+      const rgb = rgbToHex(average.r, average.g, average.b);
+      const color = new THREE.Color(rgb);
+      meshes.forEach((mesh) => {
+        (mesh.material as THREE.MeshBasicMaterial).color = color;
+      });
+    };
+  }
+  return meshes;
 }
 
 export function initBodiesMesh(points: Body[]) {
@@ -148,7 +241,7 @@ export function initScene(...objects: THREE.Object3D[]) {
   const renderer = new THREE.WebGLRenderer();
 
   scene.add(...objects);
-
+  scene.background = new THREE.Color(0x111111);
   document.body.appendChild(renderer.domElement);
 
   return { renderer, scene };
@@ -191,10 +284,10 @@ export function initCamera(scale: number, x: number, y: number, z: number) {
   const w = window.innerWidth / 2;
   const h = window.innerHeight / 2;
   const near = 0;
-  const far = Number.MAX_VALUE;
+  const far = 5000;
   const camera = new THREE.OrthographicCamera(-w, w, h, -h, near, far);
-
-  camera.position.set(x, y, z).multiplyScalar(scale);
+  camera.position.set(x, y, z);
+  camera.frustumCulled = false;
 
   return camera;
 }

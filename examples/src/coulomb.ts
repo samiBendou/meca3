@@ -10,13 +10,13 @@ import {
   initStats,
   initSystemSimulation,
   updateAxesMesh,
-  updateLinesMesh,
+  updateLinesObject,
   updateSettingsDom,
   updateSimulation,
   updateSpheresMesh,
 } from "./common";
 import Settings from "./common/settings";
-const BUFFER_LENGTH = 8192;
+const BUFFER_LENGTH = 128;
 const SAMPLE_PER_FRAMES = 2 * 8192;
 const TARGET_FRAMERATE = 60;
 
@@ -35,6 +35,7 @@ const data = {
     trajectoryLength: BUFFER_LENGTH,
     color: Color.White,
     radius: 5,
+    emissive: Color.White,
   },
   points: [
     {
@@ -44,6 +45,7 @@ const data = {
       trajectoryLength: BUFFER_LENGTH,
       color: Color.Yellow,
       radius: 10,
+      emissive: Color.Yellow,
     },
     {
       id: "electron",
@@ -55,6 +57,8 @@ const data = {
       trajectoryLength: BUFFER_LENGTH,
       color: Color.Cyan,
       radius: 10,
+      emissive: Color.Cyan,
+
     },
   ],
 };
@@ -89,8 +93,8 @@ function init() {
   );
   const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const axes = initAxesMesh();
-  const { renderer, scene } = initScene(...axes, ...spheres, ...lines);
-  const camera = initCamera(scale, 0, 0, 50e-11);
+  const { renderer, scene } = initScene(...axes, ...spheres, ...lines.flat());
+  const camera = initCamera(scale, 0, 0, 400);
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 
@@ -98,7 +102,7 @@ function init() {
     stats.begin();
     updateSimulation(points, barycenter, solver, settings);
     updateSpheresMesh(points, barycenter, spheres, settings);
-    updateLinesMesh(points, barycenter, lines, settings);
+    updateLinesObject(points, barycenter, lines, settings);
     updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateAxesMesh(camera, axes, zoomScale);
 

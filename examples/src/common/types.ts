@@ -15,6 +15,8 @@ export type SettingsDom = {
 export type Body = {
   radius: number;
   color: Color;
+  emissive?: number;
+  texture?: string;
 } & Pick<PointConstructor, "trajectoryLength">;
 
 export type SimulationData = {
