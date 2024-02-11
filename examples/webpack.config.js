@@ -4,14 +4,13 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { env } = require("process");
 
 const isProduction = process.env.NODE_ENV == "production";
-
-const config = {
-  entry: env.entry,
+const makeConfig = (env) => ({
+  entry: path.resolve(__dirname, env.entry),
   output: {
-    path: path.resolve(__dirname, "build"),
+    filename: `${env.directory}.js`,
+    path: path.resolve(__dirname, "out"),
   },
   devServer: {
     open: true,
@@ -23,10 +22,14 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      template: "template.html",
+      filename: `${env.directory}.html`,
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: "css" }],
+      patterns: [
+        { from: "css", to: "build/" },
+        { from: "static", to: "build/static" },
+      ],
     }),
 
     // Add your plugins here
@@ -42,10 +45,10 @@ const config = {
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
-};
+});
 
 module.exports = (env) => {
-  config.entry = path.resolve(__dirname, env.entry);
+  const config = makeConfig(env);
   if (isProduction) {
     config.mode = "production";
 
