@@ -2609,6 +2609,11 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
+three-fatline@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/three-fatline/-/three-fatline-0.6.1.tgz#6593d93939b8c38f2c1d8276e7e4b77df06a265d"
+  integrity sha512-H0XwIRNTshpD5zS7iBiatCB5CVaBA4D6+vzpws4R+Wg2d2k49xWpRLA/ayzFeoCa67upRnXCFrHWIIGHyJEIqQ==
+
 to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"

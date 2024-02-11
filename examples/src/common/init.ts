@@ -12,11 +12,11 @@ import {
 import Stats from "stats.js";
 import * as THREE from "three";
 import {
+  Axis,
   AXIS_COLORS,
   AXIS_MAX_LENGTH,
   AXIS_UNIT_LENGTH,
   AXIS_UNIT_SIDE,
-  Axis,
   Color,
 } from "./constants";
 import OrbitControls from "./controls";
@@ -173,14 +173,23 @@ export function initAxesMesh(axes?: Axis[]) {
   ];
 }
 
+export function initLight(): THREE.PointLight {
+  const color = Color.White;
+  const intensity = 2;
+  const light = new THREE.PointLight(color, intensity, 0, 0);
+  return light;
+}
+
 export function initSphereMesh(point: Body) {
   const { radius, color } = point;
-  const geometry = new THREE.SphereGeometry(radius * 2, 16, 32);
+  const geometry = new THREE.SphereGeometry(radius * 2, 32, 64);
 
   const texture = point.texture
     ? new THREE.TextureLoader().load(point.texture)
     : undefined;
-  const material = !point.emissive
+  const material = point.material
+    ? point.material
+    : !point.emissive
     ? new THREE.MeshLambertMaterial({
         color: texture ? undefined : color,
         map: texture,
@@ -197,7 +206,7 @@ export function initSphereMesh(point: Body) {
 
 export function initLineMesh(point: Body) {
   const { color, radius, trajectoryLength } = point;
-  const geometry = new THREE.CylinderGeometry(radius / 6, radius / 6, 20);
+  const geometry = new THREE.TetrahedronGeometry(radius / 4, 0);
   const texture = point.texture
     ? new THREE.ImageLoader().load(point.texture)
     : undefined;
@@ -230,6 +239,18 @@ export function initLineMesh(point: Body) {
   return meshes;
 }
 
+export function initLineMesh2(point: Body) {
+  const { color, trajectoryLength } = point;
+  const geometry = new THREE.Geometry();
+  const material = new THREE.LineBasicMaterial({
+    color,
+  });
+  geometry.vertices = new Array(trajectoryLength)
+    .fill(undefined)
+    .map(() => new THREE.Vector3(0, 0, 0));
+  return new THREE.Line(geometry, material);
+}
+
 export function initBodiesMesh(points: Body[]) {
   const spheres = points.map((p) => initSphereMesh(p));
   const lines = points.map((p) => initLineMesh(p));
@@ -241,6 +262,8 @@ export function initScene(...objects: THREE.Object3D[]) {
   const renderer = new THREE.WebGLRenderer();
 
   scene.add(...objects);
+  renderer.physicallyCorrectLights = true;
+  renderer.gammaOutput = true;
   scene.background = new THREE.Color(0x111111);
   document.body.appendChild(renderer.domElement);
 

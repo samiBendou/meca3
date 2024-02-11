@@ -10,7 +10,7 @@ import {
   initStats,
   initSystemSimulation,
   updateAxesMesh,
-  updateLinesObject,
+  updateLinesMesh,
   updateSettingsDom,
   updateSimulation,
   updateSpheresMesh,
@@ -103,9 +103,11 @@ function init() {
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, barycenter, solver, settings);
+    if (!settings.pause) {
+      updateSimulation(points, barycenter, solver, settings);
+    }
     updateSpheresMesh(points, barycenter, spheres, settings);
-    updateLinesObject(points, barycenter, lines, settings);
+    updateLinesMesh(points, barycenter, lines, settings);
     updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateAxesMesh(camera, axes, zoomScale);
     controls.update();

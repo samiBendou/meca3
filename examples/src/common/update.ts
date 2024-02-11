@@ -1,6 +1,6 @@
 import { Barycenter, Point, Solver, Timer } from "meca3";
 import * as THREE from "three";
-import { Object3D, OrthographicCamera } from "three";
+import { OrthographicCamera } from "three";
 import { Duration, UnitPrefix, UNIT_MAP } from "./constants";
 import Settings, { Frame } from "./settings";
 import { SettingsDom } from "./types";
@@ -98,6 +98,21 @@ export function updateSimulation<T>(
   barycenter.update(points);
 }
 
+export function updateLightObject<T extends THREE.Object3D>(
+  idx: number,
+  points: Point[],
+  barycenter: Barycenter,
+  object: T,
+  settings: Settings
+) {
+  const frame = framePosition(settings.frame, points, barycenter);
+  const position = points[idx].position.xyz;
+  object.position
+    .set(...position)
+    .sub(frame)
+    .multiplyScalar(settings.scale);
+}
+
 export function updateSpheresMesh(
   points: Point[],
   barycenter: Barycenter,
@@ -115,7 +130,14 @@ export function updateSpheresMesh(
   });
 }
 
-export function updateLinesObject<T extends Object3D>(
+export function updateSpheresScale(spheres: THREE.Mesh[], settings: Settings) {
+  // updating spheres scale in sphere according to current position of points in field
+  spheres.forEach((sphere) => {
+    sphere.scale.setScalar(settings.scale / settings.initScale);
+  });
+}
+
+export function updateLinesMesh<T extends THREE.Object3D>(
   points: Point[],
   barycenter: Barycenter,
   lines: T[][],
@@ -123,17 +145,12 @@ export function updateLinesObject<T extends Object3D>(
 ) {
   const frame = frameTrajectory(settings.frame, points, barycenter);
   const zero = new THREE.Vector3(0, 0, 0);
-  const direction = new THREE.Vector3();
-  const upVector = new THREE.Vector3(0, 1, 0);
-  const quaternion = new THREE.Quaternion();
   const frameVector = new THREE.Vector3();
 
   [barycenter, ...points].forEach((point, idx) => {
     const line = lines[idx];
     const trajectory = point.trajectory;
     line.forEach((vertex, vIdx) => {
-      const previousLine = line[vIdx - 1];
-      const previousVertex = vIdx === 0 ? zero : previousLine.position;
       const position = trajectory.get(vIdx);
       const pos =
         frame === null ? zero : frameVector.set(...frame.get(vIdx).xyz);
@@ -142,12 +159,6 @@ export function updateLinesObject<T extends Object3D>(
         .set(...position.xyz)
         .sub(pos)
         .multiplyScalar(settings.scale);
-      direction
-        .subVectors(vertex.position, previousVertex)
-        .negate()
-        .normalize();
-      quaternion.setFromUnitVectors(upVector, direction);
-      vertex.setRotationFromQuaternion(quaternion);
     });
   });
 }

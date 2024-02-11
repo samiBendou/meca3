@@ -1,4 +1,5 @@
 import { PointAcceleration, Vector3, Vector6 } from "meca3";
+import * as THREE from "three";
 import {
   Color,
   initAxesMesh,
@@ -10,13 +11,12 @@ import {
   initSettingsDom,
   initStats,
   updateAxesMesh,
-  updateLinesObject,
+  updateLinesMesh,
   updateSettingsDom,
   updateSimulation,
   updateSpheresMesh,
 } from "./common";
 import Settings from "./common/settings";
-import * as THREE from "three";
 
 const BUFFER_LENGTH = 1024;
 const SAMPLE_PER_FRAMES = 4 * 8192;
@@ -42,7 +42,6 @@ const data = {
     trajectoryLength: BUFFER_LENGTH,
     color: Color.White,
     radius: 5,
-    
   },
   points: [
     {
@@ -110,16 +109,23 @@ function init() {
   const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const light = new THREE.AmbientLight(0xffffff);
   const axes = initAxesMesh();
-  const { renderer, scene } = initScene(...axes, ...spheres, ...lines.flat(), light);
+  const { renderer, scene } = initScene(
+    ...axes,
+    ...spheres,
+    ...lines.flat(),
+    light
+  );
   const camera = initCamera(scale, 0, 0, 50 * scale);
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, barycenter, solver, settings);
+    if (!settings.pause) {
+      updateSimulation(points, barycenter, solver, settings);
+    }
     updateSpheresMesh(points, barycenter, spheres, settings);
-    updateLinesObject(points, barycenter, lines, settings);
+    updateLinesMesh(points, barycenter, lines, settings);
     updateSettingsDom(dom, settings, points, barycenter, solver.timer);
 
     zoomScale = updateAxesMesh(camera, axes, zoomScale);

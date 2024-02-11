@@ -54,17 +54,20 @@
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier-eslint": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.33.1",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "eslint": "^7.12.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
+    "prettier-eslint": "^13.0.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "three-fatline": "^0.6.1"
   }
 }

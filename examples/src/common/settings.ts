@@ -14,6 +14,7 @@ function nextFrame(frame: Frame) {
 }
 
 export default class Settings {
+  initScale: number; // scaling factor to represent bodies in animation
   scale: number; // scaling factor to represent bodies in animation
   speed: number; // simulation speed
   samples: number; // simulation steps per frame
@@ -24,6 +25,11 @@ export default class Settings {
     this.scale = params.scale;
     this.speed = params.speed;
     this.samples = params.samples;
+    this.initScale = params.scale;
+  }
+
+  set(key: NumericSettings, value: number) {
+    this[key] = value;
   }
 
   togglePause() {

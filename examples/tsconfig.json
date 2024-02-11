@@ -17,16 +17,9 @@
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "skipLibCheck": true,
-    "lib": [
-      "es2020",
-      "dom"
-    ]
+    "noEmitOnError": false,
+    "lib": ["es2020", "dom"]
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

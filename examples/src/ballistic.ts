@@ -1,4 +1,5 @@
 import { PointAcceleration, Vector3, Vector6 } from "meca3";
+import * as THREE from "three";
 import {
   Color,
   initAxesMesh,
@@ -10,15 +11,15 @@ import {
   initSettingsDom,
   initStats,
   updateAxesMesh,
-  updateLinesObject,
+  updateLinesMesh,
   updateSettingsDom,
   updateSimulation,
   updateSpheresMesh,
+  updateSpheresScale,
 } from "./common";
 import Settings from "./common/settings";
-import * as THREE from "three";
 
-const BUFFER_LENGTH = 512;
+const BUFFER_LENGTH = 1024;
 const SAMPLE_PER_FRAMES = 8192;
 const TARGET_FRAMERATE = 60;
 
@@ -58,6 +59,20 @@ const ARCHIMEDE = Vector3.ey.mul(
 );
 const gravity = Vector3.ey.mul(-GRAVITY_ACCELERATION).add(centrifugal);
 const axisCoriolis = ROTATION_AXIS.clone().mul(-2 * ROTATION_SPEED);
+const textureLoader = new THREE.TextureLoader();
+
+const path = "static/textures/cube/nalovardo/";
+const format = ".jpg";
+const urls = [
+  path + "posx" + format,
+  path + "negx" + format,
+  path + "posy" + format,
+  path + "negy" + format,
+  path + "posz" + format,
+  path + "negz" + format,
+];
+
+const reflectionCube = new THREE.CubeTextureLoader().load(urls);
 
 const data = {
   barycenter: {
@@ -78,12 +93,35 @@ const data = {
         Vector3.ez.mul(-1 * INITIAL_SPEED)
       ),
       trajectoryLength: BUFFER_LENGTH,
-      color: Color.Yellow,
+      texture: "static/textures/balls/metal-iron/Metal iron 3_baseColor.jpeg",
+      material: new THREE.MeshStandardMaterial({
+        map: textureLoader.load(
+          "static/textures/balls/metal-iron/Metal iron 3_baseColor.jpeg"
+        ),
+        aoMap: textureLoader.load(
+          "static/textures/balls/metal-iron/Metal iron 3_ambientOcclusion.jpeg"
+        ),
+        aoMapIntensity: 1,
+        roughnessMap: textureLoader.load(
+          "static/textures/balls/metal-iron/Metal iron 3_roughness.jpeg"
+        ),
+        roughness: 1,
+        metalnessMap: textureLoader.load(
+          "static/textures/balls/metal-iron/Metal iron 3_metallic.jpeg"
+        ),
+        metalness: 1,
+        normalMap: textureLoader.load(
+          "static/textures/balls/metal-iron/Metal iron 3_normal.jpeg"
+        ),
+
+        envMap: reflectionCube,
+        envMapIntensity: 1,
+      }),
       radius: 10,
     },
     {
-      id: "steel",
-      mass: 7.32 * WATER_RHO * SPHERE_VOLUME,
+      id: "soccer",
+      mass: 0.1 * WATER_RHO * SPHERE_VOLUME,
       state: Vector6.concatenated(
         Vector3.ey
           .mul(INITIAL_ALTITUDE)
@@ -92,7 +130,20 @@ const data = {
         Vector3.ez.mul(-INITIAL_SPEED)
       ),
       trajectoryLength: BUFFER_LENGTH,
-      color: Color.Cyan,
+      texture: "static/textures/balls/basket/BasketballColor.jpeg",
+      material: new THREE.MeshStandardMaterial({
+        map: textureLoader.load(
+          "static/textures/balls/basket/BasketballColor.jpeg"
+        ),
+        roughness: 1,
+        metalness: 0,
+        normalMap: textureLoader.load(
+          "static/textures/balls/basket/BasketballNormal.jpeg"
+        ),
+
+        envMap: reflectionCube,
+        envMapIntensity: 1,
+      }),
       radius: 10,
     },
     {
@@ -105,8 +156,33 @@ const data = {
           .add(Vector3.ex.mul(1 * INITIAL_OFFSET)),
         Vector3.ez.mul(-INITIAL_SPEED)
       ),
+      texture:
+        "static/textures/balls/metal-aluminium-brushed/Aluminium 6_baseColor.jpeg",
+
+      material: new THREE.MeshStandardMaterial({
+        map: textureLoader.load(
+          "static/textures/balls/metal-aluminium-brushed/Aluminium 6_baseColor.jpeg"
+        ),
+        aoMap: textureLoader.load(
+          "static/textures/balls/metal-aluminium-brushed/Aluminium 6_ambientOcclusion.jpeg"
+        ),
+        aoMapIntensity: 1,
+        roughnessMap: textureLoader.load(
+          "static/textures/balls/metal-aluminium-brushed/Aluminium 6_roughness.jpeg"
+        ),
+        roughness: 1,
+        metalnessMap: textureLoader.load(
+          "static/textures/balls/metal-aluminium-brushed/Aluminium 6_metallic.jpeg"
+        ),
+        metalness: 1,
+        normalMap: textureLoader.load(
+          "static/textures/balls/metal-aluminium-brushed/Aluminium 6_normal.jpeg"
+        ),
+
+        envMap: reflectionCube,
+        envMapIntensity: 1,
+      }),
       trajectoryLength: BUFFER_LENGTH,
-      color: Color.Magenta,
       radius: 10,
     },
   ],
@@ -124,8 +200,8 @@ const field: PointAcceleration = (p) => {
 
 let zoomScale = 1;
 const settings = new Settings({
-  scale: 0.05,
-  speed: 1 / TARGET_FRAMERATE,
+  scale: 0.04,
+  speed: 1.5 / TARGET_FRAMERATE,
   samples: SAMPLE_PER_FRAMES,
 });
 function init() {
@@ -137,25 +213,30 @@ function init() {
   );
   const { spheres, lines } = initBodiesMesh([data.barycenter, ...data.points]);
   const axes = initAxesMesh();
-  const light = new THREE.AmbientLight(0xffffff);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  const light = new THREE.HemisphereLight(0xffffff, 0x000000, 1);
   const { renderer, scene } = initScene(
     ...spheres,
     ...lines.flat(),
     ...axes,
-    light
+    light,
+    ambientLight
   );
+
   const camera = initCamera(settings.scale, 400, 0, 0);
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
 
   return function animate() {
     stats.begin();
-    updateSimulation(points, barycenter, solver, settings);
+    if (!settings.pause) {
+      updateSimulation(points, barycenter, solver, settings);
+    }
     updateSpheresMesh(points, barycenter, spheres, settings);
-    updateLinesObject(points, barycenter, lines, settings);
+    updateLinesMesh(points, barycenter, lines, settings);
+    updateSpheresScale(spheres, settings);
     updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateAxesMesh(camera, axes, zoomScale);
-
     controls.update();
     renderer.setSize(window.outerWidth, window.outerHeight);
     renderer.render(scene, camera);

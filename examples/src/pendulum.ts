@@ -1,4 +1,5 @@
 import { SystemAcceleration, Vector3, Vector6 } from "meca3";
+import * as THREE from "three";
 import {
   Color,
   initAxesMesh,
@@ -10,13 +11,12 @@ import {
   initStats,
   initSystemSimulation,
   updateAxesMesh,
-  updateLinesObject,
+  updateLinesMesh,
   updateSettingsDom,
   updateSimulation,
   updateSpheresMesh,
 } from "./common";
 import Settings from "./common/settings";
-import * as THREE from "three";
 
 const GRAVITY_ACCELERATION = 9.80665;
 const PENDULUM_LENGTH = 50;
@@ -93,7 +93,12 @@ function init() {
   const axes = initAxesMesh();
   const light = new THREE.AmbientLight(0xffffff);
 
-  const { renderer, scene } = initScene(...axes, ...spheres, ...lines.flat(), light);
+  const { renderer, scene } = initScene(
+    ...axes,
+    ...spheres,
+    ...lines.flat(),
+    light
+  );
   const camera = initCamera(settings.scale, 0, 0, 100);
   const controls = initControls(points, settings, camera);
   const dom = initSettingsDom();
@@ -102,10 +107,10 @@ function init() {
     stats.begin();
     if (!settings.pause) {
       updateSimulation(points, barycenter, solver, settings);
-      updateSpheresMesh(points, barycenter, spheres, settings);
-      updateLinesObject(points, barycenter, lines, settings);
-      updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     }
+    updateSpheresMesh(points, barycenter, spheres, settings);
+    updateLinesMesh(points, barycenter, lines, settings);
+    updateSettingsDom(dom, settings, points, barycenter, solver.timer);
     zoomScale = updateAxesMesh(camera, axes, zoomScale);
 
     controls.update();

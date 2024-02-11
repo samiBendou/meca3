@@ -3917,6 +3917,8 @@ map-visit@^1.0.0:
 
 meca3@../:
   version "5.0.0"
+  dependencies:
+    three-fatline "^0.6.1"
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -5521,6 +5523,11 @@ textextensions@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/textextensions/-/textextensions-2.6.0.tgz#d7e4ab13fe54e32e08873be40d51b74229b00fc4"
   integrity sha512-49WtAWS+tcsy93dRt6P0P3AMD2m5PvXRhuEA0kaXos5ZLlujtYmpmFsB+QvWUSxE1ZsstmYXfQ7L40+EcQgpAQ==
+
+three-fatline@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/three-fatline/-/three-fatline-0.6.1.tgz#6593d93939b8c38f2c1d8276e7e4b77df06a265d"
+  integrity sha512-H0XwIRNTshpD5zS7iBiatCB5CVaBA4D6+vzpws4R+Wg2d2k49xWpRLA/ayzFeoCa67upRnXCFrHWIIGHyJEIqQ==
 
 three@^0.105.2:
   version "0.105.2"

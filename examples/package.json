@@ -11,7 +11,8 @@
     "lorentz": "webpack serve --env entry=./dist/lorentz.js",
     "springs": "webpack serve --env entry=./dist/springs.js",
     "pendulum": "webpack serve --env entry=./dist/pendulum.js",
-    "pendulums": "webpack serve --env entry=./dist/pendulums.js"
+    "pendulums": "webpack serve --env entry=./dist/pendulums.js",
+    "solar-system": "webpack serve --env entry=./dist/solar-system/index.js"
   },
   "files": [
     "src",
@@ -20,11 +21,14 @@
   "license": "ISC",
   "dependencies": {
     "@types/stats": "^0.16.30",
+    "meca3": "../",
     "stats.js": "^0.17.0",
     "three": "^0.105.2",
-    "meca3": "../"
+    "three-fatline": "^0.6.1"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.33.1",
     "@webpack-cli/generators": "^2.4.2",
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.7.1",
@@ -36,8 +40,6 @@
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4",
-    "workbox-webpack-plugin": "^6.5.2",
-    "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "@typescript-eslint/parser": "^5.33.1"
+    "workbox-webpack-plugin": "^6.5.2"
   }
 }
