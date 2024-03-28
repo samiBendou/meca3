@@ -56,30 +56,40 @@ export function makeOnKeyPressedHandler(
     event.preventDefault();
     switch (event.key) {
       case "r":
+      case "R":
         return settings.shiftFrame(points.length);
       case "+":
         return settings.increase("scale", SCALING_KEY_SPEED);
       case "-":
         return settings.decrease("scale", SCALING_KEY_SPEED);
-      case "w":
+      case "z":
+      case "Z":
         return settings.increase("samples", SAMPLES_SPEED);
       case "x":
+      case "X":
         return settings.decrease("samples", SAMPLES_SPEED);
-      case ";":
-        return settings.increase("speed", TIME_SPEED);
       case ",":
+      case "<":
+        return settings.increase("speed", TIME_SPEED);
+      case "m":
+      case "M":
         return settings.decrease("speed", TIME_SPEED);
       case " ":
         return settings.togglePause();
-      case "q":
+      case "a":
+      case "A":
         return controls.rotateLeft(ROTATION_SPEED);
       case "d":
+      case "D":
         return controls.rotateLeft(-ROTATION_SPEED);
-      case "z":
+      case "w":
+      case "W":
         return controls.rotateUp(ROTATION_SPEED);
       case "s":
+      case "S":
         return controls.rotateUp(-ROTATION_SPEED);
       case "o":
+      case "O":
         return controls.reset();
     }
   };

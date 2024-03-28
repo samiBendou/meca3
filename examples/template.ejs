@@ -6,26 +6,62 @@
   </head>
 
   <body class="<%= pageName %>">
-    <div class="big-info" id="dynamic-info">
-      <span class="tab">Momentum (kg.m/s) </span><span id="momentum"></span>
+    <h3 id="dynamic-info">
+      <span>Momentum (kg.m/s)</span> <span id="momentum"></span>
+    </h3>
+
+    <div id="controls">
+      <h3>Controls</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th><kbd>Space</kbd></th>
+            <td>Pause/Resume the simulation</td>
+          </tr>
+          <tr>
+            <th><kbd>R</kbd></th>
+            <td>Change the frame of reference</td>
+          </tr>
+          <tr>
+            <th><kbd>+</kbd>/<kbd>-</kbd></th>
+            <td>Increase/decrease the scale</td>
+          </tr>
+          <tr>
+            <th><kbd>Z</kbd>/<kbd>X</kbd></th>
+            <td>Increase/decrease the number of steps</td>
+          </tr>
+          <tr>
+            <th><kbd>,</kbd>/<kbd>M</kbd></th>
+            <td>Increase/decrease the time step</td>
+          </tr>
+          <tr>
+            <th><kbd>W</kbd>/<kbd>A</kbd>/<kbd>S</kbd>/<kbd>D</kbd></th>
+            <td>Rotate the camera</td>
+          </tr>
+          <tr>
+            <th><kbd>O</kbd></th>
+            <td>Reset camera rotation</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div id="help">
-      <nav id="navigation-help">
-        <ol>
-          <li class="solar-system">
-            <a href="./solar-system.html">Solar system</a>
-          </li>
-          <li class="ballistic"><a href="./ballistic.html">Ballistic</a></li>
-          <li class="coulomb"><a href="./coulomb.html">Coulomb</a></li>
-          <li class="gravity"><a href="./gravity.html">Gravity</a></li>
-          <li class="lorentz"><a href="./lorentz.html">Lorentz</a></li>
-          <li class="pendulum"><a href="./pendulum.html">Pendulum</a></li>
-          <li class="pendulums"><a href="./pendulums.html">Pendulums</a></li>
-          <li class="spring"><a href="./spring.html">Spring</a></li>
-        </ol>
-      </nav>
-    </div>
+    <nav id="navigation">
+      <h3>Simulations</h3>
+      <ul>
+        <li class="solar-system">
+          <a href="./solar-system.html">Solar system</a>
+        </li>
+        <li class="ballistic"><a href="./ballistic.html">Ballistic</a></li>
+        <li class="coulomb"><a href="./coulomb.html">Coulomb</a></li>
+        <li class="gravity"><a href="./gravity.html">Gravity</a></li>
+        <li class="lorentz"><a href="./lorentz.html">Lorentz</a></li>
+        <li class="pendulum"><a href="./pendulum.html">Pendulum</a></li>
+        <li class="pendulums"><a href="./pendulums.html">Pendulums</a></li>
+        <li class="spring"><a href="./spring.html">Spring</a></li>
+      </ul>
+    </nav>
+
     <div id="infos">
       <div id="settings">
         <ul>
@@ -39,11 +75,11 @@
       </div>
     </div>
     <div id="distance">
-      <div class="big-info" id="scale"></div>
+      <h3 id="scale"></h3>
       <div id="bar"></div>
     </div>
 
-    <div class="big-info" id="elapsed"></div>
+    <h3 id="elapsed"></h3>
   </body>
 
   <link rel="stylesheet" type="text/css" href="style.css" />

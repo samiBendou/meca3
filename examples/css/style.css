@@ -3,6 +3,16 @@ body {
     color: white;
     margin: 0;
     overflow: hidden;
+    font-size: large;
+}
+
+ol, ul {
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    margin: 0;
 }
 
 a:any-link {
@@ -32,19 +42,32 @@ canvas {
 
 .big-info {
     font-weight: bold;
-    font-size: large;
 }
 
-#help {
+#navigation {
     position: absolute;
-    top: 0;
+    top: 16px;
     right: 16px;
-    width: 200px;
+    width: fit-content;
+}
+
+#controls {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+}
+
+#controls h3, #navigation h3 {
+    margin-bottom: 16px;
+}
+
+#controls th {
+    padding-right: 8px;
 }
 
 #dynamic-info {
     position: absolute;
-    top: 0;
+    top: 16px;
     width: 100%;
     text-align: center;
 }
@@ -52,25 +75,24 @@ canvas {
 #elapsed {
     position: absolute;
     bottom: 16px;
-    right: 8px;
+    right: 16px;
 }
 
 #distance {
     bottom: 16px;
-    left: 8px;
+    left: 16px;
     width: 200px;
     position: absolute;
 }
 
 #bar {
     background-color: white;
-    position: absolute;
     height: 10px;
     width: 100%;
 }
 
 #infos {
-    bottom: 0pt;
+    bottom: 16px;
     position: absolute;
     z-index: 100;
     width: 100%;
@@ -79,6 +101,7 @@ canvas {
     justify-content: center;
     align-items: center;
 }
+
 #settings {
     text-align: left;
     vertical-align:bottom;
@@ -89,10 +112,6 @@ canvas {
 li{
     list-style: none;
     margin: 8pt 0 0 0;
-}
-ul {
-    margin-left: 0;
-    padding-left: 0;
 }
 
 .tab {
