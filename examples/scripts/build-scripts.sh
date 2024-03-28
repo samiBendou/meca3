@@ -1,3 +1,4 @@
+export NODE_ENV=production
 npx webpack build --env name=ballistic
 npx webpack build --env name=gravity
 npx webpack build --env name=coulomb

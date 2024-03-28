@@ -4,6 +4,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const webpack = require("webpack");
 
 const isProduction = process.env.NODE_ENV == "production";
 const makeConfig = (env) => ({
@@ -62,10 +63,15 @@ module.exports = (env) => {
   const config = makeConfig(parsedEnv);
   if (isProduction) {
     config.mode = "production";
-
     config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      })
+    );
   } else {
     config.mode = "development";
   }
+
   return config;
 };

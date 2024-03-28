@@ -94,9 +94,10 @@ function coordinatesFromAxis(axis: Axis, max: number, min: number) {
 
 export function initStats() {
   const stats = new Stats();
-
   stats.showPanel(0);
-  document.body.appendChild(stats.dom);
+  if (process.env.NODE_ENV !== "production" && !!process.env.NODE_ENV) {
+    document.body.appendChild(stats.dom);
+  }
 
   return stats;
 }
