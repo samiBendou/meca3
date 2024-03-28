@@ -5,14 +5,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "gravity": "webpack serve --env entry=./dist/gravity.js",
-    "coulomb": "webpack serve --env entry=./dist/coulomb.js",
-    "ballistic": "webpack serve --env entry=./dist/ballistic.js",
-    "lorentz": "webpack serve --env entry=./dist/lorentz.js",
-    "springs": "webpack serve --env entry=./dist/springs.js",
-    "pendulum": "webpack serve --env entry=./dist/pendulum.js",
-    "pendulums": "webpack serve --env entry=./dist/pendulums.js",
-    "solar-system": "webpack serve --env entry=./dist/solar-system/index.js"
+    "gravity": "webpack serve --env name=gravity",
+    "coulomb": "webpack serve --env name=coulomb",
+    "ballistic": "webpack serve --env name=ballistic",
+    "lorentz": "webpack serve --env name=lorentz",
+    "springs": "webpack serve --env name=springs",
+    "pendulum": "webpack serve --env name=pendulum.js",
+    "pendulums": "webpack serve --env name=pendulums",
+    "solar-system": "webpack serve --env name=solar-system/index"
   },
   "files": [
     "src",

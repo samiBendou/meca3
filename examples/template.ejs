@@ -2,14 +2,30 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>meca3-example</title>
+    <title><%= pageName %> - meca3-example</title>
   </head>
 
-  <body>
+  <body class="<%= pageName %>">
     <div class="big-info" id="dynamic-info">
       <span class="tab">Momentum (kg.m/s) </span><span id="momentum"></span>
     </div>
 
+    <div id="help">
+      <nav id="navigation-help">
+        <ol>
+          <li class="solar-system">
+            <a href="./solar-system.html">Solar system</a>
+          </li>
+          <li class="ballistic"><a href="./ballistic.html">Ballistic</a></li>
+          <li class="coulomb"><a href="./coulomb.html">Coulomb</a></li>
+          <li class="gravity"><a href="./gravity.html">Gravity</a></li>
+          <li class="lorentz"><a href="./lorentz.html">Lorentz</a></li>
+          <li class="pendulum"><a href="./pendulum.html">Pendulum</a></li>
+          <li class="pendulums"><a href="./pendulums.html">Pendulums</a></li>
+          <li class="spring"><a href="./spring.html">Spring</a></li>
+        </ol>
+      </nav>
+    </div>
     <div id="infos">
       <div id="settings">
         <ul>

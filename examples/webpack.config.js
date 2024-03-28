@@ -13,7 +13,7 @@ const makeConfig = (env) => ({
     path: path.resolve(__dirname, "out"),
   },
   devServer: {
-    open: true,
+    open: false,
     host: "localhost",
     static: {
       directory: path.resolve(__dirname, "./static"),
@@ -22,8 +22,11 @@ const makeConfig = (env) => ({
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "template.html",
+      template: "template.ejs",
       filename: `${env.name}.html`,
+      templateParameters: {
+        pageName: env.name,
+      },
     }),
     new CopyWebpackPlugin({
       patterns: [

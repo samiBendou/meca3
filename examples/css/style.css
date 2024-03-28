@@ -5,6 +5,27 @@ body {
     overflow: hidden;
 }
 
+a:any-link {
+    color: white;
+    text-decoration: none;
+}
+
+.ballistic li.ballistic a,
+.coulomb li.coulomb a,
+.gravity li.gravity a,
+.lorentz li.lorentz a,
+.pendulum li.pendulum a,
+.pendulums li.pendulums a,
+.spring li.spring a {
+    font-weight: bolder;
+    background-color: white;
+    color: black;
+}
+
+a:hover {
+    font-weight: bold;
+}
+
 canvas {
     overflow: hidden;
 }
@@ -12,6 +33,13 @@ canvas {
 .big-info {
     font-weight: bold;
     font-size: large;
+}
+
+#help {
+    position: absolute;
+    top: 0;
+    right: 16px;
+    width: 200px;
 }
 
 #dynamic-info {
