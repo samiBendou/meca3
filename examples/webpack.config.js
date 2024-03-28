@@ -7,9 +7,9 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == "production";
 const makeConfig = (env) => ({
-  entry: path.resolve(__dirname, env.entry),
+  entry: path.resolve(__dirname, `./dist/${env.sourcePath}.js`),
   output: {
-    filename: `${env.directory}.js`,
+    filename: `${env.name}.js`,
     path: path.resolve(__dirname, "out"),
   },
   devServer: {
@@ -23,12 +23,12 @@ const makeConfig = (env) => ({
   plugins: [
     new HtmlWebpackPlugin({
       template: "template.html",
-      filename: `${env.directory}.html`,
+      filename: `${env.name}.html`,
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: "css", to: "build/" },
-        { from: "static", to: "build/static" },
+        { from: "css", to: "" },
+        { from: "static", to: "static" },
       ],
     }),
 
@@ -48,7 +48,15 @@ const makeConfig = (env) => ({
 });
 
 module.exports = (env) => {
-  const config = makeConfig(env);
+  const parsedEnv = env.name.includes("/")
+    ? {
+        ...env,
+        sourcePath: env.name,
+        name: env.name.split("/").slice(-2, -1)[0],
+      }
+    : { ...env, sourcePath: env.name };
+
+  const config = makeConfig(parsedEnv);
   if (isProduction) {
     config.mode = "production";
 
